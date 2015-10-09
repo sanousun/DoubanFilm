@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preference_screen">
+
+    <PreferenceCategory
+        android:key="settings_settings"
+        android:title="General settings">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="auto refresh?"
+            android:summary="Auto refresh when this app is launched?"
+            android:title="Auto refresh">
+
+        </CheckBoxPreference>
+    </PreferenceCategory>
+</PreferenceScreen>
