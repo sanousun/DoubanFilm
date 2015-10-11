@@ -15,15 +15,20 @@ import android.view.ViewGroup;
 
 import com.shenhui.doubanfilm.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/9/20.
  */
 public class TopFragment extends Fragment {
 
     private static final String[] TITLES = {"壹至伍拾", "伍壹至壹佰", "壹佰壹至壹佰伍", "壹伍壹至贰佰", "贰佰壹至贰佰伍"};
+    @Bind(R.id.tab_home)
+    TabLayout mTabLayout;
+    @Bind(R.id.vp_home)
+    ViewPager mViewPager;
 
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
 
     public static final String TOP_FRAGMENT_TOP = "top";
@@ -33,8 +38,7 @@ public class TopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        mTabLayout = (TabLayout) view.findViewById(R.id.tab_home);
-        mViewPager = (ViewPager) view.findViewById(R.id.vp_home);
+        ButterKnife.bind(this, view);
         initData();
         return view;
     }
@@ -46,6 +50,12 @@ public class TopFragment extends Fragment {
         mTabLayout.setTabTextColors(Color.GRAY, Color.WHITE);
         mTabLayout.setTabsFromPagerAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     private class TopPagerAdapter extends FragmentStatePagerAdapter {

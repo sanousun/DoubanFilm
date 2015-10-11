@@ -38,12 +38,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-/**
- * Created by sanousun on 2015/9/14.
- */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         DialogInterface.OnClickListener {
@@ -61,14 +59,13 @@ public class MainActivity extends AppCompatActivity
     //the file for headerImage
     private static final String PICTURE_HEADER_FILE = "header.jpg";
 
-    //main
-    private Toolbar mToolbar;
-    private DrawerLayout mDrawer;
-    private NavigationView mNavView;
-    private ActionBarDrawerToggle mToggle;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.main_nav)
+    NavigationView mNavView;
+    @Bind(R.id.main_drawer)
+    DrawerLayout mDrawer;
 
-    //navigationView header
-    private View mNavHeader;
     private CircleImageView mNavImage;
     private CircleImageView mNavEdit;
     private TextView mUserName;
@@ -91,17 +88,15 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initView();
         initData();
         initEvent();
     }
 
     protected void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDrawer = (DrawerLayout) findViewById(R.id.main_drawer);
-        mNavView = (NavigationView) findViewById(R.id.main_nav);
         homeItem = mNavView.getMenu().findItem(R.id.nav_home);
-        mNavHeader = mNavView.inflateHeaderView(R.layout.view_nav_header);
+        View mNavHeader = mNavView.inflateHeaderView(R.layout.view_nav_header);
         mNavImage = (CircleImageView) mNavHeader.findViewById(R.id.iv_nav_header);
         mNavEdit = (CircleImageView) mNavHeader.findViewById(R.id.iv_nav_edit);
         mUserName = (TextView) mNavHeader.findViewById(R.id.tv_nav_name);
@@ -113,7 +108,7 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setTitle(mTitle);
         setSupportActionBar(mToolbar);
         //设置Drawer的开关
-        mToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.openDrawer, R.string.closeDrawer);
         mToggle.syncState();
         mDrawer.setDrawerListener(mToggle);
@@ -132,8 +127,8 @@ public class MainActivity extends AppCompatActivity
         }
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         useEditor = userSP.edit();
-        mUserName.setText(userSP.getString(USER_NAME, "昵称"));
-        mUserIntro.setText(userSP.getString(USER_INTRO, "个人简介"));
+        mUserName.setText(userSP.getString(USER_NAME, USER_NAME));
+        mUserIntro.setText(userSP.getString(USER_INTRO, USER_INTRO));
     }
 
     protected void initEvent() {
@@ -142,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 View v = LayoutInflater.from(MainActivity.this).
-                        inflate(R.layout.view_dialog_user_edit, null);
+                        inflate(R.layout.dialog_user_edit, null);
                 final EditText nameEdit = (EditText) v.findViewById(R.id.edit_user_name);
                 final EditText introEdit = (EditText) v.findViewById(R.id.edit_user_intro);
                 new AlertDialog.Builder(MainActivity.this).setTitle("用户设置...").
@@ -210,9 +205,7 @@ public class MainActivity extends AppCompatActivity
         }
         transaction.commit();
         supportInvalidateOptionsMenu();
-        if (mTitle != null) {
-            getSupportActionBar().setTitle(mTitle);
-        }
+        if (mTitle != null) getSupportActionBar().setTitle(mTitle);
     }
 
     /**

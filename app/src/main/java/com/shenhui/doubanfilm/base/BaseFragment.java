@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 
 import com.shenhui.doubanfilm.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/8/31.
  */
@@ -20,21 +23,22 @@ public class BaseFragment extends Fragment {
 
     protected int layoutId = R.layout.fragment_base;
 
+    @Bind(R.id.rv_fragment)
     protected RecyclerView mRecView;
+    @Bind(R.id.fresh_fragment)
     protected SwipeRefreshLayout mRefreshLayout;
+    @Bind(R.id.btn_fragment)
     protected FloatingActionButton mFloatBtn;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(layoutId, container, false);
-        mRecView = (RecyclerView) view.findViewById(R.id.rv_fragment);
+        ButterKnife.bind(this, view);
         mRecView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fresh_fragment);
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setProgressViewOffset(false, 0, 100);
-        mFloatBtn = (FloatingActionButton) view.findViewById(R.id.btn_fragment);
         initData();
         initEvent();
         return view;
@@ -52,5 +56,11 @@ public class BaseFragment extends Fragment {
      */
     protected void initEvent() {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

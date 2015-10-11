@@ -25,6 +25,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/9/3.
  */
@@ -198,29 +201,30 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView image;
-        private LinearLayout rating;
-        private RatingBar ratingBar;
-        private TextView text_rating;
-        private TextView collect_count;
-        private TextView title;
-        private TextView original_title;
-        private TextView genres;
-        private TextView directors;
-        private TextView casts;
+        @Bind(R.id.iv_coming_images)
+        ImageView image;
+        @Bind(R.id.ll_coming_rating)
+        LinearLayout rating;
+        @Bind(R.id.rb_coming_rating)
+        RatingBar ratingBar;
+        @Bind(R.id.tv_coming_rating)
+        TextView text_rating;
+        @Bind(R.id.tv_coming_collect_count)
+        TextView collect_count;
+        @Bind(R.id.tv_coming_title)
+        TextView title;
+        @Bind(R.id.tv_coming_original_title)
+        TextView original_title;
+        @Bind(R.id.tv_coming_genres)
+        TextView genres;
+        @Bind(R.id.tv_coming_director)
+        TextView directors;
+        @Bind(R.id.tv_coming_casts1)
+        TextView casts;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.iv_coming_images);
-            rating = (LinearLayout) itemView.findViewById(R.id.ll_coming_rating);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.rb_coming_rating);
-            text_rating = (TextView) itemView.findViewById(R.id.tv_coming_rating);
-            collect_count = (TextView) itemView.findViewById(R.id.tv_coming_collect_count);
-            title = (TextView) itemView.findViewById(R.id.tv_coming_title);
-            original_title = (TextView) itemView.findViewById(R.id.tv_coming_original_title);
-            genres = (TextView) itemView.findViewById(R.id.tv_coming_genres);
-            directors = (TextView) itemView.findViewById(R.id.tv_coming_director);
-            casts = (TextView) itemView.findViewById(R.id.tv_coming_casts1);
+            ButterKnife.bind(this, itemView);
         }
     }
 

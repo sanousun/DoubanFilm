@@ -25,6 +25,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/8/12.
  */
@@ -123,27 +126,28 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
         this.notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView text_rank;
-        public ImageView image_isNew;
-        public ImageView image_film;
-        public TextView text_no_rating;
-        public LinearLayout ratingLayout;
-        public RatingBar ratingBar;
-        public TextView text_rating;
-        public TextView text_title;
+        @Bind(R.id.tv_grid_rank)
+        TextView text_rank;
+        @Bind(R.id.iv_grid_isNew)
+        ImageView image_isNew;
+        @Bind(R.id.iv_grid_image)
+        ImageView image_film;
+        @Bind(R.id.tv_grid_title)
+        TextView text_title;
+        @Bind(R.id.tv_grid_noRating)
+        TextView text_no_rating;
+        @Bind(R.id.rb_grid_rating)
+        RatingBar ratingBar;
+        @Bind(R.id.tv_grid_rating)
+        TextView text_rating;
+        @Bind(R.id.ll_grid_rating)
+        LinearLayout ratingLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            text_rank = (TextView) itemView.findViewById(R.id.tv_grid_rank);
-            image_isNew = (ImageView) itemView.findViewById(R.id.iv_grid_isNew);
-            image_film = (ImageView) itemView.findViewById(R.id.iv_grid_image);
-            text_no_rating = (TextView) itemView.findViewById(R.id.tv_grid_noRating);
-            ratingLayout = (LinearLayout) itemView.findViewById(R.id.ll_grid_rating);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.rb_grid_rating);
-            text_rating = (TextView) itemView.findViewById(R.id.tv_grid_rating);
-            text_title = (TextView) itemView.findViewById(R.id.tv_grid_title);
+            ButterKnife.bind(this, itemView);
         }
     }
 

@@ -25,6 +25,7 @@ public class Constant {
     public static final String CELEBRITY = "/v2/movie/celebrity/";
     public static final String SEARCH_Q = "/v2/movie/search?q=";
     public static final String SEARCH_TAG = "/v2/movie/search?tag=";
+    public static final String INTENT_ID = "id";
 
     public static final Type subType = new TypeToken<Subject>() {
     }.getType();

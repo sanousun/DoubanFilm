@@ -30,6 +30,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/9/20.
  */
@@ -72,7 +75,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_collect_layout, parent, false);
-        return new ViewHolder(view, new ViewHolder.OnResponseCLickListener() {
+        return new ViewHolder(view, new OnResponseCLickListener() {
             @Override
             public void onWholeClick(int pos) {
                 callback.itemClick(mData.get(pos).getId());
@@ -164,35 +167,36 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView image;
-        public LinearLayout rating;
-        public RatingBar ratingBar;
-        public TextView text_rating;
-        public TextView collect_count;
-        public TextView title;
-        public TextView original_title;
-        public TextView genres;
-        public TextView directors;
-        public TextView casts;
-        public ImageView over_flow;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @Bind(R.id.iv_collect_images)
+        ImageView image;
+        @Bind(R.id.ll_collect_rating)
+        LinearLayout rating;
+        @Bind(R.id.rb_collect_rating)
+        RatingBar ratingBar;
+        @Bind(R.id.tv_collect_rating)
+        TextView text_rating;
+        @Bind(R.id.tv_collect_collect_count)
+        TextView collect_count;
+        @Bind(R.id.tv_collect_title)
+        TextView title;
+        @Bind(R.id.tv_collect_original_title)
+        TextView original_title;
+        @Bind(R.id.tv_collect_genres)
+        TextView genres;
+        @Bind(R.id.tv_collect_director)
+        TextView directors;
+        @Bind(R.id.tv_collect_casts)
+        TextView casts;
+        @Bind(R.id.iv_collect_more)
+        ImageView over_flow;
 
         private OnResponseCLickListener mListener;
 
         public ViewHolder(View itemView, OnResponseCLickListener listener) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.iv_collect_images);
-            rating = (LinearLayout) itemView.findViewById(R.id.ll_collect_rating);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.rb_collect_rating);
-            text_rating = (TextView) itemView.findViewById(R.id.tv_collect_rating);
-            collect_count = (TextView) itemView.findViewById(R.id.tv_collect_collect_count);
-            title = (TextView) itemView.findViewById(R.id.tv_collect_title);
-            original_title = (TextView) itemView.findViewById(R.id.tv_collect_original_title);
-            genres = (TextView) itemView.findViewById(R.id.tv_collect_genres);
-            directors = (TextView) itemView.findViewById(R.id.tv_collect_director);
-            casts = (TextView) itemView.findViewById(R.id.tv_collect_casts);
-            over_flow = (ImageView) itemView.findViewById(R.id.iv_collect_more);
-
+            ButterKnife.bind(this, itemView);
             mListener = listener;
             over_flow.setOnClickListener(this);
             itemView.setOnClickListener(this);
@@ -206,18 +210,16 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                 mListener.onWholeClick(getAdapterPosition());
             }
         }
-
-        public interface OnResponseCLickListener {
-            void onWholeClick(int pos);
-
-            void onOverflowClick(View v, int pos);
-        }
     }
 
     public interface OnItemClickListener {
         void itemClick(String id);
-
         void itemRemove(int pos, String id);
+    }
+
+    public interface OnResponseCLickListener {
+        void onWholeClick(int pos);
+        void onOverflowClick(View v, int pos);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

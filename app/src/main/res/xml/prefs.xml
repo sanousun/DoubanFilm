@@ -13,4 +13,10 @@
 
         </CheckBoxPreference>
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Others">
+        <Preference
+            android:key="about"
+            android:title="About" />
+    </PreferenceCategory>
 </PreferenceScreen>

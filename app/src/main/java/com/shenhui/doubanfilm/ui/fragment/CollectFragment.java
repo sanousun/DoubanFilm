@@ -79,11 +79,11 @@ public class CollectFragment extends BaseFragment
 
     @Override
     public void itemRemove(final int pos, final String id) {
-        Snackbar.make(mView, "取消收藏...", Snackbar.LENGTH_LONG).
-                setAction("撤销", new View.OnClickListener() {
+        Snackbar.make(mView, "是否要取消收藏...", Snackbar.LENGTH_LONG).
+                setAction("确定", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mAdapter.cancelRemove(pos);
+                        MyApplication.getDataSource().deleteFilm(id);
                     }
                 }).
                 setCallback(new Snackbar.Callback() {
@@ -91,7 +91,7 @@ public class CollectFragment extends BaseFragment
                     public void onDismissed(Snackbar snackbar, int event) {
                         super.onDismissed(snackbar, event);
                         if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                            MyApplication.getDataSource().deleteFilm(id);
+                            mAdapter.cancelRemove(pos);
                         }
                     }
 

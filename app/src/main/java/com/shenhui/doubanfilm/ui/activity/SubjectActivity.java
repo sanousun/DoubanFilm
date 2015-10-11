@@ -19,12 +19,10 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,9 +63,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-/**
- * Created by sanousun on 2015/9/4.
- */
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class SubjectActivity extends AppCompatActivity
         implements CastAdapter.OnItemClickListener,
         SubCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
@@ -75,34 +73,54 @@ public class SubjectActivity extends AppCompatActivity
 
     private static final String JSON_SUBJECTS = "subjects";
 
-    private SwipeRefreshLayout mRefresh;
+    @Bind(R.id.refresh_subj)
+    SwipeRefreshLayout mRefresh;
 
     //film header
-    private AppBarLayout mAppBarLayout;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private ImageView mToolbarImage;
-    private LinearLayout mLinearContent;
-    private Toolbar mToolbar;
-    private ImageView mImage;
-    private RatingBar mRatingBar;
-    private TextView mRating;
-    private TextView mYear;
-    private TextView mCollect;
-    private TextView mTitle;
-    private TextView mOriginal_title;
-    private TextView mGenres;
-    private TextView mAke;
-    private TextView mCountries;
+    @Bind(R.id.appbarLayout_subj)
+    AppBarLayout mAppBarLayout;
+    @Bind(R.id.toolbarLayout_subj)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
+    @Bind(R.id.iv_header_subj)
+    ImageView mToolbarImage;
+    @Bind(R.id.ll_subj_content)
+    LinearLayout mLinearContent;
+    @Bind(R.id.toolbar_subj)
+    Toolbar mToolbar;
+    @Bind(R.id.iv_subj_images)
+    ImageView mImage;
+    @Bind(R.id.rb_subj_rating)
+    RatingBar mRatingBar;
+    @Bind(R.id.tv_subj_rating)
+    TextView mRating;
+    @Bind(R.id.tv_subj_year)
+    TextView mYear;
+    @Bind(R.id.tv_subj_collect_count)
+    TextView mCollect;
+    @Bind(R.id.tv_subj_title)
+    TextView mTitle;
+    @Bind(R.id.tv_subj_original_title)
+    TextView mOriginal_title;
+    @Bind(R.id.tv_subj_genres)
+    TextView mGenres;
+    @Bind(R.id.tv_subj_ake)
+    TextView mAke;
+    @Bind(R.id.tv_subj_countries)
+    TextView mCountries;
 
     //film summary
-    private CardView mSummary;
-    private TextView mSummaryText;
+    @Bind(R.id.card_subj_summary)
+    CardView mSummary;
+    @Bind(R.id.tv_subj_summary)
+    TextView mSummaryText;
 
     //film director and cast
-    private RecyclerView mCast;
+    @Bind(R.id.re_subj_cast)
+    RecyclerView mCast;
 
     //film recommend
-    private RecyclerView mRecommend;
+    @Bind(R.id.re_subj_recommend)
+    RecyclerView mRecommend;
 
     //film subject
     private String mId;
@@ -112,7 +130,6 @@ public class SubjectActivity extends AppCompatActivity
     private List<CastAndCommend> mCommendData = new ArrayList<>();
 
     private boolean isSummaryShow = false;
-    private CastAdapter mCastAdapter;
     private SubCardAdapter mCommendAdapter;
 
     private File mFile;
@@ -122,7 +139,7 @@ public class SubjectActivity extends AppCompatActivity
 
     private int mAppBarLayoutHeight;
     private int mImageWidth;
-    private FrameLayout.LayoutParams mParams;
+    private FrameLayout.LayoutParams mContentParams;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder().
@@ -139,11 +156,11 @@ public class SubjectActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_subject);
+        ButterKnife.bind(this);
         initView();
         Intent intent = getIntent();
         mId = intent.getStringExtra("id");
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + ".jpg");
-        Log.i("xyz", mFile.getPath());
         mSubject = MyApplication.getDataSource().filmOfId(mId);
         if (mSubject != null) {
             isCollect = true;
@@ -167,37 +184,15 @@ public class SubjectActivity extends AppCompatActivity
     }
 
     private void initView() {
-
-        mRefresh = (SwipeRefreshLayout) findViewById(R.id.refresh_subj);
+        //设置圆形刷新球的偏移量
         mRefresh.setProgressViewOffset(false, 0, 100);
         mRefresh.setOnRefreshListener(this);
-        mAppBarLayout = (AppBarLayout) findViewById(R.id.appbarLayout_subj);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbarLayout_subj);
-        mToolbarImage = (ImageView) findViewById(R.id.iv_header_subj);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_subj);
         mAppBarLayoutHeight =
                 mAppBarLayout.getLayoutParams().height - mToolbar.getLayoutParams().height;
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mImage = (ImageView) findViewById(R.id.iv_subj_images);
-        mImageWidth = mImage.getLayoutParams().width;
-        mLinearContent = (LinearLayout) findViewById(R.id.ll_subj_content);
-        mParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
-
-        mRatingBar = (RatingBar) findViewById(R.id.rb_subj_rating);
-        mRating = (TextView) findViewById(R.id.tv_subj_rating);
-        mYear = (TextView) findViewById(R.id.tv_subj_year);
-        mCollect = (TextView) findViewById(R.id.tv_subj_collect_count);
-        mTitle = (TextView) findViewById(R.id.tv_subj_title);
-        mOriginal_title = (TextView) findViewById(R.id.tv_subj_original_title);
-        mGenres = (TextView) findViewById(R.id.tv_subj_genres);
-        mAke = (TextView) findViewById(R.id.tv_subj_ake);
-        mCountries = (TextView) findViewById(R.id.tv_subj_countries);
-        mSummary = (CardView) findViewById(R.id.card_subj_summary);
-        mSummaryText = (TextView) findViewById(R.id.tv_subj_summary);
-        //由于使用了scrollView，所以必须对RecyclerView进行高度绑定
-        mCast = (RecyclerView) findViewById(R.id.re_subj_cast);
-        mRecommend = (RecyclerView) findViewById(R.id.re_subj_recommend);
+        mImageWidth = (int) (mImage.getLayoutParams().width * 1.1);
+        mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
         LinearLayoutManager manager = new LinearLayoutManager(SubjectActivity.this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mCast.setLayoutManager(manager);
@@ -316,7 +311,7 @@ public class SubjectActivity extends AppCompatActivity
             mCastData.add(ca);
         }
 
-        mCastAdapter = new CastAdapter(SubjectActivity.this, mCastData);
+        CastAdapter mCastAdapter = new CastAdapter(SubjectActivity.this, mCastData);
         mCastAdapter.setOnItemClickListener(SubjectActivity.this);
         mCast.setAdapter(mCastAdapter);
 
@@ -474,7 +469,7 @@ public class SubjectActivity extends AppCompatActivity
      * 将List<String>转成合适的String
      */
     private String listToString(List<String> data) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < data.size(); i++) {
             s.append(i == 0 ? "" : "/");
             s.append(data.get(i));
@@ -498,12 +493,12 @@ public class SubjectActivity extends AppCompatActivity
     private void changeLayout(float a) {
         mImage.setAlpha(a);
         if (a == 1.0) {
-            mLinearContent.setGravity(Gravity.LEFT);
+            mLinearContent.setGravity(Gravity.START);
         } else {
             mLinearContent.setGravity(Gravity.CENTER_HORIZONTAL);
         }
-        mParams.leftMargin = (int) (mImageWidth * a * 1.1);
-        mLinearContent.setLayoutParams(mParams);
+        mContentParams.leftMargin = (int) (mImageWidth * a);
+        mLinearContent.setLayoutParams(mContentParams);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

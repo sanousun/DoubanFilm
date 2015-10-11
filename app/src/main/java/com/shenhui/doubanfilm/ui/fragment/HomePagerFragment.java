@@ -16,8 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -34,12 +32,14 @@ import com.shenhui.doubanfilm.bean.USBoxSub;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * refresh的显示，先设置一个空的adapter数据，再通过网络得到数据并更新
@@ -52,9 +52,12 @@ public class HomePagerFragment extends Fragment {
     private static final String JSON_TOTAL = "total";
     private static final String JSON_SUBJECTS = "subjects";
 
-    private SwipeRefreshLayout mRefresh;
-    private RecyclerView mRecView;
-    private FloatingActionButton mBtn;
+    @Bind(R.id.rv_fragment)
+    RecyclerView mRecView;
+    @Bind(R.id.fresh_fragment)
+    SwipeRefreshLayout mRefresh;
+    @Bind(R.id.btn_fragment)
+    FloatingActionButton mBtn;
 
     private SimSubAdapter mSimAdapter;
     private BoxAdapter mBoxAdapter;
@@ -79,11 +82,9 @@ public class HomePagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_base, container, false);
-        mRefresh = (SwipeRefreshLayout) view.findViewById(R.id.fresh_fragment);
+        ButterKnife.bind(this, view);
         mRefresh.setColorSchemeResources(R.color.colorPrimary);
         mRefresh.setProgressViewOffset(false, 0, 100);
-        mRecView = (RecyclerView) view.findViewById(R.id.rv_fragment);
-        mBtn = (FloatingActionButton) view.findViewById(R.id.btn_fragment);
         initData();
         initEvent();
         return view;
@@ -218,6 +219,7 @@ public class HomePagerFragment extends Fragment {
     private void setOnScrollListener() {
         mRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
+            boolean isShow = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView,
@@ -238,10 +240,12 @@ public class HomePagerFragment extends Fragment {
                 lastVisibleItem =
                         ((LinearLayoutManager) mRecView.getLayoutManager()).
                                 findLastVisibleItemPosition();
-                if (dx < 0) {
+                if (dy < 0 && !isShow) {
                     animatorForVisible();
-                } else {
+                    isShow = true;
+                } else if (dy > 0 && isShow) {
                     animatorForGone();
+                    isShow = false;
                 }
             }
         });
@@ -323,17 +327,7 @@ public class HomePagerFragment extends Fragment {
     /**
      * 为floatingActionBar的出现消失设置动画效果
      */
-    private void animForGone() {
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_gone);
-        mBtn.setAnimation(anim);
-        mBtn.setVisibility(View.GONE);
-    }
 
-    private void animForVisible() {
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_visible);
-        mBtn.setAnimation(anim);
-        mBtn.setVisibility(View.VISIBLE);
-    }
 
     private void animatorForGone() {
         Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_gone);
@@ -387,5 +381,11 @@ public class HomePagerFragment extends Fragment {
         });
         anim.setTarget(mBtn);
         anim.start();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

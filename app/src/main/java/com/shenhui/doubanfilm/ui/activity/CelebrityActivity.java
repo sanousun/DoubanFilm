@@ -38,6 +38,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/9/12.
  */
@@ -46,16 +49,27 @@ public class CelebrityActivity extends AppCompatActivity
 
     private static final String VOLLEY_TAG = "CelActivity";
 
-    private Toolbar mToolbar;
-    private ImageView mImage;
-    private TextView mName;
-    private TextView mNameEn;
-    private TextView mGender;
-    private TextView mBronPlace;
-    private TextView mAke;
-    private TextView mAkeEn;
-    private TextView mWorks;
-    private RecyclerView mWorksView;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.tv_cel_name)
+    TextView mName;
+    @Bind(R.id.tv_cel_name_en)
+    TextView mNameEn;
+    @Bind(R.id.tv_cel_gender)
+    TextView mGender;
+    @Bind(R.id.tv_cel_bron_place)
+    TextView mBronPlace;
+    @Bind(R.id.tv_cel_ake)
+    TextView mAke;
+    @Bind(R.id.tv_cel_ake_en)
+    TextView mAkeEn;
+    @Bind(R.id.iv_cel_image)
+    ImageView mImage;
+    @Bind(R.id.tv_cel_works)
+    TextView mWorks;
+    @Bind(R.id.rv_cel_works)
+    RecyclerView mWorksView;
+
 
     private String mId;
     private Celebrity mCelebrity;
@@ -77,6 +91,7 @@ public class CelebrityActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_celebrity);
+        ButterKnife.bind(this);
         initView();
         initData();
     }
@@ -88,18 +103,8 @@ public class CelebrityActivity extends AppCompatActivity
     }
 
     private void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mImage = (ImageView) findViewById(R.id.iv_cel_image);
-        mName = (TextView) findViewById(R.id.tv_cel_name);
-        mNameEn = (TextView) findViewById(R.id.tv_cel_name_en);
-        mGender = (TextView) findViewById(R.id.tv_cel_gender);
-        mBronPlace = (TextView) findViewById(R.id.tv_cel_bron_place);
-        mAke = (TextView) findViewById(R.id.tv_cel_ake);
-        mAkeEn = (TextView) findViewById(R.id.tv_cel_ake_en);
-        mWorks = (TextView) findViewById(R.id.tv_cel_works);
-        mWorksView = (RecyclerView) findViewById(R.id.rv_cel_works);
         mWorksView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
@@ -169,7 +174,7 @@ public class CelebrityActivity extends AppCompatActivity
         if (mCelebrity.getAka_en().size() > 0) {
             SpannableString ake_en = new SpannableString("更多英文名：");
             ake_en.setSpan(new ForegroundColorSpan(
-                    Color.BLACK), 0, ake_en.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    Color.BLACK), 0, ake_en.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             mAkeEn.setText(ake_en);
             mAkeEn.append(listToString(mCelebrity.getAka_en()));
         } else {

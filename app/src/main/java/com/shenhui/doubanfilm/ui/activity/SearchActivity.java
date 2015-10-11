@@ -23,11 +23,13 @@ import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.widget.IzzySearchView;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by sanousun on 2015/8/22.
@@ -36,23 +38,24 @@ public class SearchActivity extends AppCompatActivity
         implements SearchAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "SearchActivity";
-
     private static final String JSON_SUBJECTS = "subjects";
 
-    private RecyclerView mRecyclerView;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.rv_search)
+    RecyclerView mRecyclerView;
+
     private SearchAdapter mAdapter;
     private List<SimpleSub> mData;
-    //    private SearchView searchView;
+    //SearchView on the Toolbar;
     private IzzySearchView mSearchView;
     private ProgressDialog mDialog;
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_search);
+        ButterKnife.bind(this);
         initView();
     }
 

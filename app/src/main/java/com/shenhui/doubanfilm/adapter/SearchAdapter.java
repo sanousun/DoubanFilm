@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by Sanousun on 2015/8/24.
  */
@@ -122,27 +125,28 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image_film;
-        public RatingBar ratingBar;
-        public TextView text_rating;
-        public TextView text_collect_count;
-        public TextView text_title;
-        public TextView text_original_title;
-        public TextView text_genres;
-        public TextView text_directors;
-        public TextView text_casts;
+        @Bind(R.id.iv_search_images)
+        ImageView image_film;
+        @Bind(R.id.rb_search_rating)
+        RatingBar ratingBar;
+        @Bind(R.id.tv_search_rating)
+        TextView text_rating;
+        @Bind(R.id.tv_search_collect_count)
+        TextView text_collect_count;
+        @Bind(R.id.tv_search_title)
+        TextView text_title;
+        @Bind(R.id.tv_search_original_title)
+        TextView text_original_title;
+        @Bind(R.id.tv_search_genres)
+        TextView text_genres;
+        @Bind(R.id.tv_search_directors)
+        TextView text_directors;
+        @Bind(R.id.tv_search_casts)
+        TextView text_casts;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image_film = (ImageView) itemView.findViewById(R.id.iv_search_images);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.rb_search_rating);
-            text_rating = (TextView) itemView.findViewById(R.id.tv_search_rating);
-            text_collect_count = (TextView) itemView.findViewById(R.id.tv_search_collect_count);
-            text_title = (TextView) itemView.findViewById(R.id.tv_search_title);
-            text_original_title = (TextView) itemView.findViewById(R.id.tv_search_original_title);
-            text_genres = (TextView) itemView.findViewById(R.id.tv_search_genres);
-            text_directors = (TextView) itemView.findViewById(R.id.tv_search_directors);
-            text_casts = (TextView) itemView.findViewById(R.id.tv_search_casts);
+            ButterKnife.bind(this, itemView);
         }
     }
 

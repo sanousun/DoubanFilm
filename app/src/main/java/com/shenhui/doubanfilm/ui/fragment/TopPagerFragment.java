@@ -1,15 +1,11 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +13,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimSubAdapter;
@@ -33,12 +27,6 @@ import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,9 +107,7 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
                             String content = response.getString(JSON_SUBJECTS);
                             mData = MyApplication.
                                     getDataSource().insertOrUpDate(start, content);
-                            Log.i("xyz", "adapter");
                             mAdapter.updateList(mData, TOP250_TOTAL);
-                            Log.i("xyz", "scroll");
                             setOnScrollListener();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -135,7 +121,6 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-                        Log.i("xyz", error.toString());
                         if (mRefreshLayout.isRefreshing())
                             mRefreshLayout.setRefreshing(false);
                     }
@@ -148,9 +133,9 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
      * 为RecyclerView设置下拉刷新及floatingActionButton的消失出现
      */
     private void setOnScrollListener() {
-        Log.i("xyz", "setOnScrollListener()");
         mRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
+            boolean isShow = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView,
@@ -170,13 +155,18 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
                 lastVisibleItem =
                         ((LinearLayoutManager) mRecView.getLayoutManager()).
                                 findLastVisibleItemPosition();
-                Log.i("xyz", "lastVisibleItem-->" + lastVisibleItem);
+                if (dy < 0 && !isShow) {
+                    animForVisible();
+                    isShow = true;
+                } else if (dy > 0 && isShow) {
+                    animForGone();
+                    isShow = false;
+                }
             }
         });
     }
 
     private void loadMore() {
-        Log.i("xyz", "loadMore()");
         int moreStart = mStart + TOP250_COUNT;
         List<SimpleSub> data;
         if ((data = MyApplication.getDataSource().getTop(moreStart + "")) != null) {
@@ -223,5 +213,17 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
         Intent intent = new Intent(getActivity(), SubjectActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+
+    private void animForGone() {
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_gone);
+        mFloatBtn.setAnimation(anim);
+        mFloatBtn.setVisibility(View.GONE);
+    }
+
+    private void animForVisible() {
+        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_visible);
+        mFloatBtn.setAnimation(anim);
+        mFloatBtn.setVisibility(View.VISIBLE);
     }
 }

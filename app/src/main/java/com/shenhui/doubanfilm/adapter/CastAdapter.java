@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Created by sanousun on 2015/9/4.
  */
@@ -81,15 +84,16 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image;
-        public TextView text;
-        private TextView text_dir;
+        @Bind(R.id.cast_item_image)
+        ImageView image;
+        @Bind(R.id.cast_item_text)
+        TextView text;
+        @Bind(R.id.cast_dir_text)
+        TextView text_dir;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.cast_item_image);
-            text = (TextView) itemView.findViewById(R.id.cast_item_text);
-            text_dir = (TextView) itemView.findViewById(R.id.cast_dir_text);
+            ButterKnife.bind(this, itemView);
         }
     }
 
