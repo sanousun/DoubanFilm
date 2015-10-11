@@ -40,6 +40,7 @@
                 android:paddingLeft="8dip"
                 android:paddingRight="8dip"
                 android:singleLine="true"
+                android:textColor="@color/white"
                 android:textCursorDrawable="@null" />
 
             <ImageView

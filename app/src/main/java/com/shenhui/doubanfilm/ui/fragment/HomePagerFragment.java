@@ -218,8 +218,6 @@ public class HomePagerFragment extends Fragment {
     private void setOnScrollListener() {
         mRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
-            boolean lessThanFifteen = true;
-            boolean moreThanFifteen = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView,
@@ -240,24 +238,10 @@ public class HomePagerFragment extends Fragment {
                 lastVisibleItem =
                         ((LinearLayoutManager) mRecView.getLayoutManager()).
                                 findLastVisibleItemPosition();
-
-                if (lastVisibleItem > 15) {
-                    if (!moreThanFifteen) {
-                        animatorForVisible();
-                        moreThanFifteen = true;
-                        lessThanFifteen = false;
-                    } else {
-                        lessThanFifteen = false;
-                    }
+                if (dx < 0) {
+                    animatorForVisible();
                 } else {
-                    if (!lessThanFifteen) {
-                        animatorForGone();
-                        lessThanFifteen = true;
-                        moreThanFifteen = false;
-                    } else {
-                        moreThanFifteen = false;
-                    }
-
+                    animatorForGone();
                 }
             }
         });

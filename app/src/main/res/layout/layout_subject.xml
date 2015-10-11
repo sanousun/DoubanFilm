@@ -68,11 +68,10 @@
                         app:cardCornerRadius="4dp"
                         app:cardElevation="4dp">
 
-                        <LinearLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="8dp"
-                            android:orientation="horizontal">
+                            android:layout_margin="8dp">
 
                             <ImageView
                                 android:id="@+id/iv_subj_images"
@@ -80,16 +79,18 @@
                                 android:layout_height="200dp" />
 
                             <LinearLayout
+                                android:id="@+id/ll_subj_content"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
+                                android:gravity="center_horizontal"
                                 android:orientation="vertical">
 
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
                                     android:layout_height="24dp"
                                     android:layout_marginTop="8dp"
-                                    android:gravity="center_vertical">
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
                                     <RatingBar
                                         android:id="@+id/rb_subj_rating"
@@ -102,22 +103,19 @@
                                         android:id="@+id/tv_subj_rating"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="16dp"
-                                        android:layout_toRightOf="@id/rb_subj_rating"
+                                        android:layout_marginLeft="8dp"
                                         android:textColor="@color/red" />
 
                                     <TextView
                                         android:id="@+id/tv_subj_year"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_marginRight="32dp"
+                                        android:layout_marginLeft="16dp"
                                         android:textColor="@color/red"
                                         android:textSize="18sp"
                                         android:textStyle="italic|bold" />
 
-
-                                </RelativeLayout>
+                                </LinearLayout>
 
                                 <TextView
                                     android:id="@+id/tv_subj_collect_count"
@@ -151,7 +149,7 @@
 
                                 <TextView
                                     android:id="@+id/tv_subj_ake"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="196dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:gravity="center_vertical"
@@ -159,7 +157,7 @@
 
                                 <TextView
                                     android:id="@+id/tv_subj_countries"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="196dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:gravity="center_vertical"
@@ -167,7 +165,7 @@
 
                             </LinearLayout>
 
-                        </LinearLayout>
+                        </FrameLayout>
 
                     </android.support.v7.widget.CardView>
 
@@ -201,7 +199,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/re_subj_cast"
                         android:layout_width="match_parent"
-                        android:layout_height="144dp"
+                        android:layout_height="160dp"
                         android:layout_margin="8dp" />
 
                     <TextView

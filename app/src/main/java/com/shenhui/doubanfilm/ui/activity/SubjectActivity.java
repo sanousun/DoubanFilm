@@ -20,10 +20,14 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +81,7 @@ public class SubjectActivity extends AppCompatActivity
     private AppBarLayout mAppBarLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ImageView mToolbarImage;
+    private LinearLayout mLinearContent;
     private Toolbar mToolbar;
     private ImageView mImage;
     private RatingBar mRatingBar;
@@ -114,6 +119,10 @@ public class SubjectActivity extends AppCompatActivity
 
     private Semaphore mCollectSemaphore = new Semaphore(0);
     private boolean isCollect = false;
+
+    private int mAppBarLayoutHeight;
+    private int mImageWidth;
+    private FrameLayout.LayoutParams mParams;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder().
@@ -166,9 +175,15 @@ public class SubjectActivity extends AppCompatActivity
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbarLayout_subj);
         mToolbarImage = (ImageView) findViewById(R.id.iv_header_subj);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_subj);
+        mAppBarLayoutHeight =
+                mAppBarLayout.getLayoutParams().height - mToolbar.getLayoutParams().height;
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mImage = (ImageView) findViewById(R.id.iv_subj_images);
+        mImageWidth = mImage.getLayoutParams().width;
+        mLinearContent = (LinearLayout) findViewById(R.id.ll_subj_content);
+        mParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
+
         mRatingBar = (RatingBar) findViewById(R.id.rb_subj_rating);
         mRating = (TextView) findViewById(R.id.tv_subj_rating);
         mYear = (TextView) findViewById(R.id.tv_subj_year);
@@ -263,7 +278,7 @@ public class SubjectActivity extends AppCompatActivity
         counties.setSpan(new ForegroundColorSpan(Color.GRAY),
                 0, counties.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mCountries.setText(counties);
-        mCountries.append("/n" + listToString(mSubject.getCountries()));
+        mCountries.append(listToString(mSubject.getCountries()));
 
         //简介，点击查看具体内容
         //SpannableString可以设置文字的样式，也可以通过ImageSpan在TextView中插入图片
@@ -292,7 +307,7 @@ public class SubjectActivity extends AppCompatActivity
         //获得导演演员数据列表
         for (Subject.DirectorsEntity dirs : mSubject.getDirectors()) {
             CastAndCommend dir = new CastAndCommend(dirs.getAlt(), dirs.getId(), dirs.getName(),
-                    dirs.getAvatars().getMedium(), true);
+                    dirs.getAvatars().getLarge(), true);
             mCastData.add(dir);
         }
         for (Subject.CastsEntity cas : mSubject.getCasts()) {
@@ -476,6 +491,19 @@ public class SubjectActivity extends AppCompatActivity
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
         //利用AppBarLayout的回调接口启用或者关闭滑动刷新
         mRefresh.setEnabled(i == 0);
+        float alpha = (float) (-1.0 * i) / mAppBarLayoutHeight;
+        changeLayout(alpha);
+    }
+
+    private void changeLayout(float a) {
+        mImage.setAlpha(a);
+        if (a == 1.0) {
+            mLinearContent.setGravity(Gravity.LEFT);
+        } else {
+            mLinearContent.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
+        mParams.leftMargin = (int) (mImageWidth * a * 1.1);
+        mLinearContent.setLayoutParams(mParams);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

@@ -79,16 +79,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             holder.text_original_title.setText(sub.getOriginal_title());
         }
         holder.text_genres.setText(listToString(sub.getGenres()));
-        String s = "";
+        String dir = mContext.getResources().getString(R.string.directors);
+        StringBuffer s = new StringBuffer();
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s += ((i == 0 ? "" : ",") + sub.getDirectors().get(i).getName());
+            s.append((i == 0 ? "" : "/") + sub.getDirectors().get(i).getName());
         }
-        holder.text_directors.setText(s);
-        s = "";
+        holder.text_directors.setText(dir);
+        holder.text_directors.append(s.toString());
+        String cast = mContext.getResources().getString(R.string.casts);
+        s = new StringBuffer();
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            s += ((i == 0 ? "" : ",") + sub.getCasts().get(i).getName());
+            s.append((i == 0 ? "" : "/") + sub.getCasts().get(i).getName());
         }
-        holder.text_casts.setText(s);
+        holder.text_casts.setText(cast);
+        holder.text_casts.append(s.toString());
 
         imageLoader.displayImage(sub.getImages().getLarge(),
                 holder.image_film, options, imageLoadingListener);
@@ -106,7 +110,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private String listToString(List<String> list) {
         StringBuffer s = new StringBuffer();
         for (int i = 0; i < list.size(); i++) {
-            s.append((i == 0 ? "" : ",") + list.get(i));
+            s.append((i == 0 ? "" : "/") + list.get(i));
         }
         return s.toString();
     }
