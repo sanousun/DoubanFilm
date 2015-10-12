@@ -1,6 +1,5 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,10 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sanousun on 2015/9/27.
- */
-public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnItemClickListener {
+public class TopPagerFragment extends BaseFragment
+        implements SimSubAdapter.OnItemClickListener, View.OnClickListener {
 
     private static final int TOP250_COUNT = 25;
     private static final int TOP250_TOTAL = 50;
@@ -78,6 +75,7 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
                 volley_Get(mStart + "");
             }
         });
+        mFloatBtn.setOnClickListener(this);
     }
 
     @Override
@@ -210,9 +208,15 @@ public class TopPagerFragment extends BaseFragment implements SimSubAdapter.OnIt
 
     @Override
     public void itemClick(String id) {
-        Intent intent = new Intent(getActivity(), SubjectActivity.class);
-        intent.putExtra("id", id);
-        startActivity(intent);
+        SubjectActivity.toActivity(getActivity(), id);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_fragment:
+                mRecView.smoothScrollToPosition(0);
+        }
     }
 
     private void animForGone() {

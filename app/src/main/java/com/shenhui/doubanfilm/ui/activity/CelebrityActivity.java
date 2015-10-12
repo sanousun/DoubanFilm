@@ -214,10 +214,7 @@ public class CelebrityActivity extends AppCompatActivity
 
     @Override
     public void itemClick(String id, boolean isCom) {
-
-        Intent intent = new Intent(CelebrityActivity.this, SubjectActivity.class);
-        intent.putExtra("id", id);
-        this.startActivity(intent);
+        SubjectActivity.toActivity(this, id);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

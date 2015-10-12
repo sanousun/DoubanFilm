@@ -72,9 +72,7 @@ public class CollectFragment extends BaseFragment
 
     @Override
     public void itemClick(String id) {
-        Intent intent = new Intent(getActivity(), SubjectActivity.class);
-        intent.putExtra("id", id);
-        startActivity(intent);
+        SubjectActivity.toActivity(getActivity(), id);
     }
 
     @Override

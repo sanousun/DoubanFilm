@@ -2,7 +2,6 @@ package com.shenhui.doubanfilm.ui.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -41,10 +40,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * refresh的显示，先设置一个空的adapter数据，再通过网络得到数据并更新
- * Created by sanousun on 2015/9/1.
- */
 public class HomePagerFragment extends Fragment {
 
     private static final String AUTO_REFRESH = "auto refresh?";
@@ -132,7 +127,7 @@ public class HomePagerFragment extends Fragment {
         mSimAdapter.setOnItemClickListener(new SimSubAdapter.OnItemClickListener() {
             @Override
             public void itemClick(String id) {
-                prepareIntent(SubjectActivity.class, id);
+                SubjectActivity.toActivity(getActivity(), id);
             }
         });
         mRecView.setAdapter(mSimAdapter);
@@ -145,7 +140,7 @@ public class HomePagerFragment extends Fragment {
         mBoxAdapter.setOnItemClickListener(new BoxAdapter.OnItemClickListener() {
             @Override
             public void itemClick(String id) {
-                prepareIntent(SubjectActivity.class, id);
+                SubjectActivity.toActivity(getActivity(), id);
             }
         });
         mRecView.setAdapter(mBoxAdapter);
@@ -316,19 +311,8 @@ public class HomePagerFragment extends Fragment {
     }
 
     /**
-     * 界面跳转
-     */
-    private void prepareIntent(Class cla, String id) {
-        Intent intent = new Intent(getActivity(), cla);
-        intent.putExtra("id", id);
-        startActivity(intent);
-    }
-
-    /**
      * 为floatingActionBar的出现消失设置动画效果
      */
-
-
     private void animatorForGone() {
         Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_gone);
         anim.addListener(new Animator.AnimatorListener() {

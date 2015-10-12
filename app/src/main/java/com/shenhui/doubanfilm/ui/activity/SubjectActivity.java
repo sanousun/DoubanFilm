@@ -71,6 +71,8 @@ public class SubjectActivity extends AppCompatActivity
         SubCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
         AppBarLayout.OnOffsetChangedListener {
 
+    private static final String KEY_SUBJECT_ID = "subject_id";
+
     private static final String JSON_SUBJECTS = "subjects";
 
     @Bind(R.id.refresh_subj)
@@ -159,7 +161,7 @@ public class SubjectActivity extends AppCompatActivity
         ButterKnife.bind(this);
         initView();
         Intent intent = getIntent();
-        mId = intent.getStringExtra("id");
+        mId = intent.getStringExtra(KEY_SUBJECT_ID);
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + ".jpg");
         mSubject = MyApplication.getDataSource().filmOfId(mId);
         if (mSubject != null) {
@@ -251,11 +253,11 @@ public class SubjectActivity extends AppCompatActivity
         }
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
-        mRating.setText((rate * 2) + "");
+        mRating.setText(String.format("%s", rate * 2));
         mYear.setText(mSubject.getYear());
         String coll = getResources().getString(R.string.collect);
         String count = getResources().getString(R.string.count);
-        mCollect.setText(coll + mSubject.getCollect_count() + count);
+        mCollect.setText(String.format("%s%d%s", coll, mSubject.getCollect_count(), count));
         mTitle.setText(mSubject.getTitle());
         if (!mSubject.getOriginal_title().equals(mSubject.getTitle())) {
             mOriginal_title.setText(mSubject.getOriginal_title());
@@ -499,6 +501,13 @@ public class SubjectActivity extends AppCompatActivity
         }
         mContentParams.leftMargin = (int) (mImageWidth * a);
         mLinearContent.setLayoutParams(mContentParams);
+    }
+
+
+    public static void toActivity(Context context, String id) {
+        Intent intent = new Intent(context, SubjectActivity.class);
+        intent.putExtra(KEY_SUBJECT_ID, id);
+        context.startActivity(intent);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
