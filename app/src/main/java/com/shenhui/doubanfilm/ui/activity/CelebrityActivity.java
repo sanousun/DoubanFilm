@@ -1,5 +1,6 @@
 package com.shenhui.doubanfilm.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -48,6 +49,7 @@ public class CelebrityActivity extends AppCompatActivity
         implements SubCardAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "CelActivity";
+    private static final String KEY_CEL_ID = "cel_id";
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -85,7 +87,12 @@ public class CelebrityActivity extends AppCompatActivity
             cacheOnDisk(true).
             considerExifParams(true).
             build();
-    private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
+
+    public static void toActivity(Context context, String id) {
+        Intent intent = new Intent(context, CelebrityActivity.class);
+        intent.putExtra(KEY_CEL_ID, id);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +104,7 @@ public class CelebrityActivity extends AppCompatActivity
     }
 
     private void initData() {
-        mId = getIntent().getStringExtra("id");
+        mId = getIntent().getStringExtra(KEY_CEL_ID);
         String url = Constant.API + Constant.CELEBRITY + mId;
         volley_get(url);
     }
@@ -153,7 +160,7 @@ public class CelebrityActivity extends AppCompatActivity
         if (mCelebrity == null) return;
         getSupportActionBar().setTitle(mCelebrity.getName());
         imageLoader.displayImage(mCelebrity.getAvatars().getMedium(),
-                mImage, options, imageLoadingListener);
+                mImage, options);
         mName.setText(mCelebrity.getName());
         mNameEn.setText(mCelebrity.getName_en());
         String gender = getResources().getString(R.string.gender);
@@ -217,19 +224,4 @@ public class CelebrityActivity extends AppCompatActivity
         SubjectActivity.toActivity(this, id);
     }
 
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
-            }
-        }
-    }
 }

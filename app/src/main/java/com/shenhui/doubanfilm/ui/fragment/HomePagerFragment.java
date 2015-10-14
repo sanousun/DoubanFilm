@@ -43,9 +43,13 @@ import butterknife.ButterKnife;
 public class HomePagerFragment extends Fragment {
 
     private static final String AUTO_REFRESH = "auto refresh?";
-
     private static final String JSON_TOTAL = "total";
     private static final String JSON_SUBJECTS = "subjects";
+    private static final String KEY_FRAGMENT_TITLE = "title";
+    private static final int POS_IN_THEATERS = 0;
+    private static final int POS_COMING = 1;
+    private static final int POS_US_BOX = 2;
+    private static final String VOLLEY_TAG = "HomePagerFragment";
 
     @Bind(R.id.rv_fragment)
     RecyclerView mRecView;
@@ -59,18 +63,23 @@ public class HomePagerFragment extends Fragment {
     private List<SimpleSub> mSimData = new ArrayList<>();
     private List<USBoxSub> mBoxData = new ArrayList<>();
 
-    private String mTitle = "null";
+    private int mTitlePos;
     private String requestUrl;
     private int totalItem;
     private boolean isFirstRefresh = true;
 
+    public static HomePagerFragment newInstance(int titlePos) {
+        HomePagerFragment fragment = new HomePagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_FRAGMENT_TITLE, titlePos);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mTitle = bundle.getString(HomeFragment.HOME_FRAGMENT_TITLE);
-        }
+        mTitlePos = getArguments().getInt(KEY_FRAGMENT_TITLE);
     }
 
     @Nullable
@@ -103,14 +112,14 @@ public class HomePagerFragment extends Fragment {
     }
 
     private void initData() {
-        switch (mTitle) {
-            case "正在热映":
+        switch (mTitlePos) {
+            case POS_IN_THEATERS:
                 initSimpleRecyclerView(false);
                 break;
-            case "即将上映":
+            case POS_COMING:
                 initSimpleRecyclerView(true);
                 break;
-            case "北美票房":
+            case POS_US_BOX:
                 initBoxRecyclerView();
                 break;
         }
@@ -158,16 +167,16 @@ public class HomePagerFragment extends Fragment {
     }
 
     private void updateData() {
-        switch (mTitle) {
-            case "正在热映":
+        switch (mTitlePos) {
+            case POS_IN_THEATERS:
                 requestUrl = Constant.API + Constant.IN_THEATERS;
                 volley_Get_Coming();
                 break;
-            case "即将上映":
+            case POS_COMING:
                 requestUrl = Constant.API + Constant.COMING;
                 volley_Get_Coming();
                 break;
-            case "北美票房":
+            case POS_US_BOX:
                 requestUrl = Constant.API + Constant.US_BOX;
                 volley_Get_USBox();
                 break;
@@ -204,7 +213,7 @@ public class HomePagerFragment extends Fragment {
                         mRefresh.setRefreshing(false);
                     }
                 });
-        request.setTag(mTitle);
+        request.setTag(VOLLEY_TAG + mTitlePos);
         MyApplication.getHttpQueue().add(request);
     }
 
@@ -267,7 +276,7 @@ public class HomePagerFragment extends Fragment {
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        request.setTag(mTitle);
+        request.setTag(VOLLEY_TAG + mTitlePos);
         MyApplication.getHttpQueue().add(request);
     }
 
@@ -300,14 +309,14 @@ public class HomePagerFragment extends Fragment {
                         mRefresh.setRefreshing(false);
                     }
                 });
-        request.setTag(mTitle);
+        request.setTag(VOLLEY_TAG + mTitlePos);
         MyApplication.getHttpQueue().add(request);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(mTitle);
+        MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG + mTitlePos);
     }
 
     /**

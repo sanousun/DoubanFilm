@@ -2,7 +2,6 @@ package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -15,16 +14,13 @@ import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.bean.Subject;
-import com.shenhui.doubanfilm.support.Constant;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -33,9 +29,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/9/20.
- */
 public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHolder> {
 
     private Context mContext;
@@ -124,8 +117,8 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
         Subject sub = mData.get(position);
         float rate = (float) sub.getRating().getAverage();
         holder.ratingBar.setRating(rate / 2);
-        holder.text_rating.setText("" + rate);
-        holder.collect_count.setText(sub.getCollect_count() + "");
+        holder.text_rating.setText(String.format("%s", rate));
+        holder.collect_count.setText(String.format("%d", sub.getCollect_count()));
         String title = sub.getTitle();
         String original_title = sub.getOriginal_title();
         holder.title.setText(title);
@@ -135,16 +128,14 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
             holder.original_title.setText(original_title);
             holder.original_title.setVisibility(View.VISIBLE);
         }
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < sub.getGenres().size(); i++) {
-            s.append(i == 0 ? "" : ",");
-            s.append(sub.getGenres().get(i));
+            s.append(i == 0 ? "" : ",").append(sub.getGenres().get(i));
         }
         holder.genres.setText(s.toString());
-        s.delete(0, s.length());
+        s = new StringBuilder();
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append(i == 0 ? "" : "/");
-            s.append(sub.getDirectors().get(i).getName());
+            s.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
         }
         holder.directors.setText(s.toString());
         s.delete(0, s.length());
@@ -160,11 +151,6 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mData.size();
-    }
-
-    public void upDate(List<Subject> data) {
-        this.mData = data;
-        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -214,11 +200,13 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
 
     public interface OnItemClickListener {
         void itemClick(String id);
+
         void itemRemove(int pos, String id);
     }
 
     public interface OnResponseCLickListener {
         void onWholeClick(int pos);
+
         void onOverflowClick(View v, int pos);
     }
 

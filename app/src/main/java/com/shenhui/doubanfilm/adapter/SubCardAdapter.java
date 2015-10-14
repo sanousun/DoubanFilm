@@ -62,7 +62,7 @@ public class SubCardAdapter extends RecyclerView.Adapter<SubCardAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         CastAndCommend sub = mData.get(position);
-        imageLoader.displayImage(sub.getMedium(),
+        imageLoader.displayImage(sub.getImage(),
                 holder.image, options, imageLoadingListener);
         if (sub.getIsDir()) {
             holder.text_dir.setVisibility(View.VISIBLE);
@@ -71,7 +71,7 @@ public class SubCardAdapter extends RecyclerView.Adapter<SubCardAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.itemClick(mData.get(position).getId(), mData.get(position).getIsCom());
+                callback.itemClick(mData.get(position).getId(), mData.get(position).getIsFilm());
             }
         });
     }

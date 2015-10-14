@@ -13,7 +13,7 @@ import com.shenhui.doubanfilm.ui.fragment.PrefsFragment;
  * 增加网络设置
  * Created by sanousun on 2015/8/19.
  */
-public class PreferenceActivity extends BaseActivity {
+public class PrefsActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

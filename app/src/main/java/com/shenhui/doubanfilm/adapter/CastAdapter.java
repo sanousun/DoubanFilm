@@ -63,8 +63,10 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         CastAndCommend sub = mData.get(position);
-        imageLoader.displayImage(sub.getMedium(),
-                holder.image, options, imageLoadingListener);
+        if (sub.getImage() != null) {
+            imageLoader.displayImage(sub.getImage(),
+                    holder.image, options, imageLoadingListener);
+        }
         if (sub.getIsDir()) {
             holder.text_dir.setVisibility(View.VISIBLE);
         }
@@ -72,7 +74,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.itemClick(mData.get(position).getId(), mData.get(position).getIsCom());
+                callback.itemClick(mData.get(position).getId(), mData.get(position).getIsFilm());
             }
         });
     }

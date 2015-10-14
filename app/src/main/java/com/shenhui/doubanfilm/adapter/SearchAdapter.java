@@ -25,9 +25,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by Sanousun on 2015/8/24.
- */
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     private Context mContext;
@@ -52,11 +49,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void searchChange(List<SimpleSub> data) {
-        this.mData = data;
-        notifyDataSetChanged();
-    }
-
     public void setOnItemClickListener(OnItemClickListener callback) {
         this.callback = callback;
     }
@@ -64,8 +56,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_search_layout, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -73,8 +64,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         SimpleSub sub = mData.get(position);
         holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
-        holder.text_rating.setText(sub.getRating().getAverage() + "");
-        holder.text_collect_count.setText(sub.getCollect_count() + "");
+        holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
+        holder.text_collect_count.setText(String.format("%d", sub.getCollect_count()));
         holder.text_title.setText(sub.getTitle());
         if (sub.getOriginal_title().equals(sub.getTitle())) {
             holder.text_original_title.setVisibility(View.GONE);
@@ -85,14 +76,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String dir = mContext.getResources().getString(R.string.directors);
         StringBuffer s = new StringBuffer();
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append((i == 0 ? "" : "/") + sub.getDirectors().get(i).getName());
+            s.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
         }
         holder.text_directors.setText(dir);
         holder.text_directors.append(s.toString());
         String cast = mContext.getResources().getString(R.string.casts);
         s = new StringBuffer();
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            s.append((i == 0 ? "" : "/") + sub.getCasts().get(i).getName());
+            s.append(i == 0 ? "" : "/").append(sub.getCasts().get(i).getName());
         }
         holder.text_casts.setText(cast);
         holder.text_casts.append(s.toString());
@@ -111,9 +102,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     private String listToString(List<String> list) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            s.append((i == 0 ? "" : "/") + list.get(i));
+            s.append(i == 0 ? "" : "/").append(list.get(i));
         }
         return s.toString();
     }
@@ -151,7 +142,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     public interface OnItemClickListener {
-        public void itemClick(int pos);
+        void itemClick(int pos);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

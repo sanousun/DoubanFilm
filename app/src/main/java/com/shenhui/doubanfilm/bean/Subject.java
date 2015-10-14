@@ -30,8 +30,8 @@ public class Subject {
     private int ratings_count;//评分人数
     private List<String> genres;//影片类型，最多提供3个
     private List<String> countries;//制片国家/地区
-    private List<CastsEntity> casts;//主演，最多可获得4个，数据结构为影人的简化描述
-    private List<DirectorsEntity> directors;//导演，数据结构为影人的简化描述
+    private List<CelebrityEntity> casts;//主演，最多可获得4个，数据结构为影人的简化描述
+    private List<CelebrityEntity> directors;//导演，数据结构为影人的简化描述
     private List<String> aka;//又名
 
     public void setRating(RatingEntity rating) {
@@ -126,11 +126,11 @@ public class Subject {
         this.countries = countries;
     }
 
-    public void setCasts(List<CastsEntity> casts) {
+    public void setCasts(List<CelebrityEntity> casts) {
         this.casts = casts;
     }
 
-    public void setDirectors(List<DirectorsEntity> directors) {
+    public void setDirectors(List<CelebrityEntity> directors) {
         this.directors = directors;
     }
 
@@ -230,11 +230,11 @@ public class Subject {
         return countries;
     }
 
-    public List<CastsEntity> getCasts() {
+    public List<CelebrityEntity> getCasts() {
         return casts;
     }
 
-    public List<DirectorsEntity> getDirectors() {
+    public List<CelebrityEntity> getDirectors() {
         return directors;
     }
 
@@ -313,78 +313,7 @@ public class Subject {
         }
     }
 
-    public static class CastsEntity {
-
-        private AvatarsEntity avatars;
-        private String alt;
-        private String id;
-        private String name;
-
-        public void setAvatars(AvatarsEntity avatars) {
-            this.avatars = avatars;
-        }
-
-        public void setAlt(String alt) {
-            this.alt = alt;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public AvatarsEntity getAvatars() {
-            return avatars;
-        }
-
-        public String getAlt() {
-            return alt;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static class AvatarsEntity {
-
-            private String small;
-            private String large;
-            private String medium;
-
-            public void setSmall(String small) {
-                this.small = small;
-            }
-
-            public void setLarge(String large) {
-                this.large = large;
-            }
-
-            public void setMedium(String medium) {
-                this.medium = medium;
-            }
-
-            public String getSmall() {
-                return small;
-            }
-
-            public String getLarge() {
-                return large;
-            }
-
-            public String getMedium() {
-                return medium;
-            }
-        }
-    }
-
-    public static class DirectorsEntity {
+    public static class CelebrityEntity {
 
         private AvatarsEntity avatars;
         private String alt;

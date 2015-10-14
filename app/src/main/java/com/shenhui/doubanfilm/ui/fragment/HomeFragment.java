@@ -26,14 +26,13 @@ import butterknife.ButterKnife;
  */
 public class HomeFragment extends Fragment {
 
+    private static String[] TITLES = {"正在热映", "即将上映", "北美票房"};
+
     @Bind(R.id.tab_home)
     TabLayout mTabLayout;
     @Bind(R.id.vp_home)
     ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
-
-    private static String[] TITLES = {"正在热映", "即将上映", "北美票房"};
-    public static final String HOME_FRAGMENT_TITLE = "title";
 
     @Nullable
     @Override
@@ -69,11 +68,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = new HomePagerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(HOME_FRAGMENT_TITLE, TITLES[position]);
-            fragment.setArguments(bundle);
-            return fragment;
+            return HomePagerFragment.newInstance(position);
         }
 
         @Override

@@ -3,21 +3,24 @@ package com.shenhui.doubanfilm.bean;
 /**
  * Created by sanousun on 2015/9/4.
  */
-public class CastAndCommend extends Subject.CastsEntity {
+public class CastAndCommend {
 
     private String alt;
     private String id;
     private String name;
     private String image;
     private Boolean isDir = false;
-    private Boolean isCom = false;
+    private Boolean isFilm = false;
+
+    public CastAndCommend() {
+    }
 
     public CastAndCommend(String alt, String id, String name, String image) {
         this.alt = alt;
         this.id = id;
         this.name = name;
         this.image = image;
-        this.isCom = true;
+        this.isFilm = true;
     }
 
     public CastAndCommend(String alt, String id, String name, String medium, Boolean isDir) {
@@ -26,7 +29,7 @@ public class CastAndCommend extends Subject.CastsEntity {
         this.name = name;
         this.image = medium;
         this.isDir = isDir;
-        this.isCom = false;
+        this.isFilm = false;
     }
 
     public String getAlt() {
@@ -53,12 +56,12 @@ public class CastAndCommend extends Subject.CastsEntity {
         this.name = name;
     }
 
-    public String getMedium() {
+    public String getImage() {
         return image;
     }
 
-    public void setMedium(String medium) {
-        this.image = medium;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Boolean getIsDir() {
@@ -69,11 +72,11 @@ public class CastAndCommend extends Subject.CastsEntity {
         this.isDir = isDir;
     }
 
-    public Boolean getIsCom() {
-        return isCom;
+    public Boolean getIsFilm() {
+        return isFilm;
     }
 
-    public void setIsCom(Boolean isCom) {
-        this.isCom = isCom;
+    public void setIsFilm(Boolean isFilm) {
+        this.isFilm = isFilm;
     }
 }

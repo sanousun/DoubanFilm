@@ -39,9 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CastAdapter;
@@ -58,8 +55,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -152,7 +147,6 @@ public class SubjectActivity extends AppCompatActivity
             cacheOnDisk(true).
             considerExifParams(true).
             build();
-    private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,9 +241,9 @@ public class SubjectActivity extends AppCompatActivity
             mToolbarImage.setImageBitmap(bitmap);
         } else {
             imageLoader.displayImage(mSubject.getImages().getLarge(),
-                    mImage, options, imageLoadingListener);
+                    mImage, options);
             imageLoader.displayImage(mSubject.getImages().getLarge(),
-                    mToolbarImage, options, imageLoadingListener);
+                    mToolbarImage, options);
         }
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
@@ -302,17 +296,8 @@ public class SubjectActivity extends AppCompatActivity
         });
 
         //获得导演演员数据列表
-        for (Subject.DirectorsEntity dirs : mSubject.getDirectors()) {
-            CastAndCommend dir = new CastAndCommend(dirs.getAlt(), dirs.getId(), dirs.getName(),
-                    dirs.getAvatars().getLarge(), true);
-            mCastData.add(dir);
-        }
-        for (Subject.CastsEntity cas : mSubject.getCasts()) {
-            CastAndCommend ca = new CastAndCommend(cas.getAlt(), cas.getId(), cas.getName(),
-                    cas.getAvatars().getMedium(), false);
-            mCastData.add(ca);
-        }
-
+        addCastData(mSubject.getDirectors(), true);
+        addCastData(mSubject.getCasts(), false);
         CastAdapter mCastAdapter = new CastAdapter(SubjectActivity.this, mCastData);
         mCastAdapter.setOnItemClickListener(SubjectActivity.this);
         mCast.setAdapter(mCastAdapter);
@@ -326,6 +311,21 @@ public class SubjectActivity extends AppCompatActivity
             if (i == 1) break;
         }
         volley_rem_GET(tag);
+    }
+
+    private void addCastData(List<Subject.CelebrityEntity> data, boolean isDir) {
+        for (Subject.CelebrityEntity s : data) {
+            CastAndCommend dir = new CastAndCommend();
+            dir.setAlt(s.getAlt());
+            dir.setId(s.getId());
+            dir.setName(s.getName());
+            if (s.getAvatars() != null) {
+                dir.setImage(s.getAvatars().getLarge());
+            }
+            dir.setIsFilm(false);
+            dir.setIsDir(isDir);
+            mCastData.add(dir);
+        }
     }
 
     /**
@@ -373,10 +373,11 @@ public class SubjectActivity extends AppCompatActivity
     @Override
     public void itemClick(String id, boolean isCom) {
         if (isCom) {
-            prepareIntent(SubjectActivity.this, SubjectActivity.class, id);
+            SubjectActivity.toActivity(this, id);
         } else {
-            prepareIntent(SubjectActivity.this, CelebrityActivity.class, id);
+            CelebrityActivity.toActivity(this, id);
         }
+        this.finish();
     }
 
     @Override
@@ -458,16 +459,6 @@ public class SubjectActivity extends AppCompatActivity
     }
 
     /**
-     * 启动新的activity
-     */
-    private void prepareIntent(Context context, Class cla, String id) {
-        Intent intent = new Intent(context, cla);
-        intent.putExtra("id", id);
-        startActivity(intent);
-        this.finish();
-    }
-
-    /**
      * 将List<String>转成合适的String
      */
     private String listToString(List<String> data) {
@@ -510,19 +501,4 @@ public class SubjectActivity extends AppCompatActivity
         context.startActivity(intent);
     }
 
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
-            }
-        }
-    }
 }

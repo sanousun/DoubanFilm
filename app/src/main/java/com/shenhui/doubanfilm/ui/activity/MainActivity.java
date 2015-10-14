@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * 处理返回键逻辑
+     * 处理返回键逻辑或者使用onBackPressed()
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
                 prepareIntent(SearchActivity.class);
                 break;
             case R.id.action_settings:
-                prepareIntent(PreferenceActivity.class);
+                prepareIntent(PrefsActivity.class);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -350,6 +350,11 @@ public class MainActivity extends AppCompatActivity
         return Uri.fromFile(new File(
                 getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 PICTURE_HEADER_FILE));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /**
