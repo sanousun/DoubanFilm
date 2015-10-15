@@ -14,12 +14,11 @@ import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.base.BaseAnimAdapter;
 import com.shenhui.doubanfilm.bean.Subject;
 
 import java.util.Collections;
@@ -29,7 +28,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHolder> {
+public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
+
+    private static final String URI_FOR_FILE =
+            "file://storage/emulated/0/Android/data/com.shenhui.doubanfillm/files/Pictures/";
+    private static final String URI_FOR_IMAGE = ".png";
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -39,15 +42,6 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
 
     private Subject undoSub;
 
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageForEmptyUri(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     public CollectAdapter(Context context, List<Subject> data) {
@@ -144,8 +138,8 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
             s.append(sub.getCasts().get(i).getName());
         }
         holder.casts.setText(s.toString());
-        imageLoader.displayImage(sub.getImages().getLarge(),
-                holder.image, options, imageLoadingListener);
+        String uri = URI_FOR_FILE + sub.getId() + URI_FOR_IMAGE;
+        imageLoader.displayImage(uri, holder.image, options, imageLoadingListener);
     }
 
     @Override

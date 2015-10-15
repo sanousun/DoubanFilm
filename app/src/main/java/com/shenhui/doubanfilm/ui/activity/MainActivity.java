@@ -114,9 +114,11 @@ public class MainActivity extends AppCompatActivity
         mDrawer.setDrawerListener(mToggle);
         //初始化Viewpager
         mFragmentManager = getSupportFragmentManager();
-        Fragment homeFragment = new HomeFragment();
-        mFragmentManager.beginTransaction().add(R.id.main_container, homeFragment, mTitle).commit();
-        mCurFragment = homeFragment;
+        if (mCurFragment == null) {
+            Fragment homeFragment = new HomeFragment();
+            mFragmentManager.beginTransaction().add(R.id.main_container, homeFragment, mTitle).commit();
+            mCurFragment = homeFragment;
+        }
 
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PICTURE_HEADER_FILE);
         if (mFile.exists()) {

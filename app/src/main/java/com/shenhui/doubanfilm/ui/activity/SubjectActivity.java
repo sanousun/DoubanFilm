@@ -3,7 +3,6 @@ package com.shenhui.doubanfilm.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +18,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +69,9 @@ public class SubjectActivity extends AppCompatActivity
     private static final String KEY_SUBJECT_ID = "subject_id";
 
     private static final String JSON_SUBJECTS = "subjects";
+
+    private static final String URI_FOR_FILE = "file:/";
+    private static final String URI_FOR_IMAGE = ".png";
 
     @Bind(R.id.refresh_subj)
     SwipeRefreshLayout mRefresh;
@@ -156,7 +159,7 @@ public class SubjectActivity extends AppCompatActivity
         initView();
         Intent intent = getIntent();
         mId = intent.getStringExtra(KEY_SUBJECT_ID);
-        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + ".jpg");
+        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + URI_FOR_IMAGE);
         mSubject = MyApplication.getDataSource().filmOfId(mId);
         if (mSubject != null) {
             isCollect = true;
@@ -232,19 +235,17 @@ public class SubjectActivity extends AppCompatActivity
      */
     private void initAfterGetData() {
 
+        String imageUri;
         if (mSubject.getTitle() != null) {
             mCollapsingToolbarLayout.setTitle(mSubject.getTitle());
         }
         if (mFile.exists()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(mFile.getPath());
-            mImage.setImageBitmap(bitmap);
-            mToolbarImage.setImageBitmap(bitmap);
+            imageUri = URI_FOR_FILE + mFile.getPath();
         } else {
-            imageLoader.displayImage(mSubject.getImages().getLarge(),
-                    mImage, options);
-            imageLoader.displayImage(mSubject.getImages().getLarge(),
-                    mToolbarImage, options);
+            imageUri = mSubject.getImages().getLarge();
         }
+        imageLoader.displayImage(imageUri, mImage, options);
+        imageLoader.displayImage(imageUri, mToolbarImage, options);
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
@@ -438,10 +439,11 @@ public class SubjectActivity extends AppCompatActivity
         if (mFile.exists()) {
             mFile.delete();
         }
+        FileOutputStream out = null;
         try {
-            FileOutputStream out = new FileOutputStream(mFile);
+            out = new FileOutputStream(mFile);
             Bitmap bitmap = imageLoader.loadImageSync(mSubject.getImages().getLarge());
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
         } catch (IOException e) {
