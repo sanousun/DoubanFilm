@@ -73,14 +73,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             holder.text_original_title.setText(sub.getOriginal_title());
         }
         holder.text_genres.setText(listToString(sub.getGenres()));
-        String dir = mContext.getResources().getString(R.string.directors);
+        String dir = mContext.getString(R.string.directors);
         StringBuffer s = new StringBuffer();
         for (int i = 0; i < sub.getDirectors().size(); i++) {
             s.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
         }
         holder.text_directors.setText(dir);
         holder.text_directors.append(s.toString());
-        String cast = mContext.getResources().getString(R.string.casts);
+        String cast = mContext.getString(R.string.casts);
         s = new StringBuffer();
         for (int i = 0; i < sub.getCasts().size(); i++) {
             s.append(i == 0 ? "" : "/").append(sub.getCasts().get(i).getName());
@@ -90,15 +90,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         imageLoader.displayImage(sub.getImages().getLarge(),
                 holder.image_film, options, imageLoadingListener);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (callback != null) {
-                    callback.itemClick(position);
-                }
-            }
-        });
     }
 
     private String listToString(List<String> list) {
@@ -138,6 +129,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (callback != null) {
+                        int position = getLayoutPosition();
+                        callback.itemClick(position);
+                    }
+                }
+            });
         }
     }
 

@@ -12,12 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.base.BaseAnimAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.bean.USBoxSub;
 
@@ -28,24 +27,15 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/8/12.
- */
-public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
+public class BoxAdapter extends BaseAnimAdapter<BoxAdapter.ViewHolder> {
 
-    private Context mContext;
+    private static final int FIRST = 1;
+    private static final int SECOND = 2;
+    private static final int THIRD = 3;
+
     private LayoutInflater mInflater;
     private List<USBoxSub> mData;
 
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     public static final String[] RANK = {"1st", "2nd", "3rd", "4th", "5th",
@@ -54,7 +44,6 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
     private OnItemClickListener mListener;
 
     public BoxAdapter(Context context, List<USBoxSub> data) {
-        this.mContext = context;
         this.mData = data;
         this.mInflater = LayoutInflater.from(context);
     }
@@ -66,8 +55,7 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_box_layout, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -84,19 +72,12 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
             holder.ratingLayout.setVisibility(View.GONE);
         } else {
             holder.ratingBar.setRating(rating / 2);
-            holder.text_rating.setText(rating + "");
+            holder.text_rating.setText(String.format("%s", rating));
         }
         holder.text_title.setText(simSubject.getTitle());
 
         imageLoader.displayImage(simSubject.getImages().getLarge(),
                 holder.image_film, options, imageLoadingListener);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.itemClick(mData.get(position).getSubject().getId());
-            }
-        });
     }
 
     @Override
@@ -106,13 +87,13 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
 
     public void setRankText(ViewHolder holder, int rank) {
         switch (rank) {
-            case 1:
+            case FIRST:
                 holder.text_rank.setTextColor(Color.parseColor("#D9D919"));
                 break;
-            case 2:
+            case SECOND:
                 holder.text_rank.setTextColor(Color.parseColor("#E5E5E5"));
                 break;
-            case 3:
+            case THIRD:
                 holder.text_rank.setTextColor(Color.parseColor("#B5A642"));
                 break;
             default:
@@ -148,7 +129,20 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) {
+                        int position = getLayoutPosition();
+                        mListener.itemClick(mData.get(position).getSubject().getId());
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener {
+        void itemClick(String id);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
@@ -165,9 +159,5 @@ public class BoxAdapter extends RecyclerView.Adapter<BoxAdapter.ViewHolder> {
                 }
             }
         }
-    }
-
-    public interface OnItemClickListener {
-        public void itemClick(String id);
     }
 }

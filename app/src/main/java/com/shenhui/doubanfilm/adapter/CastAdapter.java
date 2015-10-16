@@ -49,7 +49,6 @@ public class CastAdapter extends BaseAnimAdapter<CastAdapter.ViewHolder> {
             holder.text_dir.setVisibility(View.VISIBLE);
         }
         holder.text.setText(sub.getName());
-        showItemAnim(holder.itemView, position);
     }
 
     @Override

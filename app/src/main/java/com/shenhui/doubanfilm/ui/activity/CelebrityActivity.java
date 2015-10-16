@@ -2,7 +2,6 @@ package com.shenhui.doubanfilm.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,9 +23,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SubCardAdapter;
@@ -35,16 +31,11 @@ import com.shenhui.doubanfilm.bean.Celebrity;
 import com.shenhui.doubanfilm.support.Constant;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/9/12.
- */
 public class CelebrityActivity extends AppCompatActivity
         implements SubCardAdapter.OnItemClickListener {
 
@@ -133,8 +124,6 @@ public class CelebrityActivity extends AppCompatActivity
 
     /**
      * 通过volley得到mCelebrity
-     *
-     * @param url
      */
     private void volley_get(String url) {
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
@@ -169,7 +158,7 @@ public class CelebrityActivity extends AppCompatActivity
         mBronPlace.setText(bronPlace + mCelebrity.getBorn_place());
 
         if (mCelebrity.getAka().size() > 0) {
-            SpannableString ake = new SpannableString("更多中文名：");
+            SpannableString ake = new SpannableString(getString(R.string.cel_ake));
             ake.setSpan(new ForegroundColorSpan(
                     Color.BLACK), 0, ake.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             mAke.setText(ake);
@@ -179,7 +168,7 @@ public class CelebrityActivity extends AppCompatActivity
         }
 
         if (mCelebrity.getAka_en().size() > 0) {
-            SpannableString ake_en = new SpannableString("更多英文名：");
+            SpannableString ake_en = new SpannableString(getString(R.string.cel_ake_en));
             ake_en.setSpan(new ForegroundColorSpan(
                     Color.BLACK), 0, ake_en.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             mAkeEn.setText(ake_en);
@@ -196,8 +185,7 @@ public class CelebrityActivity extends AppCompatActivity
                     work.getSubject().getAlt(),
                     work.getSubject().getId(),
                     work.getSubject().getTitle(),
-                    work.getSubject().getImages().getLarge(),
-                    work.getRoles().equals("导演"));
+                    work.getSubject().getImages().getLarge());
             mWorksData.add(data);
         }
         mWorksAdapter = new SubCardAdapter(CelebrityActivity.this, mWorksData);
@@ -207,16 +195,13 @@ public class CelebrityActivity extends AppCompatActivity
 
     /**
      * List.toString方法
-     *
-     * @param data
-     * @return
      */
     private String listToString(List<String> data) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < data.size(); i++) {
-            s.append((i == 0 ? "" : "/") + data.get(i));
+            str.append(i == 0 ? "" : "/").append(data.get(i));
         }
-        return s.toString();
+        return str.toString();
     }
 
     @Override

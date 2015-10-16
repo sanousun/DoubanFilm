@@ -3,7 +3,6 @@ package com.shenhui.doubanfilm.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,11 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.base.BaseAnimAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 
 import java.util.Collections;
@@ -28,18 +26,15 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/9/3.
- */
-public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
+    private static final int DEFAULT_COUNT = 20;
 
     private Context mContext;
     private List<SimpleSub> mData;
     private OnItemClickListener callback;
-
     /**
      * 用于加载更多数据
      */
@@ -50,12 +45,9 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      */
     private boolean isComing;
 
-    private static final int DEFAULT_COUNT = 20;
-
     public SimSubAdapter(Context context, List<SimpleSub> data) {
         this(context, data, false);
     }
-
     public SimSubAdapter(Context context, List<SimpleSub> data, boolean isComing) {
         this.mContext = context;
         this.mData = data;
@@ -99,15 +91,6 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageForEmptyUri(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     @Override
@@ -124,16 +107,9 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (position == mData.size()) {
-            if (position == 0) {
-                ((FootViewHolder) viewHolder).itemView.setVisibility(View.GONE);
-            } else if (loadCompleted()) {
-                ((FootViewHolder) viewHolder).progressBar.setVisibility(View.GONE);
-                ((FootViewHolder) viewHolder).tip.setText("加载完毕！");
-            } else {
-                ((FootViewHolder) viewHolder).itemView.setVisibility(View.VISIBLE);
-            }
+            showFootView(((FootViewHolder) viewHolder), position);
             return;
         }
         SimpleSub sub = mData.get(position);
@@ -142,8 +118,8 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.rating.setVisibility(View.VISIBLE);
             float rate = (float) sub.getRating().getAverage();
             holder.ratingBar.setRating(rate / 2);
-            holder.text_rating.setText("" + rate);
-            holder.collect_count.setText(sub.getCollect_count() + "");
+            holder.text_rating.setText(String.format("%s", rate));
+            holder.collect_count.setText(String.format("%d", sub.getCollect_count()));
         }
         String title = sub.getTitle();
         String original_title = sub.getOriginal_title();
@@ -154,36 +130,37 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.original_title.setText(original_title);
             holder.original_title.setVisibility(View.VISIBLE);
         }
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < sub.getGenres().size(); i++) {
-            stringBuffer.append(i == 0 ? "" : ",");
-            stringBuffer.append(sub.getGenres().get(i));
+            str.append(i == 0 ? "" : ",");
+            str.append(sub.getGenres().get(i));
         }
-        holder.genres.setText(stringBuffer.toString());
-        stringBuffer.delete(0, stringBuffer.length());
+        holder.genres.setText(str.toString());
+        str.delete(0, str.length());
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            stringBuffer.append(i == 0 ? "" : "/");
-            stringBuffer.append(sub.getDirectors().get(i).getName());
+            str.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
         }
-        holder.directors.setText(stringBuffer.toString());
-        stringBuffer.delete(0, stringBuffer.length());
+        holder.directors.setText(str.toString());
+        str.delete(0, str.length());
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            stringBuffer.append(i == 0 ? "" : "/");
-            stringBuffer.append(sub.getCasts().get(i).getName());
+            str.append(i == 0 ? "" : "/").append(sub.getCasts().get(i).getName());
         }
-        holder.casts.setText(stringBuffer.toString());
+        holder.casts.setText(str.toString());
         imageLoader.displayImage(sub.getImages().getLarge(),
                 holder.image, options, imageLoadingListener);
+    }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (callback != null) {
-                    callback.itemClick(mData.get(position).getId());
-                }
-            }
-        });
-
+    private void showFootView(FootViewHolder viewHolder, int position) {
+        if (position == 0) {
+            viewHolder.itemView.setVisibility(View.GONE);
+        } else if (loadCompleted()) {
+            viewHolder.progressBar.setVisibility(View.GONE);
+            viewHolder.tip.setText(mContext.getString(R.string.load_completed));
+            viewHolder.itemView.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.tip.setText(mContext.getString(R.string.loading));
+            viewHolder.itemView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -225,6 +202,15 @@ public class SimSubAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (callback != null) {
+                        int position = getLayoutPosition();
+                        callback.itemClick(mData.get(position).getId());
+                    }
+                }
+            });
         }
     }
 

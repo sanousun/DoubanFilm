@@ -18,7 +18,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -250,8 +249,8 @@ public class SubjectActivity extends AppCompatActivity
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
         mYear.setText(mSubject.getYear());
-        String coll = getResources().getString(R.string.collect);
-        String count = getResources().getString(R.string.count);
+        String coll = getString(R.string.collect);
+        String count = getString(R.string.count);
         mCollect.setText(String.format("%s%d%s", coll, mSubject.getCollect_count(), count));
         mTitle.setText(mSubject.getTitle());
         if (!mSubject.getOriginal_title().equals(mSubject.getTitle())) {
@@ -261,12 +260,12 @@ public class SubjectActivity extends AppCompatActivity
             mOriginal_title.setVisibility(View.GONE);
         }
         mGenres.setText(listToString(mSubject.getGenres()));
-        SpannableString ake = new SpannableString(getResources().getString(R.string.ake));
+        SpannableString ake = new SpannableString(getString(R.string.ake));
         ake.setSpan(new ForegroundColorSpan(Color.GRAY),
                 0, ake.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mAke.setText(ake);
         mAke.append(listToString(mSubject.getAka()));
-        SpannableString counties = new SpannableString(getResources().getString(R.string.countries));
+        SpannableString counties = new SpannableString(getString(R.string.countries));
         counties.setSpan(new ForegroundColorSpan(Color.GRAY),
                 0, counties.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mCountries.setText(counties);
@@ -275,7 +274,7 @@ public class SubjectActivity extends AppCompatActivity
         //简介，点击查看具体内容
         //SpannableString可以设置文字的样式，也可以通过ImageSpan在TextView中插入图片
         //还可以通过Character span = new UnderlineSpan();设置下划线
-        SpannableString summary = new SpannableString("简介：");
+        SpannableString summary = new SpannableString(getString(R.string.summary));
         summary.setSpan(new ForegroundColorSpan(Color.BLACK),
                 0, summary.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mSummaryText.setText(summary);
@@ -449,7 +448,7 @@ public class SubjectActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, "收藏成功<(＾－＾)>！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.collect_completed), Toast.LENGTH_SHORT).show();
     }
 
     private void cancelSave() {
@@ -457,7 +456,7 @@ public class SubjectActivity extends AppCompatActivity
         if (mFile.exists()) {
             mFile.delete();
         }
-        Toast.makeText(this, "取消收藏︿(￣︶￣)︿！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.collect_cancel, Toast.LENGTH_SHORT).show();
     }
 
     /**

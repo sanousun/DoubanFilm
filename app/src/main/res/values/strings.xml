@@ -6,7 +6,6 @@
     <string name="nav_home">首页</string>
     <string name="nav_collect">收藏</string>
     <string name="nav_top250">豆瓣top250</string>
-
     <string name="genres">类型:</string>
     <string name="directors">导演:</string>
     <string name="dir">导演</string>
@@ -22,7 +21,12 @@
     <string name="cel_ake_en">更多英文名：</string>
     <string name="no_rating">暂无评分</string>
     <string name="overflow">取消收藏</string>
-
+    <string name="load_completed">加载完毕！</string>
+    <string name="loading">正在加载更多...</string>
+    <string name="searching">正在搜索...</string>
+    <string name="summary">简介：</string>
+    <string name="collect_completed">收藏成功!  (＾－＾)V</string>
+    <string name="collect_cancel">取消收藏!  ︿(￣︶￣)︿</string>
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
     <string name="user_name">用户昵称</string>

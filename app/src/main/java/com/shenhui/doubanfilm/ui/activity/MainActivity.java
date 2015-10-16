@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void initData() {
-        mTitle = getResources().getString(R.string.nav_home);
+        mTitle = getString(R.string.nav_home);
         mToolbar.setTitle(mTitle);
         setSupportActionBar(mToolbar);
         //设置Drawer的开关
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem setting = menu.findItem(R.id.action_settings);
-        if (mTitle.equals(getResources().getString(R.string.nav_home))) {
+        if (mTitle.equals(getString(R.string.nav_home))) {
             setting.setVisible(true);
         } else {
             setting.setVisible(false);
@@ -361,8 +361,6 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * 将得到头像图片保存到手机中
-     *
-     * @param bitmap 头像图片
      */
     private void saveBitmap(Bitmap bitmap) {
         if (mFile.exists()) {

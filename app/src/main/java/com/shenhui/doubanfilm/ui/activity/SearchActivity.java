@@ -31,9 +31,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/8/22.
- */
 public class SearchActivity extends AppCompatActivity
         implements SearchAdapter.OnItemClickListener {
 

@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -140,6 +139,7 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
         holder.casts.setText(s.toString());
         String uri = URI_FOR_FILE + sub.getId() + URI_FOR_IMAGE;
         imageLoader.displayImage(uri, holder.image, options, imageLoadingListener);
+        showItemAnim(holder.itemView, position);
     }
 
     @Override
@@ -151,8 +151,6 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
 
         @Bind(R.id.iv_collect_images)
         ImageView image;
-        @Bind(R.id.ll_collect_rating)
-        LinearLayout rating;
         @Bind(R.id.rb_collect_rating)
         RatingBar ratingBar;
         @Bind(R.id.tv_collect_rating)
