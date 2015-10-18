@@ -26,6 +26,7 @@ import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.BoxAdapter;
 import com.shenhui.doubanfilm.adapter.SimSubAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.bean.USBoxSub;
 import com.shenhui.doubanfilm.support.Constant;
@@ -40,7 +41,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomePagerFragment extends Fragment {
+public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemClickListener{
 
     private static final String AUTO_REFRESH = "auto refresh?";
     private static final String JSON_TOTAL = "total";
@@ -133,12 +134,7 @@ public class HomePagerFragment extends Fragment {
         inManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecView.setLayoutManager(inManager);
         mSimAdapter = new SimSubAdapter(getActivity(), mSimData, isComing);
-        mSimAdapter.setOnItemClickListener(new SimSubAdapter.OnItemClickListener() {
-            @Override
-            public void itemClick(String id) {
-                SubjectActivity.toActivity(getActivity(), id);
-            }
-        });
+        mSimAdapter.setOnItemClickListener(this);
         mRecView.setAdapter(mSimAdapter);
     }
 
@@ -146,12 +142,7 @@ public class HomePagerFragment extends Fragment {
         GridLayoutManager boxManager = new GridLayoutManager(getActivity(), 3);
         mRecView.setLayoutManager(boxManager);
         mBoxAdapter = new BoxAdapter(getActivity(), mBoxData);
-        mBoxAdapter.setOnItemClickListener(new BoxAdapter.OnItemClickListener() {
-            @Override
-            public void itemClick(String id) {
-                SubjectActivity.toActivity(getActivity(), id);
-            }
-        });
+        mBoxAdapter.setOnItemClickListener(this);
         mRecView.setAdapter(mBoxAdapter);
     }
 
@@ -317,6 +308,11 @@ public class HomePagerFragment extends Fragment {
     public void onStop() {
         super.onStop();
         MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG + mTitlePos);
+    }
+
+    @Override
+    public void onItemClick(String id) {
+        SubjectActivity.toActivity(getActivity(), id);
     }
 
     /**

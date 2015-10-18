@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimSubAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.support.Constant;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TopPagerFragment extends BaseFragment
-        implements SimSubAdapter.OnItemClickListener, View.OnClickListener {
+        implements BaseAdapter.OnItemClickListener, View.OnClickListener {
 
     private static final int TOP250_COUNT = 25;
     private static final int TOP250_TOTAL = 50;
@@ -207,7 +208,7 @@ public class TopPagerFragment extends BaseFragment
     }
 
     @Override
-    public void itemClick(String id) {
+    public void onItemClick(String id) {
         SubjectActivity.toActivity(getActivity(), id);
     }
 

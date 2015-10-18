@@ -2,7 +2,6 @@ package com.shenhui.doubanfilm.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SearchAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.widget.IzzySearchView;
@@ -32,7 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity
-        implements SearchAdapter.OnItemClickListener {
+        implements BaseAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "SearchActivity";
     private static final String JSON_SUBJECTS = "subjects";
@@ -149,9 +149,7 @@ public class SearchActivity extends AppCompatActivity
     }
 
     @Override
-    public void itemClick(int pos) {
-        Intent intent = new Intent(SearchActivity.this, SubjectActivity.class);
-        intent.putExtra("id", mData.get(pos).getId());
-        startActivity(intent);
+    public void onItemClick(String id) {
+        SubjectActivity.toActivity(this, id);
     }
 }

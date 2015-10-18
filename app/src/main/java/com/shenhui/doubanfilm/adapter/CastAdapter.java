@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAnimAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.CastAndCommend;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CastAdapter extends BaseAnimAdapter<CastAdapter.ViewHolder> {
+public class CastAdapter extends BaseAdapter<CastAdapter.ViewHolder> {
 
     private Context mContext;
     private List<CastAndCommend> mData;

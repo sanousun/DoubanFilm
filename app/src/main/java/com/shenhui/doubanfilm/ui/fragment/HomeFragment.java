@@ -18,12 +18,6 @@ import com.shenhui.doubanfilm.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-
-/**
- * FragmentStatePagerAdapter的缓存问题，无法缓存fragment
- * <p/>
- * Created by sanousun on 2015/9/17.
- */
 public class HomeFragment extends Fragment {
 
     private static String[] TITLES = {"正在热映", "即将上映", "北美票房"};
@@ -32,7 +26,6 @@ public class HomeFragment extends Fragment {
     TabLayout mTabLayout;
     @Bind(R.id.vp_home)
     ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
 
     @Nullable
     @Override
@@ -45,11 +38,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void initData() {
-        mPagerAdapter = new HomePagerAdapter(getChildFragmentManager());
+        PagerAdapter mPagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        mTabLayout.setTabTextColors(Color.GRAY, Color.WHITE);
+        mTabLayout.setTabTextColors(Color.parseColor("#aaffffff"), Color.WHITE);
         mTabLayout.setTabsFromPagerAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }

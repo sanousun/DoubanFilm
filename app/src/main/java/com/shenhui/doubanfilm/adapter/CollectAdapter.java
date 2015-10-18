@@ -7,27 +7,23 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAnimAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.Subject;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
+public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
     private static final String URI_FOR_FILE =
             "file://storage/emulated/0/Android/data/com.shenhui.doubanfillm/files/Pictures/";
@@ -40,8 +36,6 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
     private OnItemClickListener callback;
 
     private Subject undoSub;
-
-    private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     public CollectAdapter(Context context, List<Subject> data) {
         this.mContext = context;
@@ -61,7 +55,7 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_collect_layout, parent, false);
-        return new ViewHolder(view, new OnResponseCLickListener() {
+        return new ViewHolder(view, new OnResponseClickListener() {
             @Override
             public void onWholeClick(int pos) {
                 callback.itemClick(mData.get(pos).getId());
@@ -138,8 +132,7 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
         }
         holder.casts.setText(s.toString());
         String uri = URI_FOR_FILE + sub.getId() + URI_FOR_IMAGE;
-        imageLoader.displayImage(uri, holder.image, options, imageLoadingListener);
-        showItemAnim(holder.itemView, position);
+        imageLoader.displayImage(uri, holder.image, options);
     }
 
     @Override
@@ -147,7 +140,7 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
         return mData.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
         @Bind(R.id.iv_collect_images)
         ImageView image;
@@ -170,9 +163,9 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
         @Bind(R.id.iv_collect_more)
         ImageView over_flow;
 
-        private OnResponseCLickListener mListener;
+        private OnResponseClickListener mListener;
 
-        public ViewHolder(View itemView, OnResponseCLickListener listener) {
+        public ViewHolder(View itemView, OnResponseClickListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             mListener = listener;
@@ -196,25 +189,9 @@ public class CollectAdapter extends BaseAnimAdapter<CollectAdapter.ViewHolder> {
         void itemRemove(int pos, String id);
     }
 
-    public interface OnResponseCLickListener {
+    public interface OnResponseClickListener {
         void onWholeClick(int pos);
 
         void onOverflowClick(View v, int pos);
-    }
-
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
-            }
-        }
     }
 }

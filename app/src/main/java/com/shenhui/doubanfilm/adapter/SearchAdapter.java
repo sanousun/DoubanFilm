@@ -10,12 +10,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 
 import java.util.Collections;
@@ -25,32 +24,18 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
+public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
 
     private Context mContext;
     private LayoutInflater mInflater;
     private List<SimpleSub> mData;
-    private OnItemClickListener callback;
 
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     public SearchAdapter(Context context, List<SimpleSub> data) {
         this.mContext = context;
         this.mData = data;
         this.mInflater = LayoutInflater.from(context);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener callback) {
-        this.callback = callback;
     }
 
     @Override
@@ -132,18 +117,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (callback != null) {
+                    if (mCallback != null) {
                         int position = getLayoutPosition();
-                        callback.itemClick(position);
+                        mCallback.onItemClick(mData.get(position).getId());
                     }
                 }
             });
         }
     }
 
-    public interface OnItemClickListener {
-        void itemClick(int pos);
-    }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
         static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());

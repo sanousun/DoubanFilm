@@ -94,7 +94,7 @@
 
                                     <RatingBar
                                         android:id="@+id/rb_subj_rating"
-                                        style="?android:attr/ratingBarStyleSmall"
+                                        style="@android:style/Widget.Holo.RatingBar.Small"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:numStars="5" />

@@ -153,9 +153,9 @@ public class CelebrityActivity extends AppCompatActivity
         mName.setText(mCelebrity.getName());
         mNameEn.setText(mCelebrity.getName_en());
         String gender = getResources().getString(R.string.gender);
-        mGender.setText(gender + mCelebrity.getGender());
+        mGender.setText(String.format("%s%s", gender, mCelebrity.getGender()));
         String bronPlace = getResources().getString(R.string.bron_place);
-        mBronPlace.setText(bronPlace + mCelebrity.getBorn_place());
+        mBronPlace.setText(String.format("%s%s", bronPlace, mCelebrity.getBorn_place()));
 
         if (mCelebrity.getAka().size() > 0) {
             SpannableString ake = new SpannableString(getString(R.string.cel_ake));
@@ -177,7 +177,7 @@ public class CelebrityActivity extends AppCompatActivity
             mAkeEn.setVisibility(View.GONE);
         }
 
-        mWorks.setText(mCelebrity.getName() + "的影视作品");
+        mWorks.setText(String.format("%s的影视作品", mCelebrity.getName()));
 
         for (int i = 0; i < mCelebrity.getWorks().size(); i++) {
             Celebrity.WorksEntity work = mCelebrity.getWorks().get(i);

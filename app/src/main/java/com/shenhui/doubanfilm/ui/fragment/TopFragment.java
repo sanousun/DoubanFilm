@@ -18,9 +18,6 @@ import com.shenhui.doubanfilm.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/9/20.
- */
 public class TopFragment extends Fragment {
 
     private static final String[] TITLES = {"壹至伍拾", "伍壹至壹佰", "壹佰壹至壹佰伍", "壹伍壹至贰佰", "贰佰壹至贰佰伍"};
@@ -28,8 +25,6 @@ public class TopFragment extends Fragment {
     TabLayout mTabLayout;
     @Bind(R.id.vp_home)
     ViewPager mViewPager;
-
-    private PagerAdapter mPagerAdapter;
 
     public static final String TOP_FRAGMENT_TOP = "top";
 
@@ -44,7 +39,7 @@ public class TopFragment extends Fragment {
     }
 
     private void initData() {
-        mPagerAdapter = new TopPagerAdapter(getChildFragmentManager());
+        PagerAdapter mPagerAdapter = new TopPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setTabTextColors(Color.GRAY, Color.WHITE);

@@ -1,6 +1,5 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,11 +17,6 @@ import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Refresh的需要问题
- * Created by sanousun on 2015/9/15.
- */
 public class CollectFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener,
         CollectAdapter.OnItemClickListener {

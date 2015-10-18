@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAnimAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 import com.shenhui.doubanfilm.bean.USBoxSub;
 
@@ -27,7 +27,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class BoxAdapter extends BaseAnimAdapter<BoxAdapter.ViewHolder> {
+public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
 
     private static final int FIRST = 1;
     private static final int SECOND = 2;
@@ -41,15 +41,9 @@ public class BoxAdapter extends BaseAnimAdapter<BoxAdapter.ViewHolder> {
     public static final String[] RANK = {"1st", "2nd", "3rd", "4th", "5th",
             "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th"};
 
-    private OnItemClickListener mListener;
-
     public BoxAdapter(Context context, List<USBoxSub> data) {
         this.mData = data;
         this.mInflater = LayoutInflater.from(context);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mListener = listener;
     }
 
     @Override
@@ -132,17 +126,13 @@ public class BoxAdapter extends BaseAnimAdapter<BoxAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mListener != null) {
+                    if (mCallback != null) {
                         int position = getLayoutPosition();
-                        mListener.itemClick(mData.get(position).getSubject().getId());
+                        mCallback.onItemClick(mData.get(position).getSubject().getId());
                     }
                 }
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void itemClick(String id);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

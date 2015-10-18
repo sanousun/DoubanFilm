@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAnimAdapter;
+import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSub;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
+public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
@@ -34,7 +34,6 @@ public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<SimpleSub> mData;
-    private OnItemClickListener callback;
     /**
      * 用于加载更多数据
      */
@@ -74,10 +73,6 @@ public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
      */
     public boolean loadCompleted() {
         return mData.size() == total;
-    }
-
-    public void setOnItemClickListener(OnItemClickListener callback) {
-        this.callback = callback;
     }
 
     public void loadMoreData(List<SimpleSub> data) {
@@ -205,9 +200,9 @@ public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (callback != null) {
+                    if (mCallback != null) {
                         int position = getLayoutPosition();
-                        callback.itemClick(mData.get(position).getId());
+                        mCallback.onItemClick(mData.get(position).getId());
                     }
                 }
             });
@@ -227,10 +222,6 @@ public class SimSubAdapter extends BaseAnimAdapter<RecyclerView.ViewHolder> {
             progressBar = (ProgressBar) itemView.findViewById(R.id.pb_tip);
             tip = (TextView) itemView.findViewById(R.id.tv_tip);
         }
-    }
-
-    public interface OnItemClickListener {
-        void itemClick(String id);
     }
 
     private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {

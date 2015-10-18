@@ -10,10 +10,13 @@ import android.view.animation.AnimationUtils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.adapter.CollectAdapter;
 
-public class BaseAnimAdapter<T extends RecyclerView.ViewHolder>
+public class BaseAdapter<T extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<T> {
     private int mLastPosition = -1;
+
+    protected OnItemClickListener mCallback;
 
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     protected DisplayImageOptions options = new DisplayImageOptions.Builder().
@@ -24,6 +27,10 @@ public class BaseAnimAdapter<T extends RecyclerView.ViewHolder>
             cacheOnDisk(true).
             considerExifParams(true).
             build();
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mCallback = listener;
+    }
 
     @Override
     public T onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -69,5 +76,9 @@ public class BaseAnimAdapter<T extends RecyclerView.ViewHolder>
             });
             mLastPosition = pos;
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String id);
     }
 }
