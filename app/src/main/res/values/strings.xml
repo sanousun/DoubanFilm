@@ -1,38 +1,53 @@
 <resources>
     <string name="app_name">豆瓣电影</string>
+    <!--menu-->
     <string name="ic_search">搜索</string>
     <string name="ic_setting">设置</string>
     <string name="ic_sub_collect">收藏</string>
+    <!--MainActivity-->
+    <!--NavigationView-->
     <string name="nav_home">首页</string>
     <string name="nav_collect">收藏</string>
     <string name="nav_top250">豆瓣top250</string>
+    <string name="user_name">用户昵称</string>
+    <string name="user_introduction">用户介绍</string>
+    <string name="user_edit">用户设置...</string>
+    <string name="ok">确定</string>
+    <string name="select_header">请选择获得头像方式</string>
+    <string name="openDrawer">open</string>
+    <string name="closeDrawer">close</string>
+    <string name="collect_completed">收藏成功!  (＾－＾)V</string>
+    <string name="collect_cancel">取消收藏!  ︿(￣︶￣)︿</string>
+    <!--SubjectItem-->
     <string name="genres">类型:</string>
     <string name="directors">导演:</string>
-    <string name="dir">导演</string>
     <string name="casts">主演:</string>
     <string name="collect">(</string>
     <string name="count">人评价)</string>
     <string name="box">票房:</string>
     <string name="ake">又名:</string>
     <string name="countries">制片国家或地区:</string>
+    <string name="summary">简介：</string>
+    <string name="no_rating">暂无评分</string>
+    <string name="overflow">取消收藏</string>
+    <!--CardItem-->
+    <string name="dir">导演</string>
+    <!--CelebrityActivity-->
     <string name="gender">性别：</string>
     <string name="bron_place">出生地：</string>
     <string name="cel_ake">更多中文名：</string>
     <string name="cel_ake_en">更多英文名：</string>
-    <string name="no_rating">暂无评分</string>
-    <string name="overflow">取消收藏</string>
+    <!--adapter-->
     <string name="load_completed">加载完毕！</string>
     <string name="loading">正在加载更多...</string>
+    <!--SearchActivity-->
     <string name="searching">正在搜索...</string>
-    <string name="summary">简介：</string>
-    <string name="collect_completed">收藏成功!  (＾－＾)V</string>
-    <string name="collect_cancel">取消收藏!  ︿(￣︶￣)︿</string>
-    <string name="openDrawer">open</string>
-    <string name="closeDrawer">close</string>
-    <string name="user_name">用户昵称</string>
-    <string name="user_introduction">用户介绍</string>
+    <string name="query_hint">请输入要查询的电影...</string>
+    <string name="search_message">正在搜索...</string>
+    <string name="search_no_result">搜索无结果...</string>
+    <string name="search_error">刷新失败，请检查网络...</string>
+    <!--about-->
     <string name="licences_header">电影app开发基于以下开源项目：\n</string>
-
     <string name="license">
         Apache License, Version 2.0 (the "License");you may not use this file except in
         compliance with the License.You may obtain a copy of the License at\n\n

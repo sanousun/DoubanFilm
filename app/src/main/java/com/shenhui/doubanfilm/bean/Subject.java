@@ -2,9 +2,6 @@ package com.shenhui.doubanfilm.bean;
 
 import java.util.List;
 
-/**
- * Created by sanousun on 2015/9/3.
- */
 public class Subject {
 
     private RatingEntity rating;//评分
@@ -33,6 +30,16 @@ public class Subject {
     private List<CelebrityEntity> casts;//主演，最多可获得4个，数据结构为影人的简化描述
     private List<CelebrityEntity> directors;//导演，数据结构为影人的简化描述
     private List<String> aka;//又名
+
+    public String getLocalImageFile() {
+        return localImageFile;
+    }
+
+    public void setLocalImageFile(String localImageFile) {
+        this.localImageFile = localImageFile;
+    }
+
+    private String localImageFile;
 
     public void setRating(RatingEntity rating) {
         this.rating = rating;

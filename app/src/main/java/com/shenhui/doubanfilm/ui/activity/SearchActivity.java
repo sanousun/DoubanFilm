@@ -58,7 +58,7 @@ public class SearchActivity extends AppCompatActivity
 
     private void initView() {
         mSearchView = new IzzySearchView(SearchActivity.this);
-        mSearchView.setQueryHint("请输入要查询的电影...");
+        mSearchView.setQueryHint(getString(R.string.query_hint));
         mSearchView.setOnQueryTextListener(new IzzySearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity
                 getDataFromUrl(url);
                 if (mDialog == null) {
                     mDialog = new ProgressDialog(SearchActivity.this);
-                    mDialog.setMessage("正在搜索...");
+                    mDialog.setMessage(getString(R.string.search_message));
                     mDialog.setCancelable(true);
                     mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
@@ -95,7 +95,8 @@ public class SearchActivity extends AppCompatActivity
     }
 
     private void getDataFromUrl(String url) {
-        //new SearchTask(url).execute();
+        final String no_result = getString(R.string.search_no_result);
+        final String error_result= getString(R.string.search_error);
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -108,7 +109,7 @@ public class SearchActivity extends AppCompatActivity
                                 mDialog = null;
                             }
                             if (mData.size() < 1) {
-                                Toast.makeText(SearchActivity.this, "搜索无结果...",
+                                Toast.makeText(SearchActivity.this, no_result,
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 mAdapter = new SearchAdapter(SearchActivity.this, mData);
@@ -127,7 +128,7 @@ public class SearchActivity extends AppCompatActivity
                             mDialog.dismiss();
                             mDialog = null;
                         }
-                        Toast.makeText(SearchActivity.this, "刷新失败，请重试...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, error_result, Toast.LENGTH_SHORT).show();
                     }
                 });
         request.setTag(VOLLEY_TAG);

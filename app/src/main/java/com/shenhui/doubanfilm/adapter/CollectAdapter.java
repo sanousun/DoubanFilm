@@ -1,7 +1,6 @@
 package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -25,9 +24,7 @@ import butterknife.ButterKnife;
 
 public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
-    private static final String URI_FOR_FILE =
-            "file://storage/emulated/0/Android/data/com.shenhui.doubanfillm/files/Pictures/";
-    private static final String URI_FOR_IMAGE = ".png";
+    private static final String URI_FOR_FILE = "file:/";
 
     private Context mContext;
     private LayoutInflater mInflater;
@@ -131,8 +128,10 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
             s.append(sub.getCasts().get(i).getName());
         }
         holder.casts.setText(s.toString());
-        String uri = URI_FOR_FILE + sub.getId() + URI_FOR_IMAGE;
-        imageLoader.displayImage(uri, holder.image, options);
+        if (sub.getLocalImageFile() != null) {
+            imageLoader.displayImage(URI_FOR_FILE + sub.getLocalImageFile(), holder.image, options);
+        }
+        showItemAnim(holder.itemView, position);
     }
 
     @Override

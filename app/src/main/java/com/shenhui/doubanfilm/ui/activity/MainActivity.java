@@ -44,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        DialogInterface.OnClickListener {
+        DialogInterface.OnClickListener, View.OnClickListener {
 
     //for changing headerImage
     private static final int IMAGE_REQUEST_CODE = 0;
@@ -129,22 +129,27 @@ public class MainActivity extends AppCompatActivity
         }
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         useEditor = userSP.edit();
-        mUserName.setText(userSP.getString(USER_NAME, USER_NAME));
-        mUserIntro.setText(userSP.getString(USER_INTRO, USER_INTRO));
+        mUserName.setText(userSP.getString(USER_NAME, getString(R.string.user_name)));
+        mUserIntro.setText(userSP.getString(USER_INTRO, getString(R.string.user_introduction)));
     }
 
     protected void initEvent() {
         mNavView.setNavigationItemSelectedListener(this);
-        mNavEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View v = LayoutInflater.from(MainActivity.this).
+        mNavEdit.setOnClickListener(this);
+        mNavImage.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_nav_edit:
+                View v = LayoutInflater.from(this).
                         inflate(R.layout.dialog_user_edit, null);
                 final EditText nameEdit = (EditText) v.findViewById(R.id.edit_user_name);
                 final EditText introEdit = (EditText) v.findViewById(R.id.edit_user_intro);
-                new AlertDialog.Builder(MainActivity.this).setTitle("用户设置...").
+                new AlertDialog.Builder(this).setTitle(getString(R.string.user_edit)).
                         setView(v).
-                        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 String name = nameEdit.getText().toString().trim();
@@ -165,17 +170,14 @@ public class MainActivity extends AppCompatActivity
                                 dialogInterface.cancel();
                             }
                         }).show();
-            }
-        });
-        mNavImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new AlertDialog.Builder(MainActivity.this).
-                        setTitle("请选择获得头像方式").
-                        setItems(new String[]{"从相册中查找", "拍照"}, MainActivity.this).show();
-            }
-        });
+                break;
+            case R.id.iv_nav_header:
+                new AlertDialog.Builder(this).
+                        setTitle(getString(R.string.select_header)).
+                        setItems(getResources().getStringArray(R.array.select_header_item),
+                                this).show();
+                break;
+        }
     }
 
     /**
@@ -375,4 +377,6 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+
 }

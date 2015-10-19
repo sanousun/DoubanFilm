@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -18,10 +19,13 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,7 +59,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,7 +66,7 @@ import butterknife.ButterKnife;
 public class SubjectActivity extends AppCompatActivity
         implements CastAdapter.OnItemClickListener,
         SubCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
-        AppBarLayout.OnOffsetChangedListener {
+        AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     private static final String KEY_SUBJECT_ID = "subject_id";
 
@@ -74,6 +77,8 @@ public class SubjectActivity extends AppCompatActivity
 
     @Bind(R.id.refresh_subj)
     SwipeRefreshLayout mRefresh;
+    @Bind(R.id.btn_subj_skip)
+    FloatingActionButton mBtn;
 
     //film header
     @Bind(R.id.appbarLayout_subj)
@@ -133,8 +138,8 @@ public class SubjectActivity extends AppCompatActivity
 
     private File mFile;
 
-    private Semaphore mCollectSemaphore = new Semaphore(0);
     private boolean isCollect = false;
+    private boolean isBtnShow = true;
 
     private int mAppBarLayoutHeight;
     private int mImageWidth;
@@ -149,6 +154,12 @@ public class SubjectActivity extends AppCompatActivity
             cacheOnDisk(true).
             considerExifParams(true).
             build();
+
+    public static void toActivity(Context context, String id) {
+        Intent intent = new Intent(context, SubjectActivity.class);
+        intent.putExtra(KEY_SUBJECT_ID, id);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +196,7 @@ public class SubjectActivity extends AppCompatActivity
         //设置圆形刷新球的偏移量
         mRefresh.setProgressViewOffset(false, 0, 100);
         mRefresh.setOnRefreshListener(this);
+        mBtn.setOnClickListener(this);
         mAppBarLayoutHeight =
                 mAppBarLayout.getLayoutParams().height - mToolbar.getLayoutParams().height;
         setSupportActionBar(mToolbar);
@@ -249,9 +261,11 @@ public class SubjectActivity extends AppCompatActivity
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
         mYear.setText(mSubject.getYear());
-        String coll = getString(R.string.collect);
-        String count = getString(R.string.count);
-        mCollect.setText(String.format("%s%d%s", coll, mSubject.getCollect_count(), count));
+        mCollect.setText(
+                String.format("%s%d%s",
+                        getString(R.string.collect),
+                        mSubject.getCollect_count(),
+                        getString(R.string.count)));
         mTitle.setText(mSubject.getTitle());
         if (!mSubject.getOriginal_title().equals(mSubject.getTitle())) {
             mOriginal_title.setText(mSubject.getOriginal_title());
@@ -260,57 +274,34 @@ public class SubjectActivity extends AppCompatActivity
             mOriginal_title.setVisibility(View.GONE);
         }
         mGenres.setText(listToString(mSubject.getGenres()));
-        SpannableString ake = new SpannableString(getString(R.string.ake));
-        ake.setSpan(new ForegroundColorSpan(Color.GRAY),
-                0, ake.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mAke.setText(ake);
+        mAke.setText(getSpanString(R.string.ake, Color.GRAY));
         mAke.append(listToString(mSubject.getAka()));
-        SpannableString counties = new SpannableString(getString(R.string.countries));
-        counties.setSpan(new ForegroundColorSpan(Color.GRAY),
-                0, counties.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mCountries.setText(counties);
+        mCountries.setText(getSpanString(R.string.countries, Color.GRAY));
         mCountries.append(listToString(mSubject.getCountries()));
 
-        //简介，点击查看具体内容
-        //SpannableString可以设置文字的样式，也可以通过ImageSpan在TextView中插入图片
-        //还可以通过Character span = new UnderlineSpan();设置下划线
-        SpannableString summary = new SpannableString(getString(R.string.summary));
-        summary.setSpan(new ForegroundColorSpan(Color.BLACK),
-                0, summary.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mSummaryText.setText(summary);
+        mSummaryText.setText(getSpanString(R.string.summary, Color.BLACK));
         mSummaryText.append(mSubject.getSummary());
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
-        mSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isSummaryShow) {
-                    isSummaryShow = false;
-                    mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
-                    mSummaryText.setLines(3);
-                } else {
-                    isSummaryShow = true;
-                    mSummaryText.setEllipsize(null);
-                    mSummaryText.setSingleLine(false);
-                }
-            }
-        });
-
+        mSummary.setOnClickListener(this);
         //获得导演演员数据列表
         addCastData(mSubject.getDirectors(), true);
         addCastData(mSubject.getCasts(), false);
         CastAdapter mCastAdapter = new CastAdapter(SubjectActivity.this, mCastData);
         mCastAdapter.setOnItemClickListener(SubjectActivity.this);
         mCast.setAdapter(mCastAdapter);
-
-
-        //释放一个信号量
-        mCollectSemaphore.release();
-        String tag = "";
+        StringBuilder tag = new StringBuilder();
         for (int i = 0; i < mSubject.getGenres().size(); i++) {
-            tag += mSubject.getGenres().get(i);
+            tag.append(mSubject.getGenres().get(i));
             if (i == 1) break;
         }
-        volley_rem_GET(tag);
+        volley_rem_GET(tag.toString());
+    }
+
+    private SpannableString getSpanString(int res, int color) {
+        SpannableString span = new SpannableString(getString(res));
+        span.setSpan(new ForegroundColorSpan(color),
+                0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return span;
     }
 
     private void addCastData(List<Subject.CelebrityEntity> data, boolean isDir) {
@@ -411,19 +402,12 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 点击收藏后将subject存入数据库中,并将图片存入文件
      */
-    private synchronized void collectFilm() {
+    private void collectFilm() {
         if (mSubject == null) return;
         if (isCollect) {
             cancelSave();
             isCollect = false;
         } else {
-            try {
-                if (mContent == null) {
-                    mCollectSemaphore.acquire();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             saveFilm();
             isCollect = true;
         }
@@ -434,7 +418,6 @@ public class SubjectActivity extends AppCompatActivity
      * 用于保存filmContent和filmImage
      */
     private void saveFilm() {
-        MyApplication.getDataSource().insertOrUpDataFilm(mId, mContent);
         if (mFile.exists()) {
             mFile.delete();
         }
@@ -448,6 +431,9 @@ public class SubjectActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
+        mSubject.setLocalImageFile(mFile.getPath());
+        String content = new Gson().toJson(mSubject, Constant.subType);
+        MyApplication.getDataSource().insertOrUpDataFilm(mId, content);
         Toast.makeText(this, getString(R.string.collect_completed), Toast.LENGTH_SHORT).show();
     }
 
@@ -479,7 +465,19 @@ public class SubjectActivity extends AppCompatActivity
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
         //利用AppBarLayout的回调接口启用或者关闭滑动刷新
-        mRefresh.setEnabled(i == 0);
+        if (i == 0) {
+            mRefresh.setEnabled(true);
+            if (!isBtnShow) {
+                showButton();
+                isBtnShow = true;
+            }
+        } else {
+            mRefresh.setEnabled(false);
+            if (isBtnShow) {
+                hideButton();
+                isBtnShow = false;
+            }
+        }
         float alpha = (float) (-1.0 * i) / mAppBarLayoutHeight;
         changeLayout(alpha);
     }
@@ -496,10 +494,33 @@ public class SubjectActivity extends AppCompatActivity
     }
 
 
-    public static void toActivity(Context context, String id) {
-        Intent intent = new Intent(context, SubjectActivity.class);
-        intent.putExtra(KEY_SUBJECT_ID, id);
-        context.startActivity(intent);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.card_subj_summary:
+                if (isSummaryShow) {
+                    isSummaryShow = false;
+                    mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
+                    mSummaryText.setLines(3);
+                } else {
+                    isSummaryShow = true;
+                    mSummaryText.setEllipsize(null);
+                    mSummaryText.setSingleLine(false);
+                }
+                break;
+            case R.id.btn_subj_skip:
+                Log.i("xyz", "onClick");
+                break;
+        }
     }
 
+    private void hideButton() {
+        mBtn.setVisibility(View.GONE);
+    }
+
+    private void showButton() {
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.scale_visible);
+        mBtn.setAnimation(anim);
+        mBtn.setVisibility(View.VISIBLE);
+    }
 }

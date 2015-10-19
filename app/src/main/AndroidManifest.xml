@@ -9,7 +9,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/douban"
+        android:icon="@mipmap/douban_film_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity

@@ -42,7 +42,7 @@ public class TopFragment extends Fragment {
         PagerAdapter mPagerAdapter = new TopPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        mTabLayout.setTabTextColors(Color.GRAY, Color.WHITE);
+        mTabLayout.setTabTextColors(Color.parseColor("#aaffffff"), Color.WHITE);
         mTabLayout.setTabsFromPagerAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
