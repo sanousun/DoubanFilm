@@ -14,6 +14,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,8 @@ public class CelebrityActivity extends AppCompatActivity
     TextView mWorks;
     @Bind(R.id.rv_cel_works)
     RecyclerView mWorksView;
+    @Bind(R.id.ll_cel_layout)
+    LinearLayout mCelLayout;
 
 
     private String mId;
@@ -191,6 +194,8 @@ public class CelebrityActivity extends AppCompatActivity
         mWorksAdapter = new SubCardAdapter(CelebrityActivity.this, mWorksData);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
+
+        mCelLayout.setVisibility(View.VISIBLE);
     }
 
     /**

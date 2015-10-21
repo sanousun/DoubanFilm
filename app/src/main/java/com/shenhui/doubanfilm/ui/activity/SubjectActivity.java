@@ -112,6 +112,8 @@ public class SubjectActivity extends AppCompatActivity
     @Bind(R.id.tv_subj_countries)
     TextView mCountries;
 
+    @Bind(R.id.ll_subj_film)
+    LinearLayout mFilmLayout;
     //film summary
     @Bind(R.id.card_subj_summary)
     CardView mSummary;
@@ -290,6 +292,10 @@ public class SubjectActivity extends AppCompatActivity
         mCastAdapter.setOnItemClickListener(SubjectActivity.this);
         mCast.setAdapter(mCastAdapter);
         StringBuilder tag = new StringBuilder();
+        //显示View
+        mFilmLayout.setVisibility(View.VISIBLE);
+        isBtnShow = false;
+        //加载推荐
         for (int i = 0; i < mSubject.getGenres().size(); i++) {
             tag.append(mSubject.getGenres().get(i));
             if (i == 1) break;
@@ -485,12 +491,18 @@ public class SubjectActivity extends AppCompatActivity
     private void changeLayout(float a) {
         mImage.setAlpha(a);
         if (a == 1.0) {
-            mLinearContent.setGravity(Gravity.START);
+            setGravity(Gravity.START);
         } else {
-            mLinearContent.setGravity(Gravity.CENTER_HORIZONTAL);
+            setGravity(Gravity.CENTER_HORIZONTAL);
         }
         mContentParams.leftMargin = (int) (mImageWidth * a);
         mLinearContent.setLayoutParams(mContentParams);
+    }
+
+    private void setGravity(int gravity) {
+        mLinearContent.setGravity(gravity);
+        mAke.setGravity(gravity);
+        mCountries.setGravity(gravity);
     }
 
 

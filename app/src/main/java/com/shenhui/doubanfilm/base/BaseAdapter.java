@@ -9,8 +9,8 @@ import android.view.animation.AnimationUtils;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.CollectAdapter;
 
 public class BaseAdapter<T extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<T> {
@@ -23,6 +23,7 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
             showImageOnLoading(R.drawable.noimage).
             showImageOnFail(R.drawable.noimage).
             showImageForEmptyUri(R.drawable.lks_for_blank_url).
+            imageScaleType(ImageScaleType.EXACTLY_STRETCHED).
             cacheInMemory(true).
             cacheOnDisk(true).
             considerExifParams(true).

@@ -10,8 +10,8 @@
         android:id="@+id/iv_nav_header"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/lks_for_blank_url"
         app:border_color="@color/white"
@@ -40,12 +40,12 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_nav_edit"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="16dp"
         android:src="@drawable/ic_create"
         app:border_color="@color/white"
         app:border_width="2dp" />

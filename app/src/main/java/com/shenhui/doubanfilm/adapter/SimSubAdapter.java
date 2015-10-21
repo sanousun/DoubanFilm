@@ -47,6 +47,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     public SimSubAdapter(Context context, List<SimpleSub> data) {
         this(context, data, false);
     }
+
     public SimSubAdapter(Context context, List<SimpleSub> data, boolean isComing) {
         this.mContext = context;
         this.mData = data;
@@ -114,7 +115,11 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             float rate = (float) sub.getRating().getAverage();
             holder.ratingBar.setRating(rate / 2);
             holder.text_rating.setText(String.format("%s", rate));
-            holder.collect_count.setText(String.format("%d", sub.getCollect_count()));
+            holder.collect_count.setText(
+                    String.format("%s%d%s",
+                            mContext.getString(R.string.collect),
+                            sub.getCollect_count(),
+                            mContext.getString(R.string.count)));
         }
         String title = sub.getTitle();
         String original_title = sub.getOriginal_title();

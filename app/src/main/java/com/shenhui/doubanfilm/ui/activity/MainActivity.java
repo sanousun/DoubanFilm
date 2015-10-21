@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             mNavImage.setImageResource(R.drawable.lks_for_blank_url);
         }
+        mNavView.getMenu().getItem(0).setChecked(true);
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         useEditor = userSP.edit();
         mUserName.setText(userSP.getString(USER_NAME, getString(R.string.user_name)));

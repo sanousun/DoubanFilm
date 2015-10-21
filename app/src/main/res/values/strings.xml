@@ -58,6 +58,8 @@
         See the License for the specific language governing permissions and
         limitations under the License.\n
     </string>
+    <string name="delete">移除</string>
+    <string name="enter">进入</string>
 
 
 </resources>

@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:itemIconTint="@color/colorPrimary"
         app:itemTextColor="@color/black"
         app:menu="@menu/menu_nav" />
 
