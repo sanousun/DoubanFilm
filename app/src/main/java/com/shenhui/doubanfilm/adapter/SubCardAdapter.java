@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.CastAndCommend;
+import com.shenhui.doubanfilm.bean.SimpleCardBean;
 
 import java.util.List;
 
@@ -20,10 +20,10 @@ import butterknife.ButterKnife;
 public class SubCardAdapter extends BaseAdapter<SubCardAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<CastAndCommend> mData;
+    private List<SimpleCardBean> mData;
     private OnItemClickListener callback;
 
-    public SubCardAdapter(Context context, List<CastAndCommend> data) {
+    public SubCardAdapter(Context context, List<SimpleCardBean> data) {
         this.mContext = context;
         this.mData = data;
     }
@@ -40,7 +40,7 @@ public class SubCardAdapter extends BaseAdapter<SubCardAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        CastAndCommend sub = mData.get(position);
+        SimpleCardBean sub = mData.get(position);
         imageLoader.displayImage(sub.getImage(),
                 holder.image, options);
         if (sub.getIsDir()) {

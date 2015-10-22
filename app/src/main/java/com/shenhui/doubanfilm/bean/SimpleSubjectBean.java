@@ -6,7 +6,7 @@ import java.util.List;
  * Created by sanousun on 2015/9/3.
  */
 
-public class SimpleSub {
+public class SimpleSubjectBean {
 
 
     private RatingEntity rating;

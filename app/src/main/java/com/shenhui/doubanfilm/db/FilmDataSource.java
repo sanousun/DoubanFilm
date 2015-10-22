@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.Gson;
-import com.shenhui.doubanfilm.bean.SimpleSub;
-import com.shenhui.doubanfilm.bean.Subject;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 
 import java.sql.SQLException;
@@ -73,11 +73,11 @@ public final class FilmDataSource {
     /**
      * 通过filmId的到对应的film
      */
-    public Subject filmOfId(String id) {
+    public SubjectBean filmOfId(String id) {
         Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_COL, allColumnsForCol,
                 DBHelper.COLUMN_FILM + " = " + id, null, null, null, null);
         cursor.moveToFirst();
-        Subject sub = cursorToSubject(cursor);
+        SubjectBean sub = cursorToSubject(cursor);
         cursor.close();
         return sub;
     }
@@ -85,7 +85,7 @@ public final class FilmDataSource {
     /**
      * 从数据库查询得到的游标中得到film
      */
-    public Subject cursorToSubject(Cursor cursor) {
+    public SubjectBean cursorToSubject(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
             String content = cursor.getString(2);
             return new Gson().fromJson(content, Constant.subType);
@@ -108,11 +108,11 @@ public final class FilmDataSource {
     /**
      * 得到所有的collectTable中的电影
      */
-    public List<Subject> filmOfAll() {
+    public List<SubjectBean> filmOfAll() {
         Cursor cursor = mDatabase.query(
                 DBHelper.TABLE_NAME_COL, allColumnsForCol, null, null, null, null, null);
         cursor.moveToFirst();
-        List<Subject> res = new ArrayList<Subject>();
+        List<SubjectBean> res = new ArrayList<SubjectBean>();
 //        while (cursor.moveToNext()) {
 //            String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
 //            Subject sub = new Gson().fromJson(content, Constant.subType);
@@ -121,7 +121,7 @@ public final class FilmDataSource {
         //使用query查询，cursor.moveToFirst()的position=0;
         do {
             String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
-            Subject sub = new Gson().fromJson(content, Constant.subType);
+            SubjectBean sub = new Gson().fromJson(content, Constant.subType);
             res.add(sub);
         } while (cursor.moveToNext());
         cursor.close();
@@ -140,7 +140,7 @@ public final class FilmDataSource {
     /**
      * 插入top排名对应的数据内容
      */
-    public List<SimpleSub> insertTop(String top, String content) {
+    public List<SimpleSubjectBean> insertTop(String top, String content) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_TOP, top);
         values.put(DBHelper.COLUMN_CONTENT, content);
@@ -148,14 +148,14 @@ public final class FilmDataSource {
         Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_TOP, allColumnsForTop,
                 DBHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
-        List<SimpleSub> data = CursorToList(cursor);
+        List<SimpleSubjectBean> data = CursorToList(cursor);
         return data;
     }
 
     /**
      * 更新top排名对应的数据内容
      */
-    public List<SimpleSub> upDateTop(String top, String content) {
+    public List<SimpleSubjectBean> upDateTop(String top, String content) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_TOP, top);
         values.put(DBHelper.COLUMN_CONTENT, content);
@@ -164,22 +164,22 @@ public final class FilmDataSource {
         Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_TOP, allColumnsForTop,
                 DBHelper.COLUMN_ID + " = " + updateId, null, null, null, null);
         cursor.moveToFirst();
-        List<SimpleSub> data = CursorToList(cursor);
+        List<SimpleSubjectBean> data = CursorToList(cursor);
         return data;
     }
 
     /**
      * 查询top排名对应的数据内容
      */
-    public List<SimpleSub> getTop(String top) {
+    public List<SimpleSubjectBean> getTop(String top) {
         Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_TOP, allColumnsForTop,
                 DBHelper.COLUMN_TOP + " = " + top, null, null, null, null);
         cursor.moveToFirst();
-        List<SimpleSub> data = CursorToList(cursor);
+        List<SimpleSubjectBean> data = CursorToList(cursor);
         return data;
     }
 
-    public List<SimpleSub> insertOrUpDate(String top, String content) {
+    public List<SimpleSubjectBean> insertOrUpDate(String top, String content) {
         if (getTop(top) == null) {
             return insertTop(top, content);
         } else {
@@ -187,7 +187,7 @@ public final class FilmDataSource {
         }
     }
 
-    private List<SimpleSub> CursorToList(Cursor cursor) {
+    private List<SimpleSubjectBean> CursorToList(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
             String content = cursor.getString(2);
             return new Gson().fromJson(content, Constant.simpleSubTypeList);

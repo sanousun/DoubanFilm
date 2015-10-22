@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.adapter.CollectAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
-import com.shenhui.doubanfilm.bean.Subject;
+import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class CollectFragment extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener,
         CollectAdapter.OnItemClickListener {
 
-    private List<Subject> mData = new ArrayList<>();
+    private List<SubjectBean> mData = new ArrayList<>();
     private CollectAdapter mAdapter;
     private View mView;
 

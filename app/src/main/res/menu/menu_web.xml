@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/web_refresh"
+        android:orderInCategory="98"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/web_open"
+        android:orderInCategory="99"
+        android:title="@string/open"
+        app:showAsAction="never" />
+</menu>

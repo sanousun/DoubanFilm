@@ -3,7 +3,7 @@ package com.shenhui.doubanfilm.bean;
 /**
  * Created by sanousun on 2015/9/4.
  */
-public class CastAndCommend {
+public class SimpleCardBean {
 
     private String alt;
     private String id;
@@ -12,10 +12,10 @@ public class CastAndCommend {
     private Boolean isDir = false;
     private Boolean isFilm = false;
 
-    public CastAndCommend() {
+    public SimpleCardBean() {
     }
 
-    public CastAndCommend(String alt, String id, String name, String image) {
+    public SimpleCardBean(String alt, String id, String name, String image) {
         this.alt = alt;
         this.id = id;
         this.name = name;
@@ -23,7 +23,7 @@ public class CastAndCommend {
         this.isFilm = true;
     }
 
-    public CastAndCommend(String alt, String id, String name, String medium, Boolean isDir) {
+    public SimpleCardBean(String alt, String id, String name, String medium, Boolean isDir) {
         this.alt = alt;
         this.id = id;
         this.name = name;

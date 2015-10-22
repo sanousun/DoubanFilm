@@ -27,8 +27,8 @@ import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.BoxAdapter;
 import com.shenhui.doubanfilm.adapter.SimSubAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.SimpleSub;
-import com.shenhui.doubanfilm.bean.USBoxSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.bean.BoxSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
@@ -61,8 +61,8 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
 
     private SimSubAdapter mSimAdapter;
     private BoxAdapter mBoxAdapter;
-    private List<SimpleSub> mSimData = new ArrayList<>();
-    private List<USBoxSub> mBoxData = new ArrayList<>();
+    private List<SimpleSubjectBean> mSimData = new ArrayList<>();
+    private List<BoxSubjectBean> mBoxData = new ArrayList<>();
 
     private int mTitlePos;
     private String requestUrl;
@@ -254,7 +254,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    List<SimpleSub> moreData = new GsonBuilder().create().fromJson(
+                    List<SimpleSubjectBean> moreData = new GsonBuilder().create().fromJson(
                             response.getString(JSON_SUBJECTS), Constant.simpleSubTypeList);
                     mSimAdapter.loadMoreData(moreData);
                 } catch (JSONException e) {

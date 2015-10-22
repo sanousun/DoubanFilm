@@ -34,23 +34,24 @@
                     android:layout_height="wrap_content"
                     android:text="火星救援"
                     android:textColor="@color/black"
-                    android:textSize="22sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_col_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:background="@color/blue"
-                    android:padding="2dp"
                     android:text="  2015  "
-                    android:textColor="@color/white" />
+                    android:padding="1dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_col_genres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="剧情，科幻，冒险"
                     android:textColor="@color/blue" />
 
@@ -58,7 +59,7 @@
                     android:id="@+id/tv_col_cel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:text="导演：雷德利斯科特/主演：马特达蒙，杰西卡差斯坦"
                     android:textSize="12sp" />
 
@@ -79,6 +80,7 @@
                         android:id="@+id/tv_col_delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="?android:attr/selectableItemBackground"
                         android:padding="4dp"
                         android:text="@string/delete"
                         android:textColor="@color/red"
@@ -89,6 +91,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:padding="4dp"
                         android:text="@string/enter"
                         android:textSize="16sp" />

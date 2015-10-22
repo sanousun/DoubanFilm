@@ -20,7 +20,7 @@ import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimSubAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
-import com.shenhui.doubanfilm.bean.SimpleSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
@@ -43,7 +43,7 @@ public class TopPagerFragment extends BaseFragment
     private boolean mFirstLoad = true;
 
     private SimSubAdapter mAdapter;
-    private List<SimpleSub> mData = new ArrayList<>();
+    private List<SimpleSubjectBean> mData = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class TopPagerFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         if (mFirstLoad) {
-            List<SimpleSub> data;
+            List<SimpleSubjectBean> data;
             if ((data = MyApplication.getDataSource().getTop(mStart + "")) != null) {
                 mData = data;
                 mAdapter.updateList(mData, TOP250_TOTAL);
@@ -167,7 +167,7 @@ public class TopPagerFragment extends BaseFragment
 
     private void loadMore() {
         int moreStart = mStart + TOP250_COUNT;
-        List<SimpleSub> data;
+        List<SimpleSubjectBean> data;
         if ((data = MyApplication.getDataSource().getTop(moreStart + "")) != null) {
             mAdapter.loadMoreData(data);
         } else {

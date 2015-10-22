@@ -17,7 +17,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.SimpleSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     private static final int DEFAULT_COUNT = 20;
 
     private Context mContext;
-    private List<SimpleSub> mData;
+    private List<SimpleSubjectBean> mData;
     /**
      * 用于加载更多数据
      */
@@ -44,11 +44,11 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     private boolean isComing;
 
-    public SimSubAdapter(Context context, List<SimpleSub> data) {
+    public SimSubAdapter(Context context, List<SimpleSubjectBean> data) {
         this(context, data, false);
     }
 
-    public SimSubAdapter(Context context, List<SimpleSub> data, boolean isComing) {
+    public SimSubAdapter(Context context, List<SimpleSubjectBean> data, boolean isComing) {
         this.mContext = context;
         this.mData = data;
         this.isComing = isComing;
@@ -76,12 +76,12 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         return mData.size() == total;
     }
 
-    public void loadMoreData(List<SimpleSub> data) {
+    public void loadMoreData(List<SimpleSubjectBean> data) {
         this.mData.addAll(data);
         notifyDataSetChanged();
     }
 
-    public void updateList(List<SimpleSub> data, int total) {
+    public void updateList(List<SimpleSubjectBean> data, int total) {
         this.mData = data;
         this.total = total;
         notifyDataSetChanged();
@@ -108,7 +108,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             showFootView(((FootViewHolder) viewHolder), position);
             return;
         }
-        SimpleSub sub = mData.get(position);
+        SimpleSubjectBean sub = mData.get(position);
         ItemViewHolder holder = (ItemViewHolder) viewHolder;
         if (!isComing) {
             holder.rating.setVisibility(View.VISIBLE);

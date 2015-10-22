@@ -17,8 +17,8 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.SimpleSub;
-import com.shenhui.doubanfilm.bean.USBoxSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.bean.BoxSubjectBean;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -34,14 +34,14 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
     private static final int THIRD = 3;
 
     private LayoutInflater mInflater;
-    private List<USBoxSub> mData;
+    private List<BoxSubjectBean> mData;
 
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     public static final String[] RANK = {"1st", "2nd", "3rd", "4th", "5th",
             "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th"};
 
-    public BoxAdapter(Context context, List<USBoxSub> data) {
+    public BoxAdapter(Context context, List<BoxSubjectBean> data) {
         this.mData = data;
         this.mInflater = LayoutInflater.from(context);
     }
@@ -54,12 +54,12 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        USBoxSub subject = mData.get(position);
+        BoxSubjectBean subject = mData.get(position);
         setRankText(holder, subject.getRank());
         holder.text_rank.setText(RANK[subject.getRank() - 1]);
         holder.image_isNew.setVisibility(subject.getNewX() ? View.VISIBLE : View.GONE);
 
-        SimpleSub simSubject = subject.getSubject();
+        SimpleSubjectBean simSubject = subject.getSubject();
         float rating = (float) simSubject.getRating().getAverage();
         if (rating == 0) {
             holder.text_no_rating.setVisibility(View.VISIBLE);
@@ -96,7 +96,7 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         }
     }
 
-    public void updateList(List<USBoxSub> data) {
+    public void updateList(List<BoxSubjectBean> data) {
         this.mData = data;
         this.notifyDataSetChanged();
     }

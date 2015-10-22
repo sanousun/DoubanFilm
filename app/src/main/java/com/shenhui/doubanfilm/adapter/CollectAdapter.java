@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.Subject;
+import com.shenhui.doubanfilm.bean.SubjectBean;
 
 import java.util.List;
 
@@ -24,19 +24,19 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<Subject> mData;
+    private List<SubjectBean> mData;
 
     private OnItemClickListener callback;
 
-    private Subject undoSub;
+    private SubjectBean undoSub;
 
-    public CollectAdapter(Context context, List<Subject> data) {
+    public CollectAdapter(Context context, List<SubjectBean> data) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
-    public void updateList(List<Subject> data) {
+    public void updateList(List<SubjectBean> data) {
         this.mData = data;
         notifyDataSetChanged();
     }
@@ -84,7 +84,7 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Subject sub = mData.get(position);
+        SubjectBean sub = mData.get(position);
         float rate = (float) sub.getRating().getAverage();
         holder.rating.setText(String.format("%s", rate));
         String title = sub.getTitle();
@@ -92,17 +92,17 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         holder.year.setText(String.format("  %s  ", sub.getYear()));
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < sub.getGenres().size(); i++) {
-            s.append(i == 0 ? "" : "，").append(sub.getGenres().get(i));
+            s.append(i == 0 ? "" : ",").append(sub.getGenres().get(i));
         }
         holder.genres.setText(s.toString());
         s = new StringBuilder();
         s.append(mContext.getString(R.string.directors));
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append(i == 0 ? "" : "，").append(sub.getDirectors().get(i).getName());
+            s.append(i == 0 ? "" : ",").append(sub.getDirectors().get(i).getName());
         }
         s.append(String.format("/%s", mContext.getString(R.string.casts)));
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            s.append(i == 0 ? "" : "，");
+            s.append(i == 0 ? "" : ",");
             s.append(sub.getCasts().get(i).getName());
         }
         holder.celebrity.setText(s.toString());

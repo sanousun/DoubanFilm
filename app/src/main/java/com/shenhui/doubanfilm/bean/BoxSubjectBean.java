@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by sanousun on 2015/9/8.
  */
-public class USBoxSub {
+public class BoxSubjectBean {
 
     private int box;
     @SerializedName("new")
     private boolean newX;
     private int rank;
-    private SimpleSub subject;
+    private SimpleSubjectBean subject;
 
     public boolean isNewX() {
         return newX;
@@ -29,7 +29,7 @@ public class USBoxSub {
         this.rank = rank;
     }
 
-    public void setSubject(SimpleSub subject) {
+    public void setSubject(SimpleSubjectBean subject) {
         this.subject = subject;
     }
 
@@ -45,7 +45,7 @@ public class USBoxSub {
         return rank;
     }
 
-    public SimpleSub getSubject() {
+    public SimpleSubjectBean getSubject() {
         return subject;
     }
 }

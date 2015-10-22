@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by sanousun on 2015/9/12.
  */
-public class Celebrity {
+public class CelebrityBean {
 
     private String mobile_url;//条目移动版url
     private String name;//中文名

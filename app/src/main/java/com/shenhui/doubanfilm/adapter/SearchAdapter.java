@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.SimpleSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -28,11 +28,11 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
 
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<SimpleSub> mData;
+    private List<SimpleSubjectBean> mData;
 
     private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
-    public SearchAdapter(Context context, List<SimpleSub> data) {
+    public SearchAdapter(Context context, List<SimpleSubjectBean> data) {
         this.mContext = context;
         this.mData = data;
         this.mInflater = LayoutInflater.from(context);
@@ -47,7 +47,7 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        SimpleSub sub = mData.get(position);
+        SimpleSubjectBean sub = mData.get(position);
         holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
         holder.text_collect_count.setText(String.format("%d", sub.getCollect_count()));

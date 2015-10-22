@@ -1,10 +1,10 @@
 package com.shenhui.doubanfilm.support;
 
 import com.google.gson.reflect.TypeToken;
-import com.shenhui.doubanfilm.bean.Celebrity;
-import com.shenhui.doubanfilm.bean.SimpleSub;
-import com.shenhui.doubanfilm.bean.Subject;
-import com.shenhui.doubanfilm.bean.USBoxSub;
+import com.shenhui.doubanfilm.bean.CelebrityBean;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.bean.SubjectBean;
+import com.shenhui.doubanfilm.bean.BoxSubjectBean;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -27,12 +27,12 @@ public class Constant {
     public static final String SEARCH_TAG = "/v2/movie/search?tag=";
     public static final String INTENT_ID = "id";
 
-    public static final Type subType = new TypeToken<Subject>() {
+    public static final Type subType = new TypeToken<SubjectBean>() {
     }.getType();
-    public static final Type cleType = new TypeToken<Celebrity>() {
+    public static final Type cleType = new TypeToken<CelebrityBean>() {
     }.getType();
-    public static final Type simpleSubTypeList = new TypeToken<List<SimpleSub>>() {
+    public static final Type simpleSubTypeList = new TypeToken<List<SimpleSubjectBean>>() {
     }.getType();
-    public static final Type simpleBoxTypeList = new TypeToken<List<USBoxSub>>() {
+    public static final Type simpleBoxTypeList = new TypeToken<List<BoxSubjectBean>>() {
     }.getType();
 }

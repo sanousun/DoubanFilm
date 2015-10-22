@@ -10,6 +10,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +20,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,9 +46,9 @@ import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CastAdapter;
 import com.shenhui.doubanfilm.adapter.SubCardAdapter;
-import com.shenhui.doubanfilm.bean.CastAndCommend;
-import com.shenhui.doubanfilm.bean.SimpleSub;
-import com.shenhui.doubanfilm.bean.Subject;
+import com.shenhui.doubanfilm.bean.SimpleCardBean;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 
 import org.json.JSONException;
@@ -131,9 +131,9 @@ public class SubjectActivity extends AppCompatActivity
     //film subject
     private String mId;
     private String mContent;
-    private Subject mSubject;
-    private List<CastAndCommend> mCastData = new ArrayList<>();
-    private List<CastAndCommend> mCommendData = new ArrayList<>();
+    private SubjectBean mSubject;
+    private List<SimpleCardBean> mCastData = new ArrayList<>();
+    private List<SimpleCardBean> mCommendData = new ArrayList<>();
 
     private boolean isSummaryShow = false;
     private SubCardAdapter mCommendAdapter;
@@ -202,7 +202,8 @@ public class SubjectActivity extends AppCompatActivity
         mAppBarLayoutHeight =
                 mAppBarLayout.getLayoutParams().height - mToolbar.getLayoutParams().height;
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         mImageWidth = (int) (mImage.getLayoutParams().width * 1.1);
         mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
         LinearLayoutManager manager = new LinearLayoutManager(SubjectActivity.this);
@@ -310,9 +311,9 @@ public class SubjectActivity extends AppCompatActivity
         return span;
     }
 
-    private void addCastData(List<Subject.CelebrityEntity> data, boolean isDir) {
-        for (Subject.CelebrityEntity s : data) {
-            CastAndCommend dir = new CastAndCommend();
+    private void addCastData(List<SubjectBean.CelebrityEntity> data, boolean isDir) {
+        for (SubjectBean.CelebrityEntity s : data) {
+            SimpleCardBean dir = new SimpleCardBean();
             dir.setAlt(s.getAlt());
             dir.setId(s.getId());
             dir.setName(s.getName());
@@ -338,9 +339,9 @@ public class SubjectActivity extends AppCompatActivity
                         Gson gson = new GsonBuilder().create();
                         try {
                             String json = response.getString(JSON_SUBJECTS);
-                            List<SimpleSub> data = gson.fromJson(json, Constant.simpleSubTypeList);
-                            for (SimpleSub simpleSub : data) {
-                                mCommendData.add(new CastAndCommend(simpleSub.getAlt(), simpleSub.getId(),
+                            List<SimpleSubjectBean> data = gson.fromJson(json, Constant.simpleSubTypeList);
+                            for (SimpleSubjectBean simpleSub : data) {
+                                mCommendData.add(new SimpleCardBean(simpleSub.getAlt(), simpleSub.getId(),
                                         simpleSub.getTitle(), simpleSub.getImages().getLarge()));
                             }
                             mCommendAdapter = new SubCardAdapter(SubjectActivity.this, mCommendData);
@@ -427,7 +428,7 @@ public class SubjectActivity extends AppCompatActivity
         if (mFile.exists()) {
             mFile.delete();
         }
-        FileOutputStream out = null;
+        FileOutputStream out;
         try {
             out = new FileOutputStream(mFile);
             Bitmap bitmap = imageLoader.loadImageSync(mSubject.getImages().getLarge());
@@ -521,7 +522,7 @@ public class SubjectActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_subj_skip:
-                Log.i("xyz", "onClick");
+                WebActivity.toWebActivity(this, mSubject.getMobile_url(), mSubject.getTitle());
                 break;
         }
     }

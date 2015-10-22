@@ -2,7 +2,7 @@ package com.shenhui.doubanfilm.bean;
 
 import java.util.List;
 
-public class Subject {
+public class SubjectBean {
 
     private RatingEntity rating;//评分
     private int reviews_count;//影评数量

@@ -19,7 +19,7 @@ import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SearchAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.bean.SimpleSub;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.ui.widget.IzzySearchView;
 
@@ -43,7 +43,7 @@ public class SearchActivity extends AppCompatActivity
     RecyclerView mRecyclerView;
 
     private SearchAdapter mAdapter;
-    private List<SimpleSub> mData;
+    private List<SimpleSubjectBean> mData;
     //SearchView on the Toolbar;
     private IzzySearchView mSearchView;
     private ProgressDialog mDialog;

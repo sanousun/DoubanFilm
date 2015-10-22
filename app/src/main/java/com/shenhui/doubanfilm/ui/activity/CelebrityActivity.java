@@ -27,8 +27,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SubCardAdapter;
-import com.shenhui.doubanfilm.bean.CastAndCommend;
-import com.shenhui.doubanfilm.bean.Celebrity;
+import com.shenhui.doubanfilm.bean.SimpleCardBean;
+import com.shenhui.doubanfilm.bean.CelebrityBean;
 import com.shenhui.doubanfilm.support.Constant;
 
 import java.util.ArrayList;
@@ -68,8 +68,8 @@ public class CelebrityActivity extends AppCompatActivity
 
 
     private String mId;
-    private Celebrity mCelebrity;
-    private List<CastAndCommend> mWorksData = new ArrayList<>();
+    private CelebrityBean mCelebrity;
+    private List<SimpleCardBean> mWorksData = new ArrayList<>();
     private SubCardAdapter mWorksAdapter;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
@@ -183,8 +183,8 @@ public class CelebrityActivity extends AppCompatActivity
         mWorks.setText(String.format("%s的影视作品", mCelebrity.getName()));
 
         for (int i = 0; i < mCelebrity.getWorks().size(); i++) {
-            Celebrity.WorksEntity work = mCelebrity.getWorks().get(i);
-            CastAndCommend data = new CastAndCommend(
+            CelebrityBean.WorksEntity work = mCelebrity.getWorks().get(i);
+            SimpleCardBean data = new SimpleCardBean(
                     work.getSubject().getAlt(),
                     work.getSubject().getId(),
                     work.getSubject().getTitle(),
