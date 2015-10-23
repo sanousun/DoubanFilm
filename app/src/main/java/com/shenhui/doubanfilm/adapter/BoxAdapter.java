@@ -33,6 +33,10 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
     private static final int SECOND = 2;
     private static final int THIRD = 3;
 
+    private static final String GOLD = "#D9D919";
+    private static final String SILVERY = "#D9D919";
+    private static final String COPPER = "#B87333";
+
     private LayoutInflater mInflater;
     private List<BoxSubjectBean> mData;
 
@@ -82,13 +86,13 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
     public void setRankText(ViewHolder holder, int rank) {
         switch (rank) {
             case FIRST:
-                holder.text_rank.setTextColor(Color.parseColor("#D9D919"));
+                holder.text_rank.setTextColor(Color.parseColor(GOLD));
                 break;
             case SECOND:
-                holder.text_rank.setTextColor(Color.parseColor("#E5E5E5"));
+                holder.text_rank.setTextColor(Color.parseColor(SILVERY));
                 break;
             case THIRD:
-                holder.text_rank.setTextColor(Color.parseColor("#B5A642"));
+                holder.text_rank.setTextColor(Color.parseColor(COPPER));
                 break;
             default:
                 holder.text_rank.setTextColor(Color.GRAY);

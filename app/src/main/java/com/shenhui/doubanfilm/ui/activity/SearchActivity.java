@@ -3,6 +3,7 @@ package com.shenhui.doubanfilm.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,7 +88,8 @@ public class SearchActivity extends AppCompatActivity
         mToolbar.addView(relativeLayout);
         setSupportActionBar(mToolbar);
         //给左上角图标的左边加上一个返回的图标.对应ActionBar.DISPLAY_HOME_AS_UP
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_search);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -96,7 +98,7 @@ public class SearchActivity extends AppCompatActivity
 
     private void getDataFromUrl(String url) {
         final String no_result = getString(R.string.search_no_result);
-        final String error_result= getString(R.string.search_error);
+        final String error_result = getString(R.string.search_error);
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
                     @Override

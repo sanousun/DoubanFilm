@@ -16,10 +16,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +47,7 @@ import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
+import com.shenhui.doubanfilm.util.StringUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -276,13 +274,16 @@ public class SubjectActivity extends AppCompatActivity
         } else {
             mOriginal_title.setVisibility(View.GONE);
         }
-        mGenres.setText(listToString(mSubject.getGenres()));
-        mAke.setText(getSpanString(R.string.ake, Color.GRAY));
-        mAke.append(listToString(mSubject.getAka()));
-        mCountries.setText(getSpanString(R.string.countries, Color.GRAY));
-        mCountries.append(listToString(mSubject.getCountries()));
+        mGenres.setText(StringUtil.getListString(mSubject.getGenres()));
+        mAke.setText(StringUtil.getSpannableString(
+                getString(R.string.ake), Color.GRAY));
+        mAke.append(StringUtil.getListString(mSubject.getAka()));
+        mCountries.setText(StringUtil.getSpannableString(
+                getString(R.string.countries), Color.GRAY));
+        mCountries.append(StringUtil.getListString(mSubject.getCountries()));
 
-        mSummaryText.setText(getSpanString(R.string.summary, Color.BLACK));
+        mSummaryText.setText(StringUtil.getSpannableString(
+                getString(R.string.summary), Color.BLACK));
         mSummaryText.append(mSubject.getSummary());
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
         mSummary.setOnClickListener(this);
@@ -304,12 +305,6 @@ public class SubjectActivity extends AppCompatActivity
         volley_rem_GET(tag.toString());
     }
 
-    private SpannableString getSpanString(int res, int color) {
-        SpannableString span = new SpannableString(getString(res));
-        span.setSpan(new ForegroundColorSpan(color),
-                0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return span;
-    }
 
     private void addCastData(List<SubjectBean.CelebrityEntity> data, boolean isDir) {
         for (SubjectBean.CelebrityEntity s : data) {
@@ -452,18 +447,6 @@ public class SubjectActivity extends AppCompatActivity
         Toast.makeText(this, R.string.collect_cancel, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * 将List<String>转成合适的String
-     */
-    private String listToString(List<String> data) {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < data.size(); i++) {
-            s.append(i == 0 ? "" : "/");
-            s.append(data.get(i));
-        }
-        return s.toString();
-    }
-
     @Override
     public void onRefresh() {
         volley_GET();
@@ -527,6 +510,9 @@ public class SubjectActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * 隐藏floatingActionButton
+     */
     private void hideButton() {
         mBtn.setVisibility(View.GONE);
     }

@@ -22,7 +22,7 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
     protected DisplayImageOptions options = new DisplayImageOptions.Builder().
             showImageOnLoading(R.drawable.noimage).
             showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
+            showImageForEmptyUri(R.drawable.noimage).
             imageScaleType(ImageScaleType.EXACTLY_STRETCHED).
             cacheInMemory(true).
             cacheOnDisk(true).

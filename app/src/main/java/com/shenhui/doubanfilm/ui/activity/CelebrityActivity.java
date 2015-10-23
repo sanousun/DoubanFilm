@@ -4,13 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,9 +23,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SubCardAdapter;
+import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
 import com.shenhui.doubanfilm.support.Constant;
+import com.shenhui.doubanfilm.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +35,12 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CelebrityActivity extends AppCompatActivity
+public class CelebrityActivity extends BaseActivity
         implements SubCardAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "CelActivity";
     private static final String KEY_CEL_ID = "cel_id";
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
     @Bind(R.id.tv_cel_name)
     TextView mName;
     @Bind(R.id.tv_cel_name_en)
@@ -67,16 +63,14 @@ public class CelebrityActivity extends AppCompatActivity
     LinearLayout mCelLayout;
 
 
-    private String mId;
     private CelebrityBean mCelebrity;
     private List<SimpleCardBean> mWorksData = new ArrayList<>();
-    private SubCardAdapter mWorksAdapter;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder().
+            showImageOnLoading(R.drawable.noimage).
             showImageForEmptyUri(R.drawable.noimage).
             showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
             cacheInMemory(true).
             cacheOnDisk(true).
             considerExifParams(true).
@@ -90,37 +84,45 @@ public class CelebrityActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        layoutID = R.layout.layout_celebrity;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_celebrity);
         ButterKnife.bind(this);
         initView();
         initData();
     }
 
-    private void initData() {
-        mId = getIntent().getStringExtra(KEY_CEL_ID);
-        String url = Constant.API + Constant.CELEBRITY + mId;
-        volley_get(url);
-    }
-
     private void initView() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mWorksView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
-    @Override
+    private void initData() {
+        String mId = getIntent().getStringExtra(KEY_CEL_ID);
+        String url = Constant.API + Constant.CELEBRITY + mId;
+        volley_get(url);
+    }
+
     protected void onStop() {
         super.onStop();
         MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG);
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cel, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
+        if (item.getItemId() == R.id.action_cel_search) {
+            startActivity(new Intent(this, SearchActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -150,7 +152,7 @@ public class CelebrityActivity extends AppCompatActivity
      */
     private void setDataToView() {
         if (mCelebrity == null) return;
-        getSupportActionBar().setTitle(mCelebrity.getName());
+        setActionBarTitle(mCelebrity.getName());
         imageLoader.displayImage(mCelebrity.getAvatars().getMedium(),
                 mImage, options);
         mName.setText(mCelebrity.getName());
@@ -161,29 +163,24 @@ public class CelebrityActivity extends AppCompatActivity
         mBronPlace.setText(String.format("%s%s", bronPlace, mCelebrity.getBorn_place()));
 
         if (mCelebrity.getAka().size() > 0) {
-            SpannableString ake = new SpannableString(getString(R.string.cel_ake));
-            ake.setSpan(new ForegroundColorSpan(
-                    Color.BLACK), 0, ake.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mAke.setText(ake);
-            mAke.append(listToString(mCelebrity.getAka()));
+            mAke.setText(StringUtil.getSpannableString(
+                    getString(R.string.cel_ake), Color.BLACK));
+            mAke.append(StringUtil.getListString(mCelebrity.getAka()));
         } else {
             mAke.setVisibility(View.GONE);
         }
 
         if (mCelebrity.getAka_en().size() > 0) {
-            SpannableString ake_en = new SpannableString(getString(R.string.cel_ake_en));
-            ake_en.setSpan(new ForegroundColorSpan(
-                    Color.BLACK), 0, ake_en.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mAkeEn.setText(ake_en);
-            mAkeEn.append(listToString(mCelebrity.getAka_en()));
+            mAkeEn.setText(StringUtil.getSpannableString(
+                    getString(R.string.cel_ake_en), Color.BLACK));
+            mAkeEn.append(StringUtil.getListString(mCelebrity.getAka_en()));
         } else {
             mAkeEn.setVisibility(View.GONE);
         }
 
         mWorks.setText(String.format("%s的影视作品", mCelebrity.getName()));
 
-        for (int i = 0; i < mCelebrity.getWorks().size(); i++) {
-            CelebrityBean.WorksEntity work = mCelebrity.getWorks().get(i);
+        for (CelebrityBean.WorksEntity work : mCelebrity.getWorks()) {
             SimpleCardBean data = new SimpleCardBean(
                     work.getSubject().getAlt(),
                     work.getSubject().getId(),
@@ -191,22 +188,11 @@ public class CelebrityActivity extends AppCompatActivity
                     work.getSubject().getImages().getLarge());
             mWorksData.add(data);
         }
-        mWorksAdapter = new SubCardAdapter(CelebrityActivity.this, mWorksData);
+        SubCardAdapter mWorksAdapter = new SubCardAdapter(CelebrityActivity.this, mWorksData);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
 
         mCelLayout.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * List.toString方法
-     */
-    private String listToString(List<String> data) {
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < data.size(); i++) {
-            str.append(i == 0 ? "" : "/").append(data.get(i));
-        }
-        return str.toString();
     }
 
     @Override
