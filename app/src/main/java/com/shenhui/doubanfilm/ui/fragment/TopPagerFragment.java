@@ -150,11 +150,15 @@ public class TopPagerFragment extends BaseFragment
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager manager = (LinearLayoutManager) mRecView.getLayoutManager();
                 super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem =
-                        ((LinearLayoutManager) mRecView.getLayoutManager()).
-                                findLastVisibleItemPosition();
-                if (dy < 0 && !isShow) {
+                lastVisibleItem = manager.findLastVisibleItemPosition();
+                if (manager.findFirstVisibleItemPosition() == 0) {
+                    if (isShow) {
+                        animForGone();
+                        isShow = false;
+                    }
+                } else if (dy < 0 && !isShow) {
                     animForVisible();
                     isShow = true;
                 } else if (dy > 0 && isShow) {

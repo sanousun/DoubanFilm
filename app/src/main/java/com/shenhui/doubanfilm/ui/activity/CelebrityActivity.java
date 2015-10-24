@@ -121,8 +121,16 @@ public class CelebrityActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_cel_search) {
-            startActivity(new Intent(this, SearchActivity.class));
+        switch (item.getItemId()) {
+            case R.id.action_cel_search:
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            case R.id.action_cel_skip:
+                if (mCelebrity == null) {
+                    return true;
+                }
+                WebActivity.toWebActivity(this, mCelebrity.getMobile_url(), mCelebrity.getName());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -38,11 +38,10 @@
 
                 <RatingBar
                     android:id="@+id/rb_coming_rating"
-                    style="@android:style/Widget.Holo.RatingBar.Small"
+                    style="@style/MyRatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light" />
+                    android:numStars="5" />
 
                 <TextView
                     android:id="@+id/tv_coming_rating"

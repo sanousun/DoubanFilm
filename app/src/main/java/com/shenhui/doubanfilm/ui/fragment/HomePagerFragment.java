@@ -41,7 +41,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemClickListener{
+public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemClickListener {
 
     private static final String AUTO_REFRESH = "auto refresh?";
     private static final String JSON_TOTAL = "total";
@@ -232,10 +232,14 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem =
-                        ((LinearLayoutManager) mRecView.getLayoutManager()).
-                                findLastVisibleItemPosition();
-                if (dy < 0 && !isShow) {
+                LinearLayoutManager llm = (LinearLayoutManager) mRecView.getLayoutManager();
+                lastVisibleItem = llm.findLastVisibleItemPosition();
+                if (llm.findFirstVisibleItemPosition() == 0) {
+                    if (isShow) {
+                        animatorForGone();
+                        isShow = false;
+                    }
+                } else if (dy < 0 && !isShow) {
                     animatorForVisible();
                     isShow = true;
                 } else if (dy > 0 && isShow) {

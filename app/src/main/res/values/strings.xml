@@ -64,6 +64,8 @@
     <string name="refresh">刷新</string>
     <string name="open">在浏览器中打开</string>
     <string name="web_no_tips">打开失败，没有找到可以打开该链接的其它应用 :(</string>
+    <string name="douban_rating">豆瓣评分：</string>
+    <string name="skip">去豆瓣查看</string>
 
 
 </resources>

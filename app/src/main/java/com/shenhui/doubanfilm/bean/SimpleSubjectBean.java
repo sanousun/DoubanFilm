@@ -2,10 +2,6 @@ package com.shenhui.doubanfilm.bean;
 
 import java.util.List;
 
-/**
- * Created by sanousun on 2015/9/3.
- */
-
 public class SimpleSubjectBean {
 
 

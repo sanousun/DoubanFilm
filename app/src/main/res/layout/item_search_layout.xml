@@ -29,17 +29,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <RatingBar
                     android:id="@+id/rb_search_rating"
-                    style="@android:style/Widget.Holo.RatingBar.Small"
+                    style="@style/MyRatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:progress="4" />
+                    android:numStars="5" />
 
                 <TextView
                     android:id="@+id/tv_search_rating"
@@ -49,23 +47,11 @@
                     android:textColor="@color/red" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="@string/collect"
-                    android:textColor="@color/gray" />
-
-                <TextView
                     android:id="@+id/tv_search_collect_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/count"
-                    android:textColor="@color/gray" />
+                    android:textColor="@color/gray"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

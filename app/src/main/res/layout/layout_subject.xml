@@ -94,9 +94,14 @@
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/douban_rating" />
+
                                     <RatingBar
                                         android:id="@+id/rb_subj_rating"
-                                        style="@android:style/Widget.Holo.RatingBar.Small"
+                                        style="@style/MyRatingBar"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:numStars="5" />

@@ -50,7 +50,11 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         SimpleSubjectBean sub = mData.get(position);
         holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
-        holder.text_collect_count.setText(String.format("%d", sub.getCollect_count()));
+        holder.text_collect_count.setText(
+                String.format("%s%d%s",
+                        mContext.getString(R.string.collect),
+                        sub.getCollect_count(),
+                        mContext.getString(R.string.count)));
         holder.text_title.setText(sub.getTitle());
         if (sub.getOriginal_title().equals(sub.getTitle())) {
             holder.text_original_title.setVisibility(View.GONE);
