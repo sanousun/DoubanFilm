@@ -47,7 +47,7 @@ import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
-import com.shenhui.doubanfilm.util.StringUtil;
+import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -169,7 +169,8 @@ public class SubjectActivity extends AppCompatActivity
         initView();
         Intent intent = getIntent();
         mId = intent.getStringExtra(KEY_SUBJECT_ID);
-        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + URI_FOR_IMAGE);
+        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                mId + URI_FOR_IMAGE);
         mSubject = MyApplication.getDataSource().filmOfId(mId);
         if (mSubject != null) {
             isCollect = true;
@@ -198,7 +199,8 @@ public class SubjectActivity extends AppCompatActivity
         mRefresh.setOnRefreshListener(this);
         mBtn.setOnClickListener(this);
         mAppBarLayoutHeight =
-                mAppBarLayout.getLayoutParams().height - mToolbar.getLayoutParams().height;
+                mAppBarLayout.getLayoutParams().height -
+                        mToolbar.getLayoutParams().height;
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
@@ -225,7 +227,8 @@ public class SubjectActivity extends AppCompatActivity
                         if (isCollect) {
                             saveFilm();
                         }
-                        mSubject = new Gson().fromJson(mContent, Constant.subType);
+                        mSubject = new Gson().fromJson(mContent,
+                                Constant.subType);
                         initAfterGetData();
                         mRefresh.setRefreshing(false);
                     }
@@ -233,7 +236,9 @@ public class SubjectActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SubjectActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SubjectActivity.this,
+                                error.toString(),
+                                Toast.LENGTH_SHORT).show();
                         mRefresh.setRefreshing(false);
                     }
                 });
@@ -306,7 +311,8 @@ public class SubjectActivity extends AppCompatActivity
     }
 
 
-    private void addCastData(List<SubjectBean.CelebrityEntity> data, boolean isDir) {
+    private void addCastData(List<SubjectBean.CelebrityEntity> data,
+                             boolean isDir) {
         for (SubjectBean.CelebrityEntity s : data) {
             SimpleCardBean dir = new SimpleCardBean();
             dir.setAlt(s.getAlt());
@@ -334,13 +340,19 @@ public class SubjectActivity extends AppCompatActivity
                         Gson gson = new GsonBuilder().create();
                         try {
                             String json = response.getString(JSON_SUBJECTS);
-                            List<SimpleSubjectBean> data = gson.fromJson(json, Constant.simpleSubTypeList);
+                            List<SimpleSubjectBean> data = gson.fromJson(json,
+                                    Constant.simpleSubTypeList);
                             for (SimpleSubjectBean simpleSub : data) {
-                                mCommendData.add(new SimpleCardBean(simpleSub.getAlt(), simpleSub.getId(),
-                                        simpleSub.getTitle(), simpleSub.getImages().getLarge()));
+                                mCommendData.add(new SimpleCardBean(
+                                        simpleSub.getAlt(),
+                                        simpleSub.getId(),
+                                        simpleSub.getTitle(),
+                                        simpleSub.getImages().getLarge()));
                             }
-                            mCommendAdapter = new SubCardAdapter(SubjectActivity.this, mCommendData);
-                            mCommendAdapter.setOnItemClickListener(SubjectActivity.this);
+                            mCommendAdapter = new SubCardAdapter(
+                                    SubjectActivity.this, mCommendData);
+                            mCommendAdapter.setOnItemClickListener(
+                                    SubjectActivity.this);
                             mRecommend.setAdapter(mCommendAdapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -350,7 +362,9 @@ public class SubjectActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SubjectActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SubjectActivity.this,
+                                error.toString(),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
         request.setTag(mId);
@@ -505,7 +519,8 @@ public class SubjectActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_subj_skip:
-                WebActivity.toWebActivity(this, mSubject.getMobile_url(), mSubject.getTitle());
+                WebActivity.toWebActivity(this,
+                        mSubject.getMobile_url(), mSubject.getTitle());
                 break;
         }
     }

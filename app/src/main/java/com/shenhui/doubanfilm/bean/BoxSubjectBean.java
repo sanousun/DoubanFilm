@@ -2,9 +2,6 @@ package com.shenhui.doubanfilm.bean;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by sanousun on 2015/9/8.
- */
 public class BoxSubjectBean {
 
     private int box;

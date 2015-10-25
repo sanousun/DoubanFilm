@@ -9,21 +9,20 @@ import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
 
-/**
- * Created by sanousun.
- */
 public class PrefsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+
+    private static final String ABOUT = "about";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
-        findPreference("about").setOnPreferenceClickListener(this);
+        findPreference(ABOUT).setOnPreferenceClickListener(this);
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference.getKey().equals("about")) {
+        if (preference.getKey().equals(ABOUT)) {
             showApacheLicenseDialog();
         }
         return false;

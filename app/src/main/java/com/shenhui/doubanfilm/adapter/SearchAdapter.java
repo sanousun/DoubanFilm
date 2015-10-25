@@ -1,7 +1,6 @@
 package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +29,6 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     private LayoutInflater mInflater;
     private List<SimpleSubjectBean> mData;
 
-    private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
-
     public SearchAdapter(Context context, List<SimpleSubjectBean> data) {
         this.mContext = context;
         this.mData = data;
@@ -48,7 +45,7 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         SimpleSubjectBean sub = mData.get(position);
-        holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
+        holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2f);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
         holder.text_collect_count.setText(
                 String.format("%s%d%s",
@@ -65,20 +62,22 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         String dir = mContext.getString(R.string.directors);
         StringBuffer s = new StringBuffer();
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
+            s.append(i == 0 ? "" : "/").
+                    append(sub.getDirectors().get(i).getName());
         }
         holder.text_directors.setText(dir);
         holder.text_directors.append(s.toString());
         String cast = mContext.getString(R.string.casts);
         s = new StringBuffer();
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            s.append(i == 0 ? "" : "/").append(sub.getCasts().get(i).getName());
+            s.append(i == 0 ? "" : "/").
+                    append(sub.getCasts().get(i).getName());
         }
         holder.text_casts.setText(cast);
         holder.text_casts.append(s.toString());
 
         imageLoader.displayImage(sub.getImages().getLarge(),
-                holder.image_film, options, imageLoadingListener);
+                holder.image_film, options);
     }
 
     private String listToString(List<String> list) {
@@ -127,23 +126,6 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
                     }
                 }
             });
-        }
-    }
-
-
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
-            }
         }
     }
 }

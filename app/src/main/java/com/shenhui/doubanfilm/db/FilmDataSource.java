@@ -14,9 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sanousun on 2015/9/16.
- */
 public final class FilmDataSource {
 
     private SQLiteDatabase mDatabase;
@@ -34,8 +31,6 @@ public final class FilmDataSource {
 
     /**
      * 创建DBHelper通过open()得到数据库
-     *
-     * @param context
      */
     public FilmDataSource(Context context) {
         mHelper = new DBHelper(context);
@@ -112,13 +107,7 @@ public final class FilmDataSource {
         Cursor cursor = mDatabase.query(
                 DBHelper.TABLE_NAME_COL, allColumnsForCol, null, null, null, null, null);
         cursor.moveToFirst();
-        List<SubjectBean> res = new ArrayList<SubjectBean>();
-//        while (cursor.moveToNext()) {
-//            String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
-//            Subject sub = new Gson().fromJson(content, Constant.subType);
-//            res.add(sub);
-//        }
-        //使用query查询，cursor.moveToFirst()的position=0;
+        List<SubjectBean> res = new ArrayList<>();
         do {
             String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
             SubjectBean sub = new Gson().fromJson(content, Constant.subType);
@@ -149,6 +138,7 @@ public final class FilmDataSource {
                 DBHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         List<SimpleSubjectBean> data = CursorToList(cursor);
+        cursor.close();
         return data;
     }
 
@@ -165,6 +155,7 @@ public final class FilmDataSource {
                 DBHelper.COLUMN_ID + " = " + updateId, null, null, null, null);
         cursor.moveToFirst();
         List<SimpleSubjectBean> data = CursorToList(cursor);
+        cursor.close();
         return data;
     }
 
@@ -176,6 +167,7 @@ public final class FilmDataSource {
                 DBHelper.COLUMN_TOP + " = " + top, null, null, null, null);
         cursor.moveToFirst();
         List<SimpleSubjectBean> data = CursorToList(cursor);
+        cursor.close();
         return data;
     }
 

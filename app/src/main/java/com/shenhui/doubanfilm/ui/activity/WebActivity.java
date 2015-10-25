@@ -110,7 +110,9 @@ public class WebActivity extends AppCompatActivity {
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 } else {
-                    Toast.makeText(this, getString(R.string.web_no_tips), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,
+                            getString(R.string.web_no_tips),
+                            Toast.LENGTH_SHORT).show();
                 }
                 return true;
         }

@@ -17,6 +17,7 @@ public class PrefsActivity extends BaseActivity {
 
     protected void initView() {
         FragmentManager manager = getFragmentManager();
-        manager.beginTransaction().replace(R.id.container, new PrefsFragment()).commit();
+        manager.beginTransaction().replace(R.id.container,
+                new PrefsFragment()).commit();
     }
 }

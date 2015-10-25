@@ -20,13 +20,13 @@ import butterknife.ButterKnife;
 
 public class TopFragment extends Fragment {
 
-    private static final String[] TITLES = {"壹至伍拾", "伍壹至壹佰", "壹佰壹至壹佰伍", "壹伍壹至贰佰", "贰佰壹至贰佰伍"};
+    private static final String[] TITLES =
+            {"壹至伍拾", "伍壹至壹佰", "壹佰壹至壹佰伍", "壹伍壹至贰佰", "贰佰壹至贰佰伍"};
+
     @Bind(R.id.tab_home)
     TabLayout mTabLayout;
     @Bind(R.id.vp_home)
     ViewPager mViewPager;
-
-    public static final String TOP_FRAGMENT_TOP = "top";
 
     @Nullable
     @Override
@@ -61,11 +61,7 @@ public class TopFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = new TopPagerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(TOP_FRAGMENT_TOP, position);
-            fragment.setArguments(bundle);
-            return fragment;
+            return TopPagerFragment.newInstance(position);
         }
 
         @Override

@@ -105,7 +105,8 @@ public class SearchActivity extends AppCompatActivity
                     public void onResponse(JSONObject response) {
                         try {
                             String subjects = response.getString(JSON_SUBJECTS);
-                            mData = new GsonBuilder().create().fromJson(subjects, Constant.simpleSubTypeList);
+                            mData = new GsonBuilder().create().fromJson(subjects,
+                                    Constant.simpleSubTypeList);
                             if (mDialog != null) {
                                 mDialog.dismiss();
                                 mDialog = null;
@@ -130,7 +131,8 @@ public class SearchActivity extends AppCompatActivity
                             mDialog.dismiss();
                             mDialog = null;
                         }
-                        Toast.makeText(SearchActivity.this, error_result, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchActivity.this, error_result,
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
         request.setTag(VOLLEY_TAG);

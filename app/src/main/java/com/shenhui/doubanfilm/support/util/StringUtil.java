@@ -1,6 +1,5 @@
-package com.shenhui.doubanfilm.util;
+package com.shenhui.doubanfilm.support.util;
 
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;

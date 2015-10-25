@@ -1,8 +1,5 @@
 package com.shenhui.doubanfilm.bean;
 
-/**
- * Created by sanousun on 2015/9/4.
- */
 public class SimpleCardBean {
 
     private String alt;

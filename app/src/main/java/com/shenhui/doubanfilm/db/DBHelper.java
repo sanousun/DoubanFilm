@@ -1,13 +1,9 @@
 package com.shenhui.doubanfilm.db;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by sanousun on 2015/9/16.
- */
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NAME_COL = "film_collect";

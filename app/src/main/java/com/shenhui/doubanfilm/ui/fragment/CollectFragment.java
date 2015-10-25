@@ -3,13 +3,15 @@ package com.shenhui.doubanfilm.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CollectAdapter;
+import com.shenhui.doubanfilm.adapter.CollectAdapter.OnItemClickListener;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
@@ -18,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectFragment extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener,
-        CollectAdapter.OnItemClickListener {
+        implements OnRefreshListener,
+        OnItemClickListener {
 
     private List<SubjectBean> mData = new ArrayList<>();
     private CollectAdapter mAdapter;
@@ -71,8 +73,8 @@ public class CollectFragment extends BaseFragment
 
     @Override
     public void itemRemove(final int pos, final String id) {
-        Snackbar.make(mView, "是否要取消收藏...", Snackbar.LENGTH_LONG).
-                setAction("确定", new View.OnClickListener() {
+        Snackbar.make(mView, getString(R.string.cancel), Snackbar.LENGTH_LONG).
+                setAction(getString(R.string.ok), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MyApplication.getDataSource().deleteFilm(id);

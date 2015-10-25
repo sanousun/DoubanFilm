@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 public class HomeFragment extends Fragment {
 
     private static String[] TITLES = {"正在热映", "即将上映", "北美票房"};
+    private static String NORMAL_COLOR = "#aaffffff";
 
     @Bind(R.id.tab_home)
     TabLayout mTabLayout;
@@ -42,7 +43,7 @@ public class HomeFragment extends Fragment {
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        mTabLayout.setTabTextColors(Color.parseColor("#aaffffff"), Color.WHITE);
+        mTabLayout.setTabTextColors(Color.parseColor(NORMAL_COLOR), Color.WHITE);
         mTabLayout.setTabsFromPagerAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }

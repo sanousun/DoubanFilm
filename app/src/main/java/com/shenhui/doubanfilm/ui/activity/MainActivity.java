@@ -116,11 +116,13 @@ public class MainActivity extends AppCompatActivity
         mFragmentManager = getSupportFragmentManager();
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
-            mFragmentManager.beginTransaction().add(R.id.main_container, homeFragment, mTitle).commit();
+            mFragmentManager.beginTransaction().add(R.id.main_container,
+                    homeFragment, mTitle).commit();
             mCurFragment = homeFragment;
         }
 
-        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PICTURE_HEADER_FILE);
+        mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                PICTURE_HEADER_FILE);
         if (mFile.exists()) {
             Bitmap header = BitmapFactory.decodeFile(mFile.getPath());
             mNavImage.setImageBitmap(header);

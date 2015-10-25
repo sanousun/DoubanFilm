@@ -16,9 +16,6 @@ import com.shenhui.doubanfilm.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by sanousun on 2015/8/31.
- */
 public class BaseFragment extends Fragment {
 
     protected int layoutId = R.layout.fragment_base;

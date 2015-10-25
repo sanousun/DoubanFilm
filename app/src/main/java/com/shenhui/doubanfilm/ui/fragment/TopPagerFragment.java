@@ -37,6 +37,7 @@ public class TopPagerFragment extends BaseFragment
     private static final int TOP250_TOTAL = 50;
     private static final String JSON_SUBJECTS = "subjects";
     private static final String VOLLEY_TAG = "TOP_FRAGMENT";
+    public static final String KEY_FRAGMENT_TOP = "top";
 
     private int mPosition;
     private int mStart;
@@ -45,11 +46,19 @@ public class TopPagerFragment extends BaseFragment
     private SimSubAdapter mAdapter;
     private List<SimpleSubjectBean> mData = new ArrayList<>();
 
+    public static TopPagerFragment newInstance(int top) {
+        TopPagerFragment fragment = new TopPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_FRAGMENT_TOP, top);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        mPosition = bundle.getInt(TopFragment.TOP_FRAGMENT_TOP);
+        mPosition = bundle.getInt(KEY_FRAGMENT_TOP);
         mStart = mPosition * TOP250_TOTAL;
     }
 
@@ -73,7 +82,7 @@ public class TopPagerFragment extends BaseFragment
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                volley_Get(mStart + "");
+                volley_Get(String.format("%d", mStart));
             }
         });
         mFloatBtn.setOnClickListener(this);
@@ -84,7 +93,8 @@ public class TopPagerFragment extends BaseFragment
         super.onResume();
         if (mFirstLoad) {
             List<SimpleSubjectBean> data;
-            if ((data = MyApplication.getDataSource().getTop(mStart + "")) != null) {
+            if ((data = MyApplication.getDataSource().
+                    getTop(String.format("%d", mStart))) != null) {
                 mData = data;
                 mAdapter.updateList(mData, TOP250_TOTAL);
                 setOnScrollListener();
@@ -96,7 +106,8 @@ public class TopPagerFragment extends BaseFragment
     }
 
     private void volley_Get(final String start) {
-        String url = Constant.API + Constant.TOP250 + "?start=" + start + "&count=" + TOP250_COUNT;
+        String url = Constant.API +
+                Constant.TOP250 + "?start=" + start + "&count=" + TOP250_COUNT;
         mRefreshLayout.setRefreshing(true);
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
@@ -180,7 +191,8 @@ public class TopPagerFragment extends BaseFragment
     }
 
     private void volley_Get_More(final String start) {
-        String url = Constant.API + Constant.TOP250 + "?start=" + start + "&count=" + TOP250_COUNT;
+        String url = Constant.API + Constant.TOP250 +
+                "?start=" + start + "&count=" + TOP250_COUNT;
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
                     @Override

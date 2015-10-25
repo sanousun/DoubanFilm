@@ -4,7 +4,6 @@ import java.util.List;
 
 public class SimpleSubjectBean {
 
-
     private RatingEntity rating;
     private int collect_count;
     private String title;

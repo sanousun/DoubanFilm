@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.shenhui.doubanfilm.R;
 
 /**
- * baseActivity包含了toolbar初始化及三个初始化函数
- * Created by sanousun on 2015/9/12.
+ * baseActivity包含了toolbar初始化
  */
 public class BaseActivity extends AppCompatActivity {
 

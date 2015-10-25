@@ -28,8 +28,12 @@ import butterknife.ButterKnife;
 
 public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
+    //ItemView的类型，FootView应用于加载更多
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
+    /**
+     * 默认每次加载的item数量，用于网络请求
+     */
     private static final int DEFAULT_COUNT = 20;
 
     private Context mContext;
@@ -42,23 +46,30 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     /**
      * 判断是否属于“即将上映”
      */
-    private boolean isComing;
+    private boolean isComingFilm;
+
+    /**
+     * imageLoader的异步加载监听接口实例
+     */
+    private ImageLoadingListener imageLoadingListener =
+            new AnimateFirstDisplayListener();
+
 
     public SimSubAdapter(Context context, List<SimpleSubjectBean> data) {
         this(context, data, false);
     }
 
-    public SimSubAdapter(Context context, List<SimpleSubjectBean> data, boolean isComing) {
+    public SimSubAdapter(Context context, List<SimpleSubjectBean> data,
+                         boolean isComingFilm) {
         this.mContext = context;
         this.mData = data;
-        this.isComing = isComing;
+        this.isComingFilm = isComingFilm;
     }
 
     /**
-     * 用于加载更多数据时的url起点
+     * 用于加载数据时的url起点
      */
     public int getStart() {
-        start += DEFAULT_COUNT;
         return start;
     }
 
@@ -76,18 +87,26 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         return mData.size() == total;
     }
 
+    /**
+     *用于加载更多item
+     */
     public void loadMoreData(List<SimpleSubjectBean> data) {
         this.mData.addAll(data);
+        //用于下次加载更多数据是的起点
+        start += DEFAULT_COUNT;
         notifyDataSetChanged();
     }
 
+    /**
+     * 用于更新数据
+     * @param data   更新的数据
+     * @param total  数据的总量，采取多次加载
+     */
     public void updateList(List<SimpleSubjectBean> data, int total) {
         this.mData = data;
         this.total = total;
         notifyDataSetChanged();
     }
-
-    private ImageLoadingListener imageLoadingListener = new AnimateFirstDisplayListener();
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -110,7 +129,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         }
         SimpleSubjectBean sub = mData.get(position);
         ItemViewHolder holder = (ItemViewHolder) viewHolder;
-        if (!isComing) {
+        if (!isComingFilm) {
             holder.rating.setVisibility(View.VISIBLE);
             float rate = (float) sub.getRating().getAverage();
             holder.ratingBar.setRating(rate / 2);
@@ -138,12 +157,14 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         holder.genres.setText(str.toString());
         str.delete(0, str.length());
         for (int i = 0; i < sub.getDirectors().size(); i++) {
-            str.append(i == 0 ? "" : "/").append(sub.getDirectors().get(i).getName());
+            str.append(i == 0 ? "" : "/").
+                    append(sub.getDirectors().get(i).getName());
         }
         holder.directors.setText(str.toString());
         str.delete(0, str.length());
         for (int i = 0; i < sub.getCasts().size(); i++) {
-            str.append(i == 0 ? "" : "/").append(sub.getCasts().get(i).getName());
+            str.append(i == 0 ? "" : "/").
+                    append(sub.getCasts().get(i).getName());
         }
         holder.casts.setText(str.toString());
         imageLoader.displayImage(sub.getImages().getLarge(),

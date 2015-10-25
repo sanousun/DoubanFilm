@@ -27,7 +27,7 @@ import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
 import com.shenhui.doubanfilm.support.Constant;
-import com.shenhui.doubanfilm.util.StringUtil;
+import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +93,8 @@ public class CelebrityActivity extends BaseActivity
 
     private void initView() {
         mWorksView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                new LinearLayoutManager(this,
+                        LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void initData() {
@@ -129,7 +130,9 @@ public class CelebrityActivity extends BaseActivity
                 if (mCelebrity == null) {
                     return true;
                 }
-                WebActivity.toWebActivity(this, mCelebrity.getMobile_url(), mCelebrity.getName());
+                WebActivity.toWebActivity(this,
+                        mCelebrity.getMobile_url(),
+                        mCelebrity.getName());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -142,13 +145,15 @@ public class CelebrityActivity extends BaseActivity
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                mCelebrity = new GsonBuilder().create().fromJson(response, Constant.cleType);
+                mCelebrity = new GsonBuilder().create().fromJson(response,
+                        Constant.cleType);
                 setDataToView();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(CelebrityActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CelebrityActivity.this, error.toString(),
+                        Toast.LENGTH_SHORT).show();
             }
         });
         request.setTag(VOLLEY_TAG);
@@ -166,9 +171,11 @@ public class CelebrityActivity extends BaseActivity
         mName.setText(mCelebrity.getName());
         mNameEn.setText(mCelebrity.getName_en());
         String gender = getResources().getString(R.string.gender);
-        mGender.setText(String.format("%s%s", gender, mCelebrity.getGender()));
+        mGender.setText(String.format("%s%s", gender,
+                mCelebrity.getGender()));
         String bronPlace = getResources().getString(R.string.bron_place);
-        mBronPlace.setText(String.format("%s%s", bronPlace, mCelebrity.getBorn_place()));
+        mBronPlace.setText(String.format("%s%s", bronPlace,
+                mCelebrity.getBorn_place()));
 
         if (mCelebrity.getAka().size() > 0) {
             mAke.setText(StringUtil.getSpannableString(
@@ -186,7 +193,8 @@ public class CelebrityActivity extends BaseActivity
             mAkeEn.setVisibility(View.GONE);
         }
 
-        mWorks.setText(String.format("%s的影视作品", mCelebrity.getName()));
+        mWorks.setText(String.format("%s的影视作品",
+                mCelebrity.getName()));
 
         for (CelebrityBean.WorksEntity work : mCelebrity.getWorks()) {
             SimpleCardBean data = new SimpleCardBean(
@@ -196,7 +204,8 @@ public class CelebrityActivity extends BaseActivity
                     work.getSubject().getImages().getLarge());
             mWorksData.add(data);
         }
-        SubCardAdapter mWorksAdapter = new SubCardAdapter(CelebrityActivity.this, mWorksData);
+        SubCardAdapter mWorksAdapter =
+                new SubCardAdapter(CelebrityActivity.this, mWorksData);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
 

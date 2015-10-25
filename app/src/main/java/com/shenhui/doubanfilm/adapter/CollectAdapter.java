@@ -107,7 +107,9 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         }
         holder.celebrity.setText(s.toString());
         if (sub.getLocalImageFile() != null) {
-            imageLoader.displayImage(URI_FOR_FILE + sub.getLocalImageFile(), holder.image, options);
+            imageLoader.displayImage(
+                    String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),
+                    holder.image, options);
         }
     }
 
