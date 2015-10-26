@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.shenhui.doubanfilm.R;
@@ -32,9 +33,10 @@ public class WebActivity extends AppCompatActivity {
     @Bind(R.id.pb_web)
     ProgressBar mProgressBar;
     @Bind(R.id.wv_web)
-    WebView mWebView;
+    RelativeLayout mRelativeLayout;
 
     private String mUrl, mTitle;
+    private WebView mWebView;
 
     public static void toWebActivity(Context context, String url, String title) {
         Intent intent = new Intent(context, WebActivity.class);
@@ -54,6 +56,8 @@ public class WebActivity extends AppCompatActivity {
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         mUrl = getIntent().getStringExtra(EXTRA_URL);
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
+        mWebView = new WebView(getApplicationContext());
+        mRelativeLayout.addView(mWebView);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);

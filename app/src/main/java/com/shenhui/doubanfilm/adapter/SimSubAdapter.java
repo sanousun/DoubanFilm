@@ -41,7 +41,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     /**
      * 用于加载更多数据
      */
-    private int start = 0;
+    private int start = 20;
     private int total = Integer.MAX_VALUE;
     /**
      * 判断是否属于“即将上映”
@@ -88,7 +88,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     }
 
     /**
-     *用于加载更多item
+     * 用于加载更多item
      */
     public void loadMoreData(List<SimpleSubjectBean> data) {
         this.mData.addAll(data);
@@ -99,8 +99,9 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
     /**
      * 用于更新数据
-     * @param data   更新的数据
-     * @param total  数据的总量，采取多次加载
+     *
+     * @param data  更新的数据
+     * @param total 数据的总量，采取多次加载
      */
     public void updateList(List<SimpleSubjectBean> data, int total) {
         this.mData = data;

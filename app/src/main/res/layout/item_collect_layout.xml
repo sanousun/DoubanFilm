@@ -42,8 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:background="@color/blue"
-                    android:text="  2015  "
                     android:padding="1dp"
+                    android:text="  2015  "
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -58,14 +58,15 @@
                 <TextView
                     android:id="@+id/tv_col_cel"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginTop="4dp"
+                    android:layout_weight="1"
                     android:text="导演：雷德利斯科特/主演：马特达蒙，杰西卡差斯坦"
                     android:textSize="12sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="bottom"
                     android:orientation="horizontal">
@@ -74,7 +75,7 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"></LinearLayout>
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/tv_col_delete"

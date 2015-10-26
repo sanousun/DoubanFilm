@@ -84,7 +84,7 @@ public class CelebrityActivity extends BaseActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        layoutID = R.layout.layout_celebrity;
+        layoutID = R.layout.activity_celebrity;
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         initView();

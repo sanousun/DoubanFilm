@@ -2,7 +2,9 @@ package com.shenhui.doubanfilm.ui.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -44,12 +46,20 @@ import butterknife.ButterKnife;
 public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemClickListener {
 
     private static final String AUTO_REFRESH = "auto refresh?";
+    private static final String LAST_RECORD = "last record";
+    private static final int RECORD_COUNT = 20;
+
     private static final String JSON_TOTAL = "total";
     private static final String JSON_SUBJECTS = "subjects";
+
     private static final String KEY_FRAGMENT_TITLE = "title";
+
     private static final int POS_IN_THEATERS = 0;
     private static final int POS_COMING = 1;
     private static final int POS_US_BOX = 2;
+
+    private static final String[] TYPE = {"in theaters", "coming", "us box"};
+
     private static final String VOLLEY_TAG = "HomePagerFragment";
 
     @Bind(R.id.rv_fragment)
@@ -59,15 +69,18 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     @Bind(R.id.btn_fragment)
     FloatingActionButton mBtn;
 
+    private String mDataString;
     private SimSubAdapter mSimAdapter;
     private BoxAdapter mBoxAdapter;
     private List<SimpleSubjectBean> mSimData = new ArrayList<>();
     private List<BoxSubjectBean> mBoxData = new ArrayList<>();
 
     private int mTitlePos;
-    private String requestUrl;
-    private int totalItem;
+    private String mRequestUrl;
+    private int mTotalItem;
     private boolean isFirstRefresh = true;
+
+    private SharedPreferences mSharePreferences;
 
     public static HomePagerFragment newInstance(int titlePos) {
         HomePagerFragment fragment = new HomePagerFragment();
@@ -90,6 +103,9 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         ButterKnife.bind(this, view);
         mRefresh.setColorSchemeResources(R.color.colorPrimary);
         mRefresh.setProgressViewOffset(false, 0, 100);
+        mSharePreferences =
+                getActivity().getSharedPreferences(
+                        LAST_RECORD, Context.MODE_PRIVATE);
         initData();
         initEvent();
         return view;
@@ -134,6 +150,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         inManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecView.setLayoutManager(inManager);
         mSimAdapter = new SimSubAdapter(getActivity(), mSimData, isComing);
+        if (getRecord() != null) {
+            mSimData = new Gson().fromJson(getRecord(), Constant.simpleSubTypeList);
+            mSimAdapter.updateList(mSimData, RECORD_COUNT);
+        }
         mSimAdapter.setOnItemClickListener(this);
         mRecView.setAdapter(mSimAdapter);
     }
@@ -141,6 +161,9 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     private void initBoxRecyclerView() {
         GridLayoutManager boxManager = new GridLayoutManager(getActivity(), 3);
         mRecView.setLayoutManager(boxManager);
+        if (getRecord() != null) {
+            mBoxData = new Gson().fromJson(getRecord(), Constant.simpleBoxTypeList);
+        }
         mBoxAdapter = new BoxAdapter(getActivity(), mBoxData);
         mBoxAdapter.setOnItemClickListener(this);
         mRecView.setAdapter(mBoxAdapter);
@@ -160,15 +183,15 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     private void updateData() {
         switch (mTitlePos) {
             case POS_IN_THEATERS:
-                requestUrl = Constant.API + Constant.IN_THEATERS;
+                mRequestUrl = Constant.API + Constant.IN_THEATERS;
                 volley_Get_Coming();
                 break;
             case POS_COMING:
-                requestUrl = Constant.API + Constant.COMING;
+                mRequestUrl = Constant.API + Constant.COMING;
                 volley_Get_Coming();
                 break;
             case POS_US_BOX:
-                requestUrl = Constant.API + Constant.US_BOX;
+                mRequestUrl = Constant.API + Constant.US_BOX;
                 volley_Get_USBox();
                 break;
         }
@@ -179,17 +202,19 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      */
     private void volley_Get_Coming() {
         mRefresh.setRefreshing(true);
-        JsonObjectRequest request = new JsonObjectRequest(requestUrl,
+        JsonObjectRequest request = new JsonObjectRequest(mRequestUrl,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            totalItem = response.getInt(JSON_TOTAL);
-                            mSimData = new Gson().fromJson(response.getString(JSON_SUBJECTS),
+                            mTotalItem = response.getInt(JSON_TOTAL);
+                            mDataString = response.getString(JSON_SUBJECTS);
+                            mSimData = new Gson().fromJson(mDataString,
                                     Constant.simpleSubTypeList);
-                            mSimAdapter.updateList(mSimData, totalItem);
+                            mSimAdapter.updateList(mSimData, mTotalItem);
                             //实现recyclerView的下拉刷新
                             setOnScrollListener();
+                            saveRecord();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } finally {
@@ -223,7 +248,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 3 > mSimAdapter.getItemCount()) {
                     if (mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotal()) {
-                        String urlMore = requestUrl + ("?start=" + mSimAdapter.getStart());
+                        String urlMore = mRequestUrl + ("?start=" + mSimAdapter.getStart());
                         loadMore(urlMore);
                     }
                 }
@@ -280,16 +305,18 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      */
     private void volley_Get_USBox() {
         mRefresh.setRefreshing(true);
-        JsonObjectRequest request = new JsonObjectRequest(requestUrl,
+        JsonObjectRequest request = new JsonObjectRequest(mRequestUrl,
                 new Response.Listener<JSONObject>() {
                     private Gson gson = new GsonBuilder().create();
 
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            mBoxData = gson.fromJson(response.getString(JSON_SUBJECTS),
+                            mDataString = response.getString(JSON_SUBJECTS);
+                            mBoxData = gson.fromJson(mDataString,
                                     Constant.simpleBoxTypeList);
                             mBoxAdapter.updateList(mBoxData);
+                            saveRecord();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } finally {
@@ -317,6 +344,24 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     @Override
     public void onItemClick(String id) {
         SubjectActivity.toActivity(getActivity(), id);
+    }
+
+    /**
+     * 当网络不好或中断时用以显示上一次加载的数据
+     */
+    private String getRecord() {
+        return mSharePreferences.getString(TYPE[mTitlePos], null);
+    }
+
+    /**
+     * 保存上一次网络请求得到的数据
+     */
+    private void saveRecord() {
+        if (mDataString != null) {
+            Editor edit = mSharePreferences.edit();
+            edit.putString(TYPE[mTitlePos], mDataString);
+            edit.apply();
+        }
     }
 
     /**

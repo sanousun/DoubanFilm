@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -73,12 +74,14 @@ public class MainActivity extends AppCompatActivity
     private MenuItem homeItem;
     private File mFile;
 
-
     private FragmentManager mFragmentManager;
     private Fragment mCurFragment;
 
     private String mTitle;
 
+    /**
+     * 记录系统时间，用于退出时做判断
+     */
     private long exitTime = 0;
 
     private SharedPreferences userSP;
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         mDrawer.setDrawerListener(mToggle);
         //初始化Viewpager
         mFragmentManager = getSupportFragmentManager();
+        mCurFragment = mFragmentManager.findFragmentByTag(mTitle);
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
             mFragmentManager.beginTransaction().add(R.id.main_container,
@@ -212,7 +216,10 @@ public class MainActivity extends AppCompatActivity
         }
         transaction.commit();
         supportInvalidateOptionsMenu();
-        if (mTitle != null) getSupportActionBar().setTitle(mTitle);
+        if (mTitle != null) {
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) actionBar.setTitle(mTitle);
+        }
     }
 
     /**
@@ -238,14 +245,14 @@ public class MainActivity extends AppCompatActivity
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (mCurFragment instanceof HomeFragment) {
                 if ((System.currentTimeMillis() - exitTime) > 2000) {
-                    Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show();
                     exitTime = System.currentTimeMillis();
                 } else {
                     this.finish();
                     System.exit(0);
                 }
             } else {
-                changeFragment(getResources().getString(R.string.nav_home));
+                changeFragment(getString(R.string.nav_home));
                 homeItem.setChecked(true);
             }
             return true;

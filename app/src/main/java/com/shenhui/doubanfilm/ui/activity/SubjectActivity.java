@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
@@ -16,13 +17,15 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,8 +98,6 @@ public class SubjectActivity extends AppCompatActivity
     RatingBar mRatingBar;
     @Bind(R.id.tv_subj_rating)
     TextView mRating;
-    @Bind(R.id.tv_subj_year)
-    TextView mYear;
     @Bind(R.id.tv_subj_collect_count)
     TextView mCollect;
     @Bind(R.id.tv_subj_title)
@@ -139,7 +140,6 @@ public class SubjectActivity extends AppCompatActivity
     private File mFile;
 
     private boolean isCollect = false;
-    private boolean isBtnShow = true;
 
     private int mAppBarLayoutHeight;
     private int mImageWidth;
@@ -164,7 +164,7 @@ public class SubjectActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_subject);
+        setContentView(R.layout.activity_subject);
         ButterKnife.bind(this);
         initView();
         Intent intent = getIntent();
@@ -266,13 +266,19 @@ public class SubjectActivity extends AppCompatActivity
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
-        mYear.setText(mSubject.getYear());
         mCollect.setText(
                 String.format("%s%d%s",
                         getString(R.string.collect),
                         mSubject.getCollect_count(),
                         getString(R.string.count)));
-        mTitle.setText(mSubject.getTitle());
+        mTitle.setText(String.format("%s   ", mSubject.getTitle()));
+        SpannableString year = new SpannableString(mSubject.getYear());
+        year.setSpan(new ForegroundColorSpan(Color.RED),
+                0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        year.setSpan(new StyleSpan(Typeface.BOLD_ITALIC),
+                0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTitle.append(year);
+
         if (!mSubject.getOriginal_title().equals(mSubject.getTitle())) {
             mOriginal_title.setText(mSubject.getOriginal_title());
             mOriginal_title.setVisibility(View.VISIBLE);
@@ -288,7 +294,7 @@ public class SubjectActivity extends AppCompatActivity
         mCountries.append(StringUtil.getListString(mSubject.getCountries()));
 
         mSummaryText.setText(StringUtil.getSpannableString(
-                getString(R.string.summary), Color.BLACK));
+                getString(R.string.summary), Color.BLUE));
         mSummaryText.append(mSubject.getSummary());
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
         mSummary.setOnClickListener(this);
@@ -301,7 +307,6 @@ public class SubjectActivity extends AppCompatActivity
         StringBuilder tag = new StringBuilder();
         //显示View
         mFilmLayout.setVisibility(View.VISIBLE);
-        isBtnShow = false;
         //加载推荐
         for (int i = 0; i < mSubject.getGenres().size(); i++) {
             tag.append(mSubject.getGenres().get(i));
@@ -471,16 +476,8 @@ public class SubjectActivity extends AppCompatActivity
         //利用AppBarLayout的回调接口启用或者关闭滑动刷新
         if (i == 0) {
             mRefresh.setEnabled(true);
-            if (!isBtnShow) {
-                showButton();
-                isBtnShow = true;
-            }
         } else {
             mRefresh.setEnabled(false);
-            if (isBtnShow) {
-                hideButton();
-                isBtnShow = false;
-            }
         }
         float alpha = (float) (-1.0 * i) / mAppBarLayoutHeight;
         changeLayout(alpha);
@@ -519,22 +516,10 @@ public class SubjectActivity extends AppCompatActivity
                 }
                 break;
             case R.id.btn_subj_skip:
+                if (mSubject == null) break;
                 WebActivity.toWebActivity(this,
                         mSubject.getMobile_url(), mSubject.getTitle());
                 break;
         }
-    }
-
-    /**
-     * 隐藏floatingActionButton
-     */
-    private void hideButton() {
-        mBtn.setVisibility(View.GONE);
-    }
-
-    private void showButton() {
-        Animation anim = AnimationUtils.loadAnimation(this, R.anim.scale_visible);
-        mBtn.setAnimation(anim);
-        mBtn.setVisibility(View.VISIBLE);
     }
 }

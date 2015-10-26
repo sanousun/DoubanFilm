@@ -13,8 +13,8 @@
         android:layout_height="2dp"
         android:max="100" />
 
-    <WebView
+    <RelativeLayout
         android:id="@+id/wv_web"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"></RelativeLayout>
 </LinearLayout>
