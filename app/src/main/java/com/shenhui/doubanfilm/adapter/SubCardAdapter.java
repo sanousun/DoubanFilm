@@ -48,7 +48,9 @@ public class SubCardAdapter extends BaseAdapter<SubCardAdapter.ViewHolder> {
             holder.text_dir.setVisibility(View.VISIBLE);
         }
         holder.text.setText(sub.getName());
-        showItemAnim(holder.itemView, position);
+        if (position > 3) {
+            showItemAnim(holder.itemView, position);
+        }
     }
 
     @Override
@@ -72,7 +74,7 @@ public class SubCardAdapter extends BaseAdapter<SubCardAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     int pos = getLayoutPosition();
-                    if (callback != null){
+                    if (callback != null) {
                         callback.itemClick(mData.get(pos).getId(), mData.get(pos).getIsFilm());
                     }
                 }

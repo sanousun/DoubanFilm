@@ -41,7 +41,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     /**
      * 用于加载更多数据
      */
-    private int start = 20;
+    private int start = 0;
     private int total = Integer.MAX_VALUE;
     /**
      * 判断是否属于“即将上映”
@@ -70,7 +70,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 用于加载数据时的url起点
      */
     public int getStart() {
-        return start;
+        return start + DEFAULT_COUNT;
     }
 
     /**
@@ -92,8 +92,6 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     public void loadMoreData(List<SimpleSubjectBean> data) {
         this.mData.addAll(data);
-        //用于下次加载更多数据是的起点
-        start += DEFAULT_COUNT;
         notifyDataSetChanged();
     }
 

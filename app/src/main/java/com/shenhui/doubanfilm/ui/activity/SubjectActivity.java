@@ -3,16 +3,24 @@ package com.shenhui.doubanfilm.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.renderscript.Allocation;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,6 +50,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CastAdapter;
@@ -262,7 +271,22 @@ public class SubjectActivity extends AppCompatActivity
             imageUri = mSubject.getImages().getLarge();
         }
         imageLoader.displayImage(imageUri, mImage, options);
-        imageLoader.displayImage(imageUri, mToolbarImage, options);
+        imageLoader.displayImage(imageUri, mToolbarImage, options, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                super.onLoadingComplete(imageUri, view, loadedImage);
+//                blur(loadedImage, mCollapsingToolbarLayout, 20f);
+                Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        int defaultBgColor = getResources().getColor(R.color.colorPrimary);
+                        int bgColor = palette.getDarkVibrantColor(defaultBgColor);
+                        mCollapsingToolbarLayout.setBackgroundColor(bgColor);
+                    }
+                });
+            }
+        });
+
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
@@ -522,4 +546,34 @@ public class SubjectActivity extends AppCompatActivity
                 break;
         }
     }
+
+    /**
+     * 设置毛玻璃的背景,先将图片缩小，模糊后放大
+     * 出现线状条文。。。。放弃
+     */
+//    private void blur(Bitmap bkg, View view, float radius) {
+//        Matrix matrix = new Matrix();
+//        int width = view.getMeasuredWidth() / 10;
+//        int height = view.getMeasuredHeight() / 10;
+//        int dw = bkg.getWidth();
+//        int dh = bkg.getHeight();
+//        Bitmap overlay = Bitmap.createBitmap(
+//                width, height, Bitmap.Config.ARGB_4444);
+//        Canvas canvas = new Canvas(overlay);
+//        canvas.translate(-view.getX(), -view.getY());
+//        Rect rect = new Rect(dw / 4, dh / 4, dw * 3 / 4, dh * 3 / 4);
+//        canvas.drawBitmap(bkg, rect, new Rect(0, 0, width, height), null);
+//        RenderScript rs = RenderScript.create(this);
+//        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
+//        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
+//        blur.setInput(overlayAlloc);
+//        blur.setRadius(radius);
+//        blur.forEach(overlayAlloc);
+//        overlayAlloc.copyTo(overlay);
+//        matrix.postScale(10f, 10f);
+//        Bitmap result = Bitmap.createBitmap(
+//                overlay, 0, 0, overlay.getWidth(), overlay.getHeight(), matrix, true);
+//        view.setBackground(new BitmapDrawable(getResources(), result));
+//        rs.destroy();
+//    }
 }

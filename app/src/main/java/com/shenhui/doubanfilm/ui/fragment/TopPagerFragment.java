@@ -169,10 +169,10 @@ public class TopPagerFragment extends BaseFragment
                         animForGone();
                         isShow = false;
                     }
-                } else if (dy < 0 && !isShow) {
+                } else if (dy < -50 && !isShow) {
                     animForVisible();
                     isShow = true;
-                } else if (dy > 0 && isShow) {
+                } else if (dy > 20 && isShow) {
                     animForGone();
                     isShow = false;
                 }

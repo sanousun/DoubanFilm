@@ -264,10 +264,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                         animatorForGone();
                         isShow = false;
                     }
-                } else if (dy < 0 && !isShow) {
+                } else if (dy < -50 && !isShow) {
                     animatorForVisible();
                     isShow = true;
-                } else if (dy > 0 && isShow) {
+                } else if (dy > 20 && isShow) {
                     animatorForGone();
                     isShow = false;
                 }
