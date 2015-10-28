@@ -27,6 +27,8 @@ import com.shenhui.doubanfilm.ui.widget.IzzySearchView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.Bind;
@@ -63,21 +65,26 @@ public class SearchActivity extends AppCompatActivity
         mSearchView.setOnQueryTextListener(new IzzySearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                final String url = Constant.API + Constant.SEARCH_Q + query;
-                getDataFromUrl(url);
-                if (mDialog == null) {
-                    mDialog = new ProgressDialog(SearchActivity.this);
-                    mDialog.setMessage(getString(R.string.search_message));
-                    mDialog.setCancelable(true);
-                    mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            MyApplication.getHttpQueue().cancelAll(url);
-                        }
-                    });
+                final String url;
+                try {
+                    url = Constant.API + Constant.SEARCH_Q + URLEncoder.encode(query, "UTF-8");
+                    getDataFromUrl(url);
+                    if (mDialog == null) {
+                        mDialog = new ProgressDialog(SearchActivity.this);
+                        mDialog.setMessage(getString(R.string.search_message));
+                        mDialog.setCancelable(true);
+                        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                MyApplication.getHttpQueue().cancelAll(url);
+                            }
+                        });
+                    }
+                    mDialog.show();
+                    mSearchView.clearFocus();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
-                mDialog.show();
-                mSearchView.clearFocus();
                 return true;
             }
         });
