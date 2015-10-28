@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity
         mCurFragment = mFragmentManager.findFragmentByTag(mTitle);
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
-            mFragmentManager.beginTransaction().add(R.id.main_container,
-                    homeFragment, mTitle).commit();
+            mFragmentManager.beginTransaction().
+                    add(R.id.main_container, homeFragment, mTitle).
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
+                    commit();
             mCurFragment = homeFragment;
         }
 
@@ -204,14 +206,17 @@ public class MainActivity extends AppCompatActivity
     private void changeFragment(String title) {
         mTitle = title;
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.hide(mCurFragment);
+        transaction.setCustomAnimations(
+                R.anim.slide_right_in, R.anim.slide_left_out,
+                R.anim.slide_right_in, R.anim.slide_left_out);
         Fragment fragment = mFragmentManager.findFragmentByTag(title);
         if (fragment == null) {
+            transaction.hide(mCurFragment);
             fragment = newFragment(title);
             transaction.add(R.id.main_container, fragment, title);
             mCurFragment = fragment;
-        } else {
-            transaction.show(fragment);
+        } else if (fragment != mCurFragment) {
+            transaction.hide(mCurFragment).show(fragment);
             mCurFragment = fragment;
         }
         transaction.commit();

@@ -11,7 +11,8 @@
         android:id="@+id/pb_web"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:max="100" />
+        android:max="100"
+        android:progressTint="@color/blue" />
 
     <RelativeLayout
         android:id="@+id/wv_web"
