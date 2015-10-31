@@ -207,8 +207,8 @@ public class MainActivity extends AppCompatActivity
         mTitle = title;
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.setCustomAnimations(
-                R.anim.slide_right_in, R.anim.slide_left_out,
-                R.anim.slide_right_in, R.anim.slide_left_out);
+                R.anim.fragment_in, R.anim.fragment_out,
+                R.anim.fragment_in, R.anim.fragment_out);
         Fragment fragment = mFragmentManager.findFragmentByTag(title);
         if (fragment == null) {
             transaction.hide(mCurFragment);
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity
         }
         try {
             FileOutputStream out = new FileOutputStream(mFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.flush();
             out.close();
         } catch (IOException e) {

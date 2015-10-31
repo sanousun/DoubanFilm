@@ -54,7 +54,6 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     private ImageLoadingListener imageLoadingListener =
             new AnimateFirstDisplayListener();
 
-
     public SimSubAdapter(Context context, List<SimpleSubjectBean> data) {
         this(context, data, false);
     }
@@ -70,7 +69,8 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 用于加载数据时的url起点
      */
     public int getStart() {
-        return start + DEFAULT_COUNT;
+        start += DEFAULT_COUNT;
+        return start;
     }
 
     /**
@@ -84,7 +84,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 判断是否已经加载完毕
      */
     public boolean loadCompleted() {
-        return mData.size() == total;
+        return mData.size() == getTotal();
     }
 
     /**
@@ -170,13 +170,17 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
                 holder.image, options, imageLoadingListener);
     }
 
-    private void showFootView(FootViewHolder viewHolder, int position) {
+    private void showFootView(final FootViewHolder viewHolder, int position) {
         if (position == 0) {
             viewHolder.itemView.setVisibility(View.GONE);
         } else if (loadCompleted()) {
-            viewHolder.progressBar.setVisibility(View.GONE);
-            viewHolder.tip.setText(mContext.getString(R.string.load_completed));
-            viewHolder.itemView.setVisibility(View.VISIBLE);
+//            viewHolder.progressBar.setVisibility(View.GONE);
+//            viewHolder.tip.setText(mContext.getString(R.string.load_completed));
+//            viewHolder.itemView.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
+            params.height = 0;
+            viewHolder.itemView.setLayoutParams(params);
+
         } else {
             viewHolder.tip.setText(mContext.getString(R.string.loading));
             viewHolder.itemView.setVisibility(View.VISIBLE);

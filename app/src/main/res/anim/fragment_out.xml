@@ -3,10 +3,14 @@
     android:interpolator="@android:anim/accelerate_decelerate_interpolator"
     android:shareInterpolator="true">
 
-    <translate
+    <scale
         android:duration="@android:integer/config_mediumAnimTime"
-        android:fromYDelta="0"
-        android:toYDelta="-100%p" />
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
+        android:toXScale="0.8"
+        android:toYScale="0.8" />
 
     <alpha
         android:duration="@android:integer/config_mediumAnimTime"
