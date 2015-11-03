@@ -22,7 +22,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.SubCardAdapter;
+import com.shenhui.doubanfilm.adapter.FilmCardAdapter;
 import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
@@ -36,7 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class CelebrityActivity extends BaseActivity
-        implements SubCardAdapter.OnItemClickListener {
+        implements FilmCardAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "CelActivity";
     private static final String KEY_CEL_ID = "cel_id";
@@ -204,8 +204,8 @@ public class CelebrityActivity extends BaseActivity
                     work.getSubject().getImages().getLarge());
             mWorksData.add(data);
         }
-        SubCardAdapter mWorksAdapter =
-                new SubCardAdapter(CelebrityActivity.this, mWorksData);
+        FilmCardAdapter mWorksAdapter =
+                new FilmCardAdapter(CelebrityActivity.this, mWorksData);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
 

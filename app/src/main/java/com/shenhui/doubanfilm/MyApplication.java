@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.shenhui.doubanfilm.db.FilmDataSource;
+import com.shenhui.doubanfilm.support.OkHttpStack;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.sql.SQLException;
@@ -51,7 +52,7 @@ public class MyApplication extends Application {
         LeakCanary.install(this);
         myApplicationContext = this;
         initImageLoader(getApplicationContext());
-        mQueue = Volley.newRequestQueue(getApplicationContext());
+        mQueue = Volley.newRequestQueue(getApplicationContext(), new OkHttpStack());
         mSource = new FilmDataSource(getApplicationContext());
         try {
             mSource.open();

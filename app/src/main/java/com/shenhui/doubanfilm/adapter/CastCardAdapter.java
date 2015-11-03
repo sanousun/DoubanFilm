@@ -17,13 +17,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CastAdapter extends BaseAdapter<CastAdapter.ViewHolder> {
+public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
 
     private Context mContext;
     private List<SimpleCardBean> mData;
     private OnItemClickListener callback;
 
-    public CastAdapter(Context context, List<SimpleCardBean> data) {
+    public CastCardAdapter(Context context, List<SimpleCardBean> data) {
         this.mContext = context;
         this.mData = data;
     }

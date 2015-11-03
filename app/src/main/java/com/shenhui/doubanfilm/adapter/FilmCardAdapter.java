@@ -17,13 +17,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SubCardAdapter extends BaseAdapter<SubCardAdapter.ViewHolder> {
+public class FilmCardAdapter extends BaseAdapter<FilmCardAdapter.ViewHolder> {
 
     private Context mContext;
     private List<SimpleCardBean> mData;
     private OnItemClickListener callback;
 
-    public SubCardAdapter(Context context, List<SimpleCardBean> data) {
+    public FilmCardAdapter(Context context, List<SimpleCardBean> data) {
         this.mContext = context;
         this.mData = data;
     }

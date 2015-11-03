@@ -3,17 +3,11 @@ package com.shenhui.doubanfilm.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.renderscript.Allocation;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +28,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,8 +49,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.CastAdapter;
-import com.shenhui.doubanfilm.adapter.SubCardAdapter;
+import com.shenhui.doubanfilm.adapter.CastCardAdapter;
+import com.shenhui.doubanfilm.adapter.FilmCardAdapter;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.SubjectBean;
@@ -74,8 +70,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SubjectActivity extends AppCompatActivity
-        implements CastAdapter.OnItemClickListener,
-        SubCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
+        implements CastCardAdapter.OnItemClickListener,
+        FilmCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
         AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     private static final String KEY_SUBJECT_ID = "subject_id";
@@ -144,7 +140,7 @@ public class SubjectActivity extends AppCompatActivity
     private List<SimpleCardBean> mCommendData = new ArrayList<>();
 
     private boolean isSummaryShow = false;
-    private SubCardAdapter mCommendAdapter;
+    private FilmCardAdapter mCommendAdapter;
 
     private File mFile;
 
@@ -271,21 +267,35 @@ public class SubjectActivity extends AppCompatActivity
             imageUri = mSubject.getImages().getLarge();
         }
         imageLoader.displayImage(imageUri, mImage, options);
-        imageLoader.displayImage(imageUri, mToolbarImage, options, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                super.onLoadingComplete(imageUri, view, loadedImage);
-//                blur(loadedImage, mCollapsingToolbarLayout, 20f);
-                Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
+        imageLoader.displayImage(imageUri, mToolbarImage, options,
+                new SimpleImageLoadingListener() {
                     @Override
-                    public void onGenerated(Palette palette) {
-                        int defaultBgColor = getResources().getColor(R.color.colorPrimary);
-                        int bgColor = palette.getDarkVibrantColor(defaultBgColor);
-                        mCollapsingToolbarLayout.setBackgroundColor(bgColor);
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Window window = getWindow();
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS |
+                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+                            window.getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                            window.addFlags(
+                                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.setStatusBarColor(Color.TRANSPARENT);
+                            window.setNavigationBarColor(Color.TRANSPARENT);
+                        }
+//                blur(loadedImage, mCollapsingToolbarLayout, 20f);
+                        Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                int defaultBgColor = getResources().getColor(R.color.colorPrimary);
+                                int bgColor = palette.getDarkVibrantColor(defaultBgColor);
+                                mCollapsingToolbarLayout.setBackgroundColor(bgColor);
+                            }
+                        });
                     }
                 });
-            }
-        });
 
         float rate = ((float) mSubject.getRating().getAverage()) / 2;
         mRatingBar.setRating(rate);
@@ -325,9 +335,9 @@ public class SubjectActivity extends AppCompatActivity
         //获得导演演员数据列表
         addCastData(mSubject.getDirectors(), true);
         addCastData(mSubject.getCasts(), false);
-        CastAdapter mCastAdapter = new CastAdapter(SubjectActivity.this, mCastData);
-        mCastAdapter.setOnItemClickListener(SubjectActivity.this);
-        mCast.setAdapter(mCastAdapter);
+        CastCardAdapter mCastCardAdapter = new CastCardAdapter(SubjectActivity.this, mCastData);
+        mCastCardAdapter.setOnItemClickListener(SubjectActivity.this);
+        mCast.setAdapter(mCastCardAdapter);
         StringBuilder tag = new StringBuilder();
         //显示View
         mFilmLayout.setVisibility(View.VISIBLE);
@@ -378,7 +388,7 @@ public class SubjectActivity extends AppCompatActivity
                                         simpleSub.getTitle(),
                                         simpleSub.getImages().getLarge()));
                             }
-                            mCommendAdapter = new SubCardAdapter(
+                            mCommendAdapter = new FilmCardAdapter(
                                     SubjectActivity.this, mCommendData);
                             mCommendAdapter.setOnItemClickListener(
                                     SubjectActivity.this);

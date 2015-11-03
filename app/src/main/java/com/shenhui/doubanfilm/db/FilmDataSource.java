@@ -45,6 +45,8 @@ public final class FilmDataSource {
         mDatabase = mHelper.getWritableDatabase();
     }
 
+    //------------------------操作收藏电影-------------------------------
+
     /**
      * 插入filmId对应的film
      */
@@ -82,7 +84,7 @@ public final class FilmDataSource {
      */
     public SubjectBean cursorToSubject(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
-            String content = cursor.getString(2);
+            String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
             return new Gson().fromJson(content, Constant.subType);
         }
         return null;
@@ -124,7 +126,9 @@ public final class FilmDataSource {
         mDatabase.delete(DBHelper.TABLE_NAME_COL, DBHelper.COLUMN_FILM + " = " + id, null);
     }
 
-    //操作top250数据的方法
+    //------------------------操作收藏电影-------------------------------
+
+    //------------------------操作top250数据-----------------------------
 
     /**
      * 插入top排名对应的数据内容
@@ -147,12 +151,22 @@ public final class FilmDataSource {
      */
     public List<SimpleSubjectBean> upDateTop(String top, String content) {
         ContentValues values = new ContentValues();
-        values.put(DBHelper.COLUMN_TOP, top);
-        values.put(DBHelper.COLUMN_CONTENT, content);
-        int updateId = mDatabase.update(
-                DBHelper.TABLE_NAME_TOP, values, DBHelper.COLUMN_TOP + " = " + top, null);
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_TOP, allColumnsForTop,
-                DBHelper.COLUMN_ID + " = " + updateId, null, null, null, null);
+        values.put(
+                DBHelper.COLUMN_TOP,
+                top);
+        values.put(
+                DBHelper.COLUMN_CONTENT,
+                content);
+        mDatabase.update(
+                DBHelper.TABLE_NAME_TOP,
+                values,
+                DBHelper.COLUMN_TOP + " = " + top,
+                null);
+        Cursor cursor = mDatabase.query(
+                DBHelper.TABLE_NAME_TOP,
+                allColumnsForTop,
+                DBHelper.COLUMN_TOP + " = " + top,
+                null, null, null, null);
         cursor.moveToFirst();
         List<SimpleSubjectBean> data = CursorToList(cursor);
         cursor.close();
@@ -171,7 +185,7 @@ public final class FilmDataSource {
         return data;
     }
 
-    public List<SimpleSubjectBean> insertOrUpDate(String top, String content) {
+    public List<SimpleSubjectBean> insertOrUpDateTop(String top, String content) {
         if (getTop(top) == null) {
             return insertTop(top, content);
         } else {
@@ -181,9 +195,11 @@ public final class FilmDataSource {
 
     private List<SimpleSubjectBean> CursorToList(Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
-            String content = cursor.getString(2);
+            String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
             return new Gson().fromJson(content, Constant.simpleSubTypeList);
         }
         return null;
     }
+
+    //------------------------操作top250数据-----------------------------
 }

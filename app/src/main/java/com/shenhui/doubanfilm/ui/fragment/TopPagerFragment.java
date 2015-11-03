@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.SimSubAdapter;
+import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
@@ -30,21 +32,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v7.widget.RecyclerView.*;
+
 public class TopPagerFragment extends BaseFragment
         implements BaseAdapter.OnItemClickListener, View.OnClickListener {
 
     private static final int TOP250_COUNT = 25;
     private static final int TOP250_TOTAL = 50;
     private static final String JSON_SUBJECTS = "subjects";
-    private static final String VOLLEY_TAG = "TOP_FRAGMENT";
-    public static final String KEY_FRAGMENT_TOP = "top";
+    private static final String VOLLEY_TAG = "top_fragment";
+    public static final String KEY_FRAGMENT_TOP = "key_top";
 
     private int mPosition;
-    private int mStart;
-    private boolean mFirstLoad = true;
+    private String mStart;
+    private boolean isFirstLoad = true;
+    private boolean isRefresh = false;
 
-    private SimSubAdapter mAdapter;
+    private SimpleSubjectAdapter mAdapter;
     private List<SimpleSubjectBean> mData = new ArrayList<>();
+
+    /**
+     * 为RecyclerView设置下拉刷新及floatingActionButton的消失出现
+     */
+    private OnScrollListener mScrollListener;
+
+    //-------------------------------------------------------------------
 
     public static TopPagerFragment newInstance(int top) {
         TopPagerFragment fragment = new TopPagerFragment();
@@ -59,55 +71,56 @@ public class TopPagerFragment extends BaseFragment
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         mPosition = bundle.getInt(KEY_FRAGMENT_TOP);
-        mStart = mPosition * TOP250_TOTAL;
+        mStart = String.valueOf(mPosition * TOP250_TOTAL);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     protected void initData() {
-        super.initData();
-        mAdapter = new SimSubAdapter(getActivity(), mData);
+        mAdapter = new SimpleSubjectAdapter(getActivity(), mData);
         mRecView.setAdapter(mAdapter);
     }
 
     @Override
     protected void initEvent() {
-        super.initEvent();
         mAdapter.setOnItemClickListener(this);
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                volley_Get(String.format("%d", mStart));
-            }
-        });
+        mRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        isRefresh = true;
+                        volley_Get(mStart);
+                    }
+                });
         mFloatBtn.setOnClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mFirstLoad) {
+        if (isFirstLoad) {
             List<SimpleSubjectBean> data;
             if ((data = MyApplication.getDataSource().
-                    getTop(String.format("%d", mStart))) != null) {
+                    getTop(mStart)) != null) {
                 mData = data;
                 mAdapter.updateList(mData, TOP250_TOTAL);
                 setOnScrollListener();
             } else {
-                volley_Get(mStart + "");
+                volley_Get(mStart);
             }
-            mFirstLoad = false;
+            isFirstLoad = false;
         }
     }
 
     private void volley_Get(final String start) {
-        String url = Constant.API +
-                Constant.TOP250 + "?start=" + start + "&count=" + TOP250_COUNT;
+        String url = String.format("%s%s?start=%s&count=%d",
+                Constant.API, Constant.TOP250, start, TOP250_COUNT);
         mRefreshLayout.setRefreshing(true);
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
@@ -116,7 +129,7 @@ public class TopPagerFragment extends BaseFragment
                         try {
                             String content = response.getString(JSON_SUBJECTS);
                             mData = MyApplication.
-                                    getDataSource().insertOrUpDate(start, content);
+                                    getDataSource().insertOrUpDateTop(start, content);
                             mAdapter.updateList(mData, TOP250_TOTAL);
                             setOnScrollListener();
                         } catch (JSONException e) {
@@ -136,72 +149,37 @@ public class TopPagerFragment extends BaseFragment
                     }
                 });
         request.setTag(VOLLEY_TAG + mPosition);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 
-    /**
-     * 为RecyclerView设置下拉刷新及floatingActionButton的消失出现
-     */
-    private void setOnScrollListener() {
-        mRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int lastVisibleItem;
-            boolean isShow = false;
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView,
-                                             int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 3 > mAdapter.getItemCount()) {
-                    if (mAdapter.getItemCount() - 1 < mAdapter.getTotal()) {
-                        loadMore();
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                LinearLayoutManager manager = (LinearLayoutManager) mRecView.getLayoutManager();
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = manager.findLastVisibleItemPosition();
-                if (manager.findFirstVisibleItemPosition() == 0) {
-                    if (isShow) {
-                        animForGone();
-                        isShow = false;
-                    }
-                } else if (dy < -50 && !isShow) {
-                    animForVisible();
-                    isShow = true;
-                } else if (dy > 20 && isShow) {
-                    animForGone();
-                    isShow = false;
-                }
-            }
-        });
-    }
-
     private void loadMore() {
-        int moreStart = mStart + TOP250_COUNT;
+        String moreStart = String.valueOf(mPosition * TOP250_TOTAL + TOP250_COUNT);
         List<SimpleSubjectBean> data;
-        if ((data = MyApplication.getDataSource().getTop(moreStart + "")) != null) {
+        if ((data = MyApplication.getDataSource().
+                getTop(moreStart)) != null && !isRefresh) {
             mAdapter.loadMoreData(data);
         } else {
-            volley_Get_More(moreStart + "");
+            volley_Get_More(moreStart);
         }
     }
 
     private void volley_Get_More(final String start) {
-        String url = Constant.API + Constant.TOP250 +
-                "?start=" + start + "&count=" + TOP250_COUNT;
+        String url = String.format("%s%s?start=%s&count=%d",
+                Constant.API, Constant.TOP250, start, TOP250_COUNT);
         JsonObjectRequest request = new JsonObjectRequest(url,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             String content = response.getString(JSON_SUBJECTS);
-                            mData = MyApplication.
-                                    getDataSource().insertOrUpDate(start, content);
-                            mAdapter.loadMoreData(mData);
+                            List<SimpleSubjectBean> data = MyApplication.
+                                    getDataSource().insertOrUpDateTop(start, content);
+                            mAdapter.loadMoreData(data);
+                            isRefresh = false;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -214,7 +192,59 @@ public class TopPagerFragment extends BaseFragment
                     }
                 });
         request.setTag(VOLLEY_TAG + mPosition);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
+    }
+
+
+    /**
+     * 为RecyclerView设置下拉刷新及floatingActionButton的消失出现
+     */
+    private void setOnScrollListener() {
+        if (mRecView == null) {
+            return;
+        }
+        if (mScrollListener == null) {
+            mScrollListener = new OnScrollListener() {
+                int lastVisibleItem;
+                boolean isShow = false;
+
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView,
+                                                 int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == SCROLL_STATE_IDLE
+                            && lastVisibleItem + 3 > mAdapter.getItemCount()) {
+                        if (mAdapter.getItemCount() - 1 < mAdapter.getTotal()) {
+                            loadMore();
+                        }
+                    }
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecView.getLayoutManager();
+                    super.onScrolled(recyclerView, dx, dy);
+                    lastVisibleItem = manager.findLastVisibleItemPosition();
+                    if (manager.findFirstVisibleItemPosition() == 0) {
+                        if (isShow) {
+                            animForGone();
+                            isShow = false;
+                        }
+                    } else if (dy < -50 && !isShow) {
+                        animForVisible();
+                        isShow = true;
+                    } else if (dy > 20 && isShow) {
+                        animForGone();
+                        isShow = false;
+                    }
+                }
+            };
+            mRecView.addOnScrollListener(mScrollListener);
+        }
     }
 
     @Override

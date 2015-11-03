@@ -14,11 +14,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -27,7 +29,7 @@ import com.google.gson.GsonBuilder;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.BoxAdapter;
-import com.shenhui.doubanfilm.adapter.SimSubAdapter;
+import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.BoxSubjectBean;
@@ -42,6 +44,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static android.support.v7.widget.RecyclerView.*;
 
 public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemClickListener {
 
@@ -70,10 +74,11 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     FloatingActionButton mBtn;
 
     private String mDataString;
-    private SimSubAdapter mSimAdapter;
+    private SimpleSubjectAdapter mSimAdapter;
     private BoxAdapter mBoxAdapter;
     private List<SimpleSubjectBean> mSimData = new ArrayList<>();
     private List<BoxSubjectBean> mBoxData = new ArrayList<>();
+    private OnScrollListener mScrollListener;
 
     private int mTitlePos;
     private String mRequestUrl;
@@ -143,13 +148,13 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     }
 
     /**
-     * 使用可以保存图片的SubjectActivity
+     * 初始化“正在上映”和“即将上映”对应的fragment
      */
     private void initSimpleRecyclerView(boolean isComing) {
         LinearLayoutManager inManager = new LinearLayoutManager(getActivity());
         inManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecView.setLayoutManager(inManager);
-        mSimAdapter = new SimSubAdapter(getActivity(), mSimData, isComing);
+        mSimAdapter = new SimpleSubjectAdapter(getActivity(), mSimData, isComing);
         if (getRecord() != null) {
             mSimData = new Gson().fromJson(getRecord(), Constant.simpleSubTypeList);
             mSimAdapter.updateList(mSimData, RECORD_COUNT);
@@ -158,6 +163,9 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         mRecView.setAdapter(mSimAdapter);
     }
 
+    /**
+     * 初始化“北美票房”对应的fragment
+     */
     private void initBoxRecyclerView() {
         GridLayoutManager boxManager = new GridLayoutManager(getActivity(), 3);
         mRecView.setLayoutManager(boxManager);
@@ -230,6 +238,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                     }
                 });
         request.setTag(VOLLEY_TAG + mTitlePos);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 
@@ -237,47 +249,54 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      * 为RecyclerView设置下拉刷新及floatingActionButton的消失出现
      */
     private void setOnScrollListener() {
-        mRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int lastVisibleItem;
-            boolean isShow = false;
+        if (mRecView == null) {
+            return;
+        }
+        if (mScrollListener == null) {
+            mScrollListener = new OnScrollListener() {
+                int lastVisibleItem;
+                boolean isShow = false;
 
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView,
-                                             int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 3 > mSimAdapter.getItemCount()) {
-                    if (mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotal()) {
-                        String urlMore = mRequestUrl + ("?start=" + mSimAdapter.getStart());
-                        loadMore(urlMore);
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView,
+                                                 int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == SCROLL_STATE_IDLE
+                            && lastVisibleItem + 3 > mSimAdapter.getItemCount()) {
+                        if (mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotal()) {
+                            String urlMore = mRequestUrl + ("?start=" + mSimAdapter.getStart());
+                            loadMore(urlMore);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager llm = (LinearLayoutManager) mRecView.getLayoutManager();
-                lastVisibleItem = llm.findLastVisibleItemPosition();
-                if (llm.findFirstVisibleItemPosition() == 0) {
-                    if (isShow) {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    LinearLayoutManager llm = (LinearLayoutManager) mRecView.getLayoutManager();
+                    lastVisibleItem = llm.findLastVisibleItemPosition();
+                    if (llm.findFirstVisibleItemPosition() == 0) {
+                        if (isShow) {
+                            animatorForGone();
+                            isShow = false;
+                        }
+                    } else if (dy < -50 && !isShow) {
+                        animatorForVisible();
+                        isShow = true;
+                    } else if (dy > 20 && isShow) {
                         animatorForGone();
                         isShow = false;
                     }
-                } else if (dy < -50 && !isShow) {
-                    animatorForVisible();
-                    isShow = true;
-                } else if (dy > 20 && isShow) {
-                    animatorForGone();
-                    isShow = false;
                 }
-            }
-        });
+            };
+            mRecView.addOnScrollListener(mScrollListener);
+        }
     }
 
     /**
      * adapter加载更多
      */
+
     private void loadMore(String url) {
         JsonObjectRequest request = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
             @Override
@@ -297,6 +316,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
             }
         });
         request.setTag(VOLLEY_TAG + mTitlePos);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 
@@ -332,6 +355,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                     }
                 });
         request.setTag(VOLLEY_TAG + mTitlePos);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 

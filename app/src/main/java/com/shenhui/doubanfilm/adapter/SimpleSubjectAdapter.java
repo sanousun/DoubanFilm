@@ -3,6 +3,7 @@ package com.shenhui.doubanfilm.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
+public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
     //ItemView的类型，FootView应用于加载更多
     private static final int TYPE_ITEM = 0;
@@ -42,7 +43,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 用于加载更多数据
      */
     private int start = 0;
-    private int total = Integer.MAX_VALUE;
+    private int total = 0;
     /**
      * 判断是否属于“即将上映”
      */
@@ -54,12 +55,12 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     private ImageLoadingListener imageLoadingListener =
             new AnimateFirstDisplayListener();
 
-    public SimSubAdapter(Context context, List<SimpleSubjectBean> data) {
+    public SimpleSubjectAdapter(Context context, List<SimpleSubjectBean> data) {
         this(context, data, false);
     }
 
-    public SimSubAdapter(Context context, List<SimpleSubjectBean> data,
-                         boolean isComingFilm) {
+    public SimpleSubjectAdapter(Context context, List<SimpleSubjectBean> data,
+                                boolean isComingFilm) {
         this.mContext = context;
         this.mData = data;
         this.isComingFilm = isComingFilm;
@@ -73,6 +74,10 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         return start;
     }
 
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     /**
      * 返回adapter数据的总数
      */
@@ -84,7 +89,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 判断是否已经加载完毕
      */
     public boolean loadCompleted() {
-        return mData.size() == getTotal();
+        return mData.size() >= getTotal();
     }
 
     /**
@@ -103,7 +108,8 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     public void updateList(List<SimpleSubjectBean> data, int total) {
         this.mData = data;
-        this.total = total;
+        start = 0;
+        setTotal(total);
         notifyDataSetChanged();
     }
 
@@ -123,7 +129,7 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (position == mData.size()) {
-            showFootView(((FootViewHolder) viewHolder), position);
+            showFootView((FootViewHolder) viewHolder);
             return;
         }
         SimpleSubjectBean sub = mData.get(position);
@@ -170,20 +176,15 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
                 holder.image, options, imageLoadingListener);
     }
 
-    private void showFootView(final FootViewHolder viewHolder, int position) {
-        if (position == 0) {
-            viewHolder.itemView.setVisibility(View.GONE);
-        } else if (loadCompleted()) {
-//            viewHolder.progressBar.setVisibility(View.GONE);
-//            viewHolder.tip.setText(mContext.getString(R.string.load_completed));
-//            viewHolder.itemView.setVisibility(View.VISIBLE);
+    private void showFootView(final FootViewHolder viewHolder) {
+        if (loadCompleted()) {
             ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
             params.height = 0;
             viewHolder.itemView.setLayoutParams(params);
-
         } else {
-            viewHolder.tip.setText(mContext.getString(R.string.loading));
-            viewHolder.itemView.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
+            params.height = 120;
+            viewHolder.itemView.setLayoutParams(params);
         }
     }
 
@@ -196,8 +197,9 @@ public class SimSubAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         if (position == mData.size()) {
             return TYPE_FOOT;
+        } else {
+            return TYPE_ITEM;
         }
-        return TYPE_ITEM;
     }
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
