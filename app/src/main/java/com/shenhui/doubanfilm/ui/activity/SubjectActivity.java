@@ -559,31 +559,29 @@ public class SubjectActivity extends AppCompatActivity
 
     /**
      * 设置毛玻璃的背景,先将图片缩小，模糊后放大
-     * 出现线状条文。。。。放弃
+     * 效果未达到预期
      */
-//    private void blur(Bitmap bkg, View view, float radius) {
-//        Matrix matrix = new Matrix();
-//        int width = view.getMeasuredWidth() / 10;
-//        int height = view.getMeasuredHeight() / 10;
-//        int dw = bkg.getWidth();
-//        int dh = bkg.getHeight();
+//    private void blur(Bitmap bkg, View view) {
+//
+//        float scaleFactor = 8f;
+//        float radius = 2f;
+//        int width = (int) (view.getMeasuredWidth() / scaleFactor);
+//        int height = (int) (view.getMeasuredHeight() / scaleFactor);
 //        Bitmap overlay = Bitmap.createBitmap(
-//                width, height, Bitmap.Config.ARGB_4444);
+//                width, height, Bitmap.Config.ARGB_8888);
 //        Canvas canvas = new Canvas(overlay);
-//        canvas.translate(-view.getX(), -view.getY());
-//        Rect rect = new Rect(dw / 4, dh / 4, dw * 3 / 4, dh * 3 / 4);
-//        canvas.drawBitmap(bkg, rect, new Rect(0, 0, width, height), null);
-//        RenderScript rs = RenderScript.create(this);
+//        canvas.translate(-(bkg.getWidth() - width) / 2, -(bkg.getHeight() - height) / 2);
+//        Paint paint = new Paint();
+//        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
+//        canvas.drawBitmap(bkg, 0, 0, paint);
+//        RenderScript rs = RenderScript.create(getApplication());
 //        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
 //        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
 //        blur.setInput(overlayAlloc);
 //        blur.setRadius(radius);
 //        blur.forEach(overlayAlloc);
 //        overlayAlloc.copyTo(overlay);
-//        matrix.postScale(10f, 10f);
-//        Bitmap result = Bitmap.createBitmap(
-//                overlay, 0, 0, overlay.getWidth(), overlay.getHeight(), matrix, true);
-//        view.setBackground(new BitmapDrawable(getResources(), result));
+//        view.setBackground(new BitmapDrawable(getResources(), overlay));
 //        rs.destroy();
 //    }
 }
