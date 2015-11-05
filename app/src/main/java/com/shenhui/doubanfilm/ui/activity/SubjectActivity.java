@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
@@ -22,14 +20,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +34,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -73,9 +71,9 @@ public class SubjectActivity extends AppCompatActivity
         implements CastCardAdapter.OnItemClickListener,
         FilmCardAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
         AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
-
+    //intent中subjectId的key用于查询数据
     private static final String KEY_SUBJECT_ID = "subject_id";
-
+    //json中subject的标签
     private static final String JSON_SUBJECTS = "subjects";
 
     private static final String URI_FOR_FILE = "file:/";
@@ -146,7 +144,6 @@ public class SubjectActivity extends AppCompatActivity
 
     private boolean isCollect = false;
 
-    private int mAppBarLayoutHeight;
     private int mImageWidth;
     private FrameLayout.LayoutParams mContentParams;
 
@@ -160,6 +157,8 @@ public class SubjectActivity extends AppCompatActivity
             considerExifParams(true).
             build();
 
+    //----------------------------------------------------------------------------------------
+
     public static void toActivity(Context context, String id) {
         Intent intent = new Intent(context, SubjectActivity.class);
         intent.putExtra(KEY_SUBJECT_ID, id);
@@ -172,6 +171,7 @@ public class SubjectActivity extends AppCompatActivity
         setContentView(R.layout.activity_subject);
         ButterKnife.bind(this);
         initView();
+        initEvent();
         Intent intent = getIntent();
         mId = intent.getStringExtra(KEY_SUBJECT_ID);
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -181,8 +181,34 @@ public class SubjectActivity extends AppCompatActivity
             isCollect = true;
             initAfterGetData();
         } else {
-            volley_GET();
+            volleyGetSubject();
         }
+    }
+
+    private void initView() {
+        //设置圆形刷新球的偏移量
+        mRefresh.setProgressViewOffset(false, 0, 100);
+        mToolbar.setTitle("");
+
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        //用于collapsingToolbar缩放时content动画
+        mImageWidth = (int) (mImage.getLayoutParams().width * 1.1);
+        mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
+
+        mCast.setLayoutManager(new LinearLayoutManager(
+                SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mRecommend.setLayoutManager(new LinearLayoutManager(
+                SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    private void initEvent() {
+        mRefresh.setOnRefreshListener(this);
+        mBtn.setOnClickListener(this);
     }
 
     @Override
@@ -198,28 +224,7 @@ public class SubjectActivity extends AppCompatActivity
         mAppBarLayout.removeOnOffsetChangedListener(this);
     }
 
-    private void initView() {
-        //设置圆形刷新球的偏移量
-        mRefresh.setProgressViewOffset(false, 0, 100);
-        mRefresh.setOnRefreshListener(this);
-        mBtn.setOnClickListener(this);
-        mAppBarLayoutHeight =
-                mAppBarLayout.getLayoutParams().height -
-                        mToolbar.getLayoutParams().height;
-        setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
-        mImageWidth = (int) (mImage.getLayoutParams().width * 1.1);
-        mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
-        LinearLayoutManager manager = new LinearLayoutManager(SubjectActivity.this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mCast.setLayoutManager(manager);
-        mRecommend.setLayoutManager(
-                new LinearLayoutManager(
-                        SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-    }
-
-    private void volley_GET() {
+    private void volleyGetSubject() {
         String url = Constant.API + Constant.SUBJECT + mId;
         mRefresh.setRefreshing(true);
         StringRequest stringRequest = new StringRequest(url,
@@ -230,7 +235,7 @@ public class SubjectActivity extends AppCompatActivity
                         mContent = response;
                         //如果film已经收藏,更新数据
                         if (isCollect) {
-                            saveFilm();
+                            filmSave();
                         }
                         mSubject = new Gson().fromJson(mContent,
                                 Constant.subType);
@@ -248,6 +253,9 @@ public class SubjectActivity extends AppCompatActivity
                     }
                 });
         stringRequest.setTag(mId);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(stringRequest);
     }
 
@@ -257,35 +265,18 @@ public class SubjectActivity extends AppCompatActivity
      */
     private void initAfterGetData() {
 
-        String imageUri;
         if (mSubject.getTitle() != null) {
             mCollapsingToolbarLayout.setTitle(mSubject.getTitle());
         }
-        if (mFile.exists()) {
-            imageUri = URI_FOR_FILE + mFile.getPath();
-        } else {
-            imageUri = mSubject.getImages().getLarge();
-        }
+        String imageUri = (mFile.exists() ?
+                String.format("%s%s", URI_FOR_FILE, mFile.getPath()) :
+                mSubject.getImages().getLarge());
         imageLoader.displayImage(imageUri, mImage, options);
         imageLoader.displayImage(imageUri, mToolbarImage, options,
                 new SimpleImageLoadingListener() {
                     @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    public void onLoadingComplete(String imageUri, View view, final Bitmap loadedImage) {
                         super.onLoadingComplete(imageUri, view, loadedImage);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Window window = getWindow();
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS |
-                                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-                            window.getDecorView().setSystemUiVisibility(
-                                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                            window.addFlags(
-                                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            window.setStatusBarColor(Color.TRANSPARENT);
-                            window.setNavigationBarColor(Color.TRANSPARENT);
-                        }
-//                blur(loadedImage, mCollapsingToolbarLayout, 20f);
                         Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(Palette palette) {
@@ -297,7 +288,7 @@ public class SubjectActivity extends AppCompatActivity
                     }
                 });
 
-        float rate = ((float) mSubject.getRating().getAverage()) / 2;
+        float rate = (float) (mSubject.getRating().getAverage() / 2);
         mRatingBar.setRating(rate);
         mRating.setText(String.format("%s", rate * 2));
         mCollect.setText(
@@ -306,10 +297,11 @@ public class SubjectActivity extends AppCompatActivity
                         mSubject.getCollect_count(),
                         getString(R.string.count)));
         mTitle.setText(String.format("%s   ", mSubject.getTitle()));
-        SpannableString year = new SpannableString(mSubject.getYear());
-        year.setSpan(new ForegroundColorSpan(Color.RED),
+        SpannableString year = new SpannableString(
+                String.format(" %s ", mSubject.getYear()));
+        year.setSpan(new ForegroundColorSpan(Color.WHITE),
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        year.setSpan(new StyleSpan(Typeface.BOLD_ITALIC),
+        year.setSpan(new BackgroundColorSpan(Color.parseColor("#5ea4ff")),
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTitle.append(year);
 
@@ -328,7 +320,7 @@ public class SubjectActivity extends AppCompatActivity
         mCountries.append(StringUtil.getListString(mSubject.getCountries()));
 
         mSummaryText.setText(StringUtil.getSpannableString(
-                getString(R.string.summary), Color.BLUE));
+                getString(R.string.summary), Color.parseColor("#5ea4ff")));
         mSummaryText.append(mSubject.getSummary());
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
         mSummary.setOnClickListener(this);
@@ -346,7 +338,7 @@ public class SubjectActivity extends AppCompatActivity
             tag.append(mSubject.getGenres().get(i));
             if (i == 1) break;
         }
-        volley_rem_GET(tag.toString());
+        volleyGetRemmond(tag.toString());
     }
 
 
@@ -369,7 +361,7 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 通过查询tag获得recommend数据
      */
-    private void volley_rem_GET(String tag) {
+    private void volleyGetRemmond(String tag) {
 
         String url = Constant.API + Constant.SEARCH_TAG + tag;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
@@ -407,6 +399,9 @@ public class SubjectActivity extends AppCompatActivity
                     }
                 });
         request.setTag(mId);
+        request.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 
@@ -448,7 +443,7 @@ public class SubjectActivity extends AppCompatActivity
                 this.startActivity(new Intent(this, SearchActivity.class));
                 break;
             case R.id.action_sub_collect:
-                collectFilm();
+                collectFilmAndSaveImage();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -457,13 +452,13 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 点击收藏后将subject存入数据库中,并将图片存入文件
      */
-    private void collectFilm() {
+    private void collectFilmAndSaveImage() {
         if (mSubject == null) return;
         if (isCollect) {
             cancelSave();
             isCollect = false;
         } else {
-            saveFilm();
+            filmSave();
             isCollect = true;
         }
         supportInvalidateOptionsMenu();
@@ -472,7 +467,7 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 用于保存filmContent和filmImage
      */
-    private void saveFilm() {
+    private void filmSave() {
         if (mFile.exists()) {
             mFile.delete();
         }
@@ -502,33 +497,27 @@ public class SubjectActivity extends AppCompatActivity
 
     @Override
     public void onRefresh() {
-        volley_GET();
+        volleyGetSubject();
     }
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
         //利用AppBarLayout的回调接口启用或者关闭滑动刷新
-        if (i == 0) {
-            mRefresh.setEnabled(true);
-        } else {
-            mRefresh.setEnabled(false);
-        }
-        float alpha = (float) (-1.0 * i) / mAppBarLayoutHeight;
-        changeLayout(alpha);
+        mRefresh.setEnabled(i == 0);
+        float alpha = (-1.0f * i) /
+                (appBarLayout.getHeight() - mToolbar.getHeight());
+        Log.i("xyz", "height-->" + (appBarLayout.getHeight() - mToolbar.getHeight()) + ",i-->" + (-i));
+        changeContentLayout(alpha);
     }
 
-    private void changeLayout(float a) {
+    private void changeContentLayout(float a) {
+        setContentGravity(a == 1 ? Gravity.START : Gravity.CENTER_HORIZONTAL);
         mImage.setAlpha(a);
-        if (a == 1.0) {
-            setGravity(Gravity.START);
-        } else {
-            setGravity(Gravity.CENTER_HORIZONTAL);
-        }
         mContentParams.leftMargin = (int) (mImageWidth * a);
         mLinearContent.setLayoutParams(mContentParams);
     }
 
-    private void setGravity(int gravity) {
+    private void setContentGravity(int gravity) {
         mLinearContent.setGravity(gravity);
         mAke.setGravity(gravity);
         mCountries.setGravity(gravity);
@@ -556,32 +545,4 @@ public class SubjectActivity extends AppCompatActivity
                 break;
         }
     }
-
-    /**
-     * 设置毛玻璃的背景,先将图片缩小，模糊后放大
-     * 效果未达到预期
-     */
-//    private void blur(Bitmap bkg, View view) {
-//
-//        float scaleFactor = 8f;
-//        float radius = 2f;
-//        int width = (int) (view.getMeasuredWidth() / scaleFactor);
-//        int height = (int) (view.getMeasuredHeight() / scaleFactor);
-//        Bitmap overlay = Bitmap.createBitmap(
-//                width, height, Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(overlay);
-//        canvas.translate(-(bkg.getWidth() - width) / 2, -(bkg.getHeight() - height) / 2);
-//        Paint paint = new Paint();
-//        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-//        canvas.drawBitmap(bkg, 0, 0, paint);
-//        RenderScript rs = RenderScript.create(getApplication());
-//        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
-//        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
-//        blur.setInput(overlayAlloc);
-//        blur.setRadius(radius);
-//        blur.forEach(overlayAlloc);
-//        overlayAlloc.copyTo(overlay);
-//        view.setBackground(new BitmapDrawable(getResources(), overlay));
-//        rs.destroy();
-//    }
 }

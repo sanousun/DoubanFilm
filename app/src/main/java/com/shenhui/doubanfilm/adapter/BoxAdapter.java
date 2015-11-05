@@ -60,7 +60,7 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, final int position) {
         BoxSubjectBean subject = mData.get(position);
         int rank = subject.getRank();
-        setRankText(holder, rank);
+        setRankTextColor(holder, rank);
         if (rank < 4) {
             holder.text_rank.setText(RANK[rank]);
         } else {
@@ -89,7 +89,7 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         return mData.size();
     }
 
-    public void setRankText(ViewHolder holder, int rank) {
+    public void setRankTextColor(ViewHolder holder, int rank) {
         switch (rank) {
             case FIRST:
                 holder.text_rank.setTextColor(

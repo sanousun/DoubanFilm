@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -100,7 +101,7 @@ public class CelebrityActivity extends BaseActivity
     private void initData() {
         String mId = getIntent().getStringExtra(KEY_CEL_ID);
         String url = Constant.API + Constant.CELEBRITY + mId;
-        volley_get(url);
+        volleyGetCelebrity(url);
     }
 
     protected void onStop() {
@@ -141,13 +142,13 @@ public class CelebrityActivity extends BaseActivity
     /**
      * 通过volley得到mCelebrity
      */
-    private void volley_get(String url) {
+    private void volleyGetCelebrity(String url) {
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mCelebrity = new GsonBuilder().create().fromJson(response,
                         Constant.cleType);
-                setDataToView();
+                setViewAfterGetData();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -157,13 +158,16 @@ public class CelebrityActivity extends BaseActivity
             }
         });
         request.setTag(VOLLEY_TAG);
+        request.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
     }
 
     /**
      * 得到mCelebrity实例后设置界面
      */
-    private void setDataToView() {
+    private void setViewAfterGetData() {
         if (mCelebrity == null) return;
         setActionBarTitle(mCelebrity.getName());
         imageLoader.displayImage(mCelebrity.getAvatars().getMedium(),
