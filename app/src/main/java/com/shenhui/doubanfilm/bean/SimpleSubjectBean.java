@@ -14,8 +14,8 @@ public class SimpleSubjectBean {
     private String alt;
     private String id;
     private List<String> genres;
-    private List<CastsEntity> casts;
-    private List<DirectorsEntity> directors;
+    private List<CelebrityEntity> casts;
+    private List<CelebrityEntity> directors;
 
     public void setRating(RatingEntity rating) {
         this.rating = rating;
@@ -57,11 +57,11 @@ public class SimpleSubjectBean {
         this.genres = genres;
     }
 
-    public void setCasts(List<CastsEntity> casts) {
+    public void setCasts(List<CelebrityEntity> casts) {
         this.casts = casts;
     }
 
-    public void setDirectors(List<DirectorsEntity> directors) {
+    public void setDirectors(List<CelebrityEntity> directors) {
         this.directors = directors;
     }
 
@@ -105,224 +105,11 @@ public class SimpleSubjectBean {
         return genres;
     }
 
-    public List<CastsEntity> getCasts() {
+    public List<CelebrityEntity> getCasts() {
         return casts;
     }
 
-    public List<DirectorsEntity> getDirectors() {
+    public List<CelebrityEntity> getDirectors() {
         return directors;
-    }
-
-    public static class RatingEntity {
-
-        private int max;
-        private double average;
-        private String stars;
-        private int min;
-
-        public void setMax(int max) {
-            this.max = max;
-        }
-
-        public void setAverage(double average) {
-            this.average = average;
-        }
-
-        public void setStars(String stars) {
-            this.stars = stars;
-        }
-
-        public void setMin(int min) {
-            this.min = min;
-        }
-
-        public int getMax() {
-            return max;
-        }
-
-        public double getAverage() {
-            return average;
-        }
-
-        public String getStars() {
-            return stars;
-        }
-
-        public int getMin() {
-            return min;
-        }
-    }
-
-    public static class ImagesEntity {
-
-        private String small;
-        private String large;
-        private String medium;
-
-        public void setSmall(String small) {
-            this.small = small;
-        }
-
-        public void setLarge(String large) {
-            this.large = large;
-        }
-
-        public void setMedium(String medium) {
-            this.medium = medium;
-        }
-
-        public String getSmall() {
-            return small;
-        }
-
-        public String getLarge() {
-            return large;
-        }
-
-        public String getMedium() {
-            return medium;
-        }
-    }
-
-    public static class CastsEntity {
-
-        private AvatarsEntity avatars;
-        private String alt;
-        private String id;
-        private String name;
-
-        public void setAvatars(AvatarsEntity avatars) {
-            this.avatars = avatars;
-        }
-
-        public void setAlt(String alt) {
-            this.alt = alt;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public AvatarsEntity getAvatars() {
-            return avatars;
-        }
-
-        public String getAlt() {
-            return alt;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static class AvatarsEntity {
-
-            private String small;
-            private String large;
-            private String medium;
-
-            public void setSmall(String small) {
-                this.small = small;
-            }
-
-            public void setLarge(String large) {
-                this.large = large;
-            }
-
-            public void setMedium(String medium) {
-                this.medium = medium;
-            }
-
-            public String getSmall() {
-                return small;
-            }
-
-            public String getLarge() {
-                return large;
-            }
-
-            public String getMedium() {
-                return medium;
-            }
-        }
-    }
-
-    public static class DirectorsEntity {
-
-        private AvatarsEntity avatars;
-        private String alt;
-        private String id;
-        private String name;
-
-        public void setAvatars(AvatarsEntity avatars) {
-            this.avatars = avatars;
-        }
-
-        public void setAlt(String alt) {
-            this.alt = alt;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public AvatarsEntity getAvatars() {
-            return avatars;
-        }
-
-        public String getAlt() {
-            return alt;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public static class AvatarsEntity {
-
-            private String small;
-            private String large;
-            private String medium;
-
-            public void setSmall(String small) {
-                this.small = small;
-            }
-
-            public void setLarge(String large) {
-                this.large = large;
-            }
-
-            public void setMedium(String medium) {
-                this.medium = medium;
-            }
-
-            public String getSmall() {
-                return small;
-            }
-
-            public String getLarge() {
-                return large;
-            }
-
-            public String getMedium() {
-                return medium;
-            }
-        }
     }
 }

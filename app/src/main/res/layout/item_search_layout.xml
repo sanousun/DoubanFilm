@@ -72,7 +72,6 @@
                 android:textColor="@color/black"
                 android:textSize="12sp" />
 
-
             <TextView
                 android:id="@+id/tv_search_genres"
                 android:layout_width="wrap_content"
@@ -80,31 +79,22 @@
                 android:layout_marginTop="4dp"
                 android:textColor="@color/gray" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/tv_search_directors"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:singleLine="true"
+                android:textColor="@color/blue" />
 
-
-                <TextView
-                    android:id="@+id/tv_search_directors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:textColor="@color/blue" />
-
-                <TextView
-                    android:id="@+id/tv_search_casts"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:textColor="@color/blue" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_search_casts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:textColor="@color/blue" />
 
         </LinearLayout>
 

@@ -86,64 +86,26 @@
                 android:textColor="@color/blue"
                 android:textSize="12sp" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/tv_coming_director"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/blue"
+                android:textSize="12sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/directors"
-                        android:textColor="@color/gray"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_coming_director"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:gravity="center_vertical"
-                        android:singleLine="true"
-                        android:textColor="@color/blue"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/casts"
-                        android:textColor="@color/gray"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tv_coming_casts1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:gravity="center_vertical"
-                        android:singleLine="true"
-                        android:textColor="@color/blue"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_coming_casts1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@color/blue"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

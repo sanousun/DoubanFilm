@@ -27,6 +27,7 @@ import com.shenhui.doubanfilm.adapter.FilmCardAdapter;
 import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
+import com.shenhui.doubanfilm.bean.WorksEntity;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
@@ -184,7 +185,7 @@ public class CelebrityActivity extends BaseActivity
         if (mCelebrity.getAka().size() > 0) {
             mAke.setText(StringUtil.getSpannableString(
                     getString(R.string.cel_ake), Color.BLACK));
-            mAke.append(StringUtil.getListString(mCelebrity.getAka()));
+            mAke.append(StringUtil.getListString(mCelebrity.getAka(), '/'));
         } else {
             mAke.setVisibility(View.GONE);
         }
@@ -192,7 +193,7 @@ public class CelebrityActivity extends BaseActivity
         if (mCelebrity.getAka_en().size() > 0) {
             mAkeEn.setText(StringUtil.getSpannableString(
                     getString(R.string.cel_ake_en), Color.BLACK));
-            mAkeEn.append(StringUtil.getListString(mCelebrity.getAka_en()));
+            mAkeEn.append(StringUtil.getListString(mCelebrity.getAka_en(), '/'));
         } else {
             mAkeEn.setVisibility(View.GONE);
         }
@@ -200,7 +201,7 @@ public class CelebrityActivity extends BaseActivity
         mWorks.setText(String.format("%s的影视作品",
                 mCelebrity.getName()));
 
-        for (CelebrityBean.WorksEntity work : mCelebrity.getWorks()) {
+        for (WorksEntity work : mCelebrity.getWorks()) {
             SimpleCardBean data = new SimpleCardBean(
                     work.getSubject().getAlt(),
                     work.getSubject().getId(),

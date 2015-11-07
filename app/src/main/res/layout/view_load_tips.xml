@@ -11,13 +11,13 @@
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp" />
+        android:paddingEnd="16dp" />
 
     <TextView
         android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="正在加载更多..."
+        android:text="@string/foot_loading"
         android:textSize="14sp" />
 
 </LinearLayout>

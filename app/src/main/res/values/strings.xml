@@ -60,14 +60,18 @@
         See the License for the specific language governing permissions and
         limitations under the License.\n
     </string>
-    <!--collectItem-->
+    <!--CollectAdapter-->
     <string name="delete">移除</string>
     <string name="enter">详细</string>
     <string name="refresh">刷新</string>
+    <!--WebActivity-->
     <string name="open">在浏览器中打开</string>
     <string name="web_no_tips">打开失败，没有找到可以打开该链接的其它应用 :(</string>
     <string name="skip">去豆瓣查看</string>
     <string name="cancel">是否要取消收藏...</string>
+    <!--SimpleSubjectAdapter_FootView_tips-->
+    <string name="foot_loading">正在加载更多...</string>
+    <string name="foot_fail">加载失败，请点击重试。</string>
 
 
 </resources>

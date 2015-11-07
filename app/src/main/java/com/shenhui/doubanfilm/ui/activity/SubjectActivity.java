@@ -49,6 +49,7 @@ import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CastCardAdapter;
 import com.shenhui.doubanfilm.adapter.FilmCardAdapter;
+import com.shenhui.doubanfilm.bean.CelebrityEntity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.SubjectBean;
@@ -311,13 +312,13 @@ public class SubjectActivity extends AppCompatActivity
         } else {
             mOriginal_title.setVisibility(View.GONE);
         }
-        mGenres.setText(StringUtil.getListString(mSubject.getGenres()));
+        mGenres.setText(StringUtil.getListString(mSubject.getGenres(), ','));
         mAke.setText(StringUtil.getSpannableString(
                 getString(R.string.ake), Color.GRAY));
-        mAke.append(StringUtil.getListString(mSubject.getAka()));
+        mAke.append(StringUtil.getListString(mSubject.getAka(), '/'));
         mCountries.setText(StringUtil.getSpannableString(
                 getString(R.string.countries), Color.GRAY));
-        mCountries.append(StringUtil.getListString(mSubject.getCountries()));
+        mCountries.append(StringUtil.getListString(mSubject.getCountries(), '/'));
 
         mSummaryText.setText(StringUtil.getSpannableString(
                 getString(R.string.summary), Color.parseColor("#5ea4ff")));
@@ -342,9 +343,9 @@ public class SubjectActivity extends AppCompatActivity
     }
 
 
-    private void addCastData(List<SubjectBean.CelebrityEntity> data,
+    private void addCastData(List<CelebrityEntity> data,
                              boolean isDir) {
-        for (SubjectBean.CelebrityEntity s : data) {
+        for (CelebrityEntity s : data) {
             SimpleCardBean dir = new SimpleCardBean();
             dir.setAlt(s.getAlt());
             dir.setId(s.getId());

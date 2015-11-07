@@ -30,7 +30,7 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_cast_layout, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_cast_card_layout, parent, false);
         return new ViewHolder(v);
     }
 

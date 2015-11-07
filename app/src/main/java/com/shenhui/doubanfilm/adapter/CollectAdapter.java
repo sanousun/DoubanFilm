@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SubjectBean;
+import com.shenhui.doubanfilm.support.util.CelebrityUtil;
+import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import java.util.List;
 
@@ -90,22 +92,14 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         String title = sub.getTitle();
         holder.title.setText(title);
         holder.year.setText(String.format("  %s  ", sub.getYear()));
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < sub.getGenres().size(); i++) {
-            s.append(i == 0 ? "" : ",").append(sub.getGenres().get(i));
-        }
-        holder.genres.setText(s.toString());
-        s = new StringBuilder();
-        s.append(mContext.getString(R.string.directors));
-        for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append(i == 0 ? "" : ",").append(sub.getDirectors().get(i).getName());
-        }
-        s.append(String.format("/%s", mContext.getString(R.string.casts)));
-        for (int i = 0; i < sub.getCasts().size(); i++) {
-            s.append(i == 0 ? "" : ",");
-            s.append(sub.getCasts().get(i).getName());
-        }
-        holder.celebrity.setText(s.toString());
+        holder.genres.setText(StringUtil.getListString(sub.getGenres(), ','));
+        StringBuilder sb = new StringBuilder();
+        sb.append(mContext.getString(R.string.directors)).
+                append(CelebrityUtil.list2String(sub.getDirectors(), ',')).
+                append('/').
+                append(mContext.getString(R.string.casts)).
+                append(CelebrityUtil.list2String(sub.getCasts(), ','));
+        holder.celebrity.setText(sb.toString());
         if (sub.getLocalImageFile() != null) {
             imageLoader.displayImage(
                     String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),

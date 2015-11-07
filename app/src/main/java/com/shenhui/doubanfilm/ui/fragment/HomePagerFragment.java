@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -264,8 +265,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                     if (newState == SCROLL_STATE_IDLE
                             && lastVisibleItem + 3 > mSimAdapter.getItemCount()) {
                         if (mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotal()) {
-                            String urlMore = mRequestUrl + ("?start=" + mSimAdapter.getStart());
-                            loadMore(urlMore);
+                            loadMore();
                         }
                     }
                 }
@@ -297,7 +297,8 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      * adapter加载更多
      */
 
-    private void loadMore(String url) {
+    private void loadMore() {
+        String url = mRequestUrl + ("?start=" + mSimAdapter.getStart());
         JsonObjectRequest request = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -312,7 +313,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                mSimAdapter.setFootView(SimpleSubjectAdapter.FOOT_FAIL);
             }
         });
         request.setTag(VOLLEY_TAG + mTitlePos);
@@ -370,7 +371,13 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
 
     @Override
     public void onItemClick(String id) {
-        SubjectActivity.toActivity(getActivity(), id);
+
+        Log.i("xyz", "id-->" + id);
+        if (id.equals(SimpleSubjectAdapter.FOOT_VIEW_ID)) {
+            loadMore();
+        } else {
+            SubjectActivity.toActivity(getActivity(), id);
+        }
     }
 
     /**

@@ -15,6 +15,8 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.support.util.CelebrityUtil;
+import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -42,10 +44,10 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         SimpleSubjectBean sub = mData.get(position);
-        holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2f);
+        holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
         holder.text_collect_count.setText(
                 String.format("%s%d%s",
@@ -58,34 +60,19 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         } else {
             holder.text_original_title.setText(sub.getOriginal_title());
         }
-        holder.text_genres.setText(listToString(sub.getGenres()));
-        String dir = mContext.getString(R.string.directors);
-        StringBuffer s = new StringBuffer();
-        for (int i = 0; i < sub.getDirectors().size(); i++) {
-            s.append(i == 0 ? "" : "/").
-                    append(sub.getDirectors().get(i).getName());
-        }
-        holder.text_directors.setText(dir);
-        holder.text_directors.append(s.toString());
-        String cast = mContext.getString(R.string.casts);
-        s = new StringBuffer();
-        for (int i = 0; i < sub.getCasts().size(); i++) {
-            s.append(i == 0 ? "" : "/").
-                    append(sub.getCasts().get(i).getName());
-        }
-        holder.text_casts.setText(cast);
-        holder.text_casts.append(s.toString());
+        holder.text_genres.setText(
+                StringUtil.getListString(sub.getGenres(), ','));
+        holder.text_directors.setText(
+                mContext.getString(R.string.directors));
+        holder.text_directors.append(
+                CelebrityUtil.list2String(sub.getDirectors(), '/'));
+        holder.text_casts.setText(
+                mContext.getString(R.string.casts));
+        holder.text_casts.append(
+                CelebrityUtil.list2String(sub.getCasts(), '/'));
 
         imageLoader.displayImage(sub.getImages().getLarge(),
                 holder.image_film, options);
-    }
-
-    private String listToString(List<String> list) {
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            s.append(i == 0 ? "" : "/").append(list.get(i));
-        }
-        return s.toString();
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,9 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.support.util.CelebrityUtil;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
+import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,17 +35,20 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     //ItemView的类型，FootView应用于加载更多
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOT = 1;
-    /**
-     * 默认每次加载的item数量，用于网络请求
-     */
-    private static final int DEFAULT_COUNT = 20;
+
+    //FootView的显示类型
+    public static final int FOOT_LOADING = 0;
+    public static final int FOOT_COMPLETED = 1;
+    public static final int FOOT_FAIL = 2;
+    private FootViewHolder mFootView;
+    //用于判断是否是加载失败时点击的FootView
+    public static final String FOOT_VIEW_ID = "-1";
 
     private Context mContext;
     private List<SimpleSubjectBean> mData;
     /**
      * 用于加载更多数据
      */
-    private int start = 0;
     private int total = 0;
     /**
      * 判断是否属于“即将上映”
@@ -70,8 +76,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      * 用于加载数据时的url起点
      */
     public int getStart() {
-        start += DEFAULT_COUNT;
-        return start;
+        return mData.size();
     }
 
     public void setTotal(int total) {
@@ -108,7 +113,6 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     public void updateList(List<SimpleSubjectBean> data, int total) {
         this.mData = data;
-        start = 0;
         setTotal(total);
         notifyDataSetChanged();
     }
@@ -121,7 +125,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             return new FootViewHolder(view);
         } else {
             View view = LayoutInflater.from(mContext).inflate
-                    (R.layout.item_simple_sub_layout, parent, false);
+                    (R.layout.item_simple_subject_layout, parent, false);
             return new ItemViewHolder(view);
         }
     }
@@ -129,7 +133,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (position == mData.size()) {
-            showFootView((FootViewHolder) viewHolder);
+            showFootView();
             return;
         }
         SimpleSubjectBean sub = mData.get(position);
@@ -154,37 +158,50 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             holder.original_title.setText(original_title);
             holder.original_title.setVisibility(View.VISIBLE);
         }
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < sub.getGenres().size(); i++) {
-            str.append(i == 0 ? "" : ",");
-            str.append(sub.getGenres().get(i));
-        }
-        holder.genres.setText(str.toString());
-        str.delete(0, str.length());
-        for (int i = 0; i < sub.getDirectors().size(); i++) {
-            str.append(i == 0 ? "" : "/").
-                    append(sub.getDirectors().get(i).getName());
-        }
-        holder.directors.setText(str.toString());
-        str.delete(0, str.length());
-        for (int i = 0; i < sub.getCasts().size(); i++) {
-            str.append(i == 0 ? "" : "/").
-                    append(sub.getCasts().get(i).getName());
-        }
-        holder.casts.setText(str.toString());
+
+        holder.genres.setText(
+                StringUtil.getListString(sub.getGenres(), ','));
+        holder.directors.setText(
+                StringUtil.getSpannableString(
+                        mContext.getString(R.string.directors), Color.GRAY));
+        holder.directors.append(
+                CelebrityUtil.list2String(sub.getDirectors(), '/'));
+        holder.casts.setText(
+                StringUtil.getSpannableString(
+                        mContext.getString(R.string.casts), Color.GRAY));
+        holder.casts.append(
+                CelebrityUtil.list2String(sub.getCasts(), '/'));
         imageLoader.displayImage(sub.getImages().getLarge(),
                 holder.image, options, imageLoadingListener);
     }
 
-    private void showFootView(final FootViewHolder viewHolder) {
-        if (loadCompleted()) {
-            ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
-            params.height = 0;
-            viewHolder.itemView.setLayoutParams(params);
-        } else {
-            ViewGroup.LayoutParams params = viewHolder.itemView.getLayoutParams();
-            params.height = 120;
-            viewHolder.itemView.setLayoutParams(params);
+    private void showFootView() {
+        if (loadCompleted()) setFootView(FOOT_COMPLETED);
+        else setFootView(FOOT_LOADING);
+    }
+
+    public void setFootView(int event) {
+        if (mFootView == null) return;
+        ViewGroup.LayoutParams params = mFootView.itemView.getLayoutParams();
+        switch (event) {
+            case FOOT_LOADING:
+                params.height = DensityUtil.dp2px(mContext, 40f);
+                mFootView.itemView.setLayoutParams(params);
+                mFootView.progressBar.setVisibility(View.VISIBLE);
+                mFootView.tip.setText(mContext.getString(R.string.foot_loading));
+                mFootView.itemView.setClickable(false);
+                break;
+            case FOOT_COMPLETED:
+                params.height = 0;
+                mFootView.itemView.setLayoutParams(params);
+                mFootView.itemView.setClickable(false);
+                break;
+            case FOOT_FAIL:
+                params.height = DensityUtil.dp2px(mContext, 40f);
+                mFootView.itemView.setLayoutParams(params);
+                mFootView.progressBar.setVisibility(View.GONE);
+                mFootView.tip.setText(mContext.getString(R.string.foot_fail));
+                mFootView.itemView.setClickable(true);
         }
     }
 
@@ -248,10 +265,20 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         private ProgressBar progressBar;
         private TextView tip;
 
-        public FootViewHolder(View itemView) {
+        public FootViewHolder(final View itemView) {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.pb_tip);
             tip = (TextView) itemView.findViewById(R.id.tv_tip);
+            mFootView = this;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mCallback != null) {
+                        setFootView(FOOT_LOADING);
+                        mCallback.onItemClick(FOOT_VIEW_ID);
+                    }
+                }
+            });
         }
     }
 
