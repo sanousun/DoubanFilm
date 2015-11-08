@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -85,7 +86,6 @@ public class MainActivity extends AppCompatActivity
     private long exitTime = 0;
 
     private SharedPreferences userSP;
-    private SharedPreferences.Editor useEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity
             mCurFragment = homeFragment;
         }
 
+        //头像设置
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 PICTURE_HEADER_FILE);
         if (mFile.exists()) {
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity
         }
         mNavView.getMenu().getItem(0).setChecked(true);
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
-        useEditor = userSP.edit();
         mUserName.setText(userSP.getString(USER_NAME, getString(R.string.user_name)));
         mUserIntro.setText(userSP.getString(USER_INTRO, getString(R.string.user_introduction)));
     }
@@ -152,15 +152,16 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_nav_edit:
-                View v = LayoutInflater.from(this).
+                View v = LayoutInflater.from(MainActivity.this).
                         inflate(R.layout.dialog_user_edit, null);
                 final EditText nameEdit = (EditText) v.findViewById(R.id.edit_user_name);
                 final EditText introEdit = (EditText) v.findViewById(R.id.edit_user_intro);
-                new AlertDialog.Builder(this).setTitle(getString(R.string.user_edit)).
+                new AlertDialog.Builder(MainActivity.this).setTitle(getString(R.string.user_edit)).
                         setView(v).
                         setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                Editor editor = userSP.edit();
                                 String name = nameEdit.getText().toString().trim();
                                 String intro = introEdit.getText().toString().trim();
                                 if (name.equals("") && intro.equals("")) {
@@ -168,20 +169,20 @@ public class MainActivity extends AppCompatActivity
                                     return;
                                 }
                                 if (!name.equals("")) {
-                                    useEditor.putString(USER_NAME, name);
+                                    editor.putString(USER_NAME, name);
                                     mUserName.setText(name);
                                 }
                                 if (!intro.equals("")) {
-                                    useEditor.putString(USER_INTRO, intro);
+                                    editor.putString(USER_INTRO, intro);
                                     mUserIntro.setText(intro);
                                 }
-                                useEditor.commit();
+                                editor.commit();
                                 dialogInterface.cancel();
                             }
                         }).show();
                 break;
             case R.id.iv_nav_header:
-                new AlertDialog.Builder(this).
+                new AlertDialog.Builder(MainActivity.this).
                         setTitle(getString(R.string.select_header)).
                         setItems(getResources().getStringArray(R.array.select_header_item),
                                 this).show();
@@ -196,23 +197,22 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         menuItem.setChecked(true);
         mDrawer.closeDrawers();
-        changeFragment(menuItem.getTitle().toString());
+        switchFragment(menuItem.getTitle().toString());
         return true;
     }
 
     /**
      * 判断各种逻辑下的fragment显示问题
      */
-    private void changeFragment(String title) {
+    private void switchFragment(String title) {
         mTitle = title;
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.setCustomAnimations(
-                R.anim.fragment_in, R.anim.fragment_out,
                 R.anim.fragment_in, R.anim.fragment_out);
         Fragment fragment = mFragmentManager.findFragmentByTag(title);
         if (fragment == null) {
             transaction.hide(mCurFragment);
-            fragment = newFragment(title);
+            fragment = createFragmentByTitle(title);
             transaction.add(R.id.main_container, fragment, title);
             mCurFragment = fragment;
         } else if (fragment != mCurFragment) {
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * 根据menuItem的title返回对应的fragment
      */
-    private Fragment newFragment(String title) {
+    private Fragment createFragmentByTitle(String title) {
         switch (title) {
             case "首页":
                 return new HomeFragment();
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity
                     System.exit(0);
                 }
             } else {
-                changeFragment(getString(R.string.nav_home));
+                switchFragment(getString(R.string.nav_home));
                 homeItem.setChecked(true);
             }
             return true;

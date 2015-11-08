@@ -22,7 +22,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +53,7 @@ import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import org.json.JSONException;
@@ -188,7 +188,7 @@ public class SubjectActivity extends AppCompatActivity
 
     private void initView() {
         //设置圆形刷新球的偏移量
-        mRefresh.setProgressViewOffset(false, 0, 100);
+        mRefresh.setProgressViewOffset(false, 0, DensityUtil.dp2px(getApplication(), 32f));
         mToolbar.setTitle("");
 
         setSupportActionBar(mToolbar);
@@ -198,7 +198,7 @@ public class SubjectActivity extends AppCompatActivity
         }
 
         //用于collapsingToolbar缩放时content动画
-        mImageWidth = (int) (mImage.getLayoutParams().width * 1.1);
+        mImageWidth = mImage.getLayoutParams().width + DensityUtil.dp2px(getApplication(), 8f);
         mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
 
         mCast.setLayoutManager(new LinearLayoutManager(
@@ -339,7 +339,7 @@ public class SubjectActivity extends AppCompatActivity
             tag.append(mSubject.getGenres().get(i));
             if (i == 1) break;
         }
-        volleyGetRemmond(tag.toString());
+        volley_Get_Recommend(tag.toString());
     }
 
 
@@ -362,7 +362,7 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 通过查询tag获得recommend数据
      */
-    private void volleyGetRemmond(String tag) {
+    private void volley_Get_Recommend(String tag) {
 
         String url = Constant.API + Constant.SEARCH_TAG + tag;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
@@ -507,7 +507,6 @@ public class SubjectActivity extends AppCompatActivity
         mRefresh.setEnabled(i == 0);
         float alpha = (-1.0f * i) /
                 (appBarLayout.getHeight() - mToolbar.getHeight());
-        Log.i("xyz", "height-->" + (appBarLayout.getHeight() - mToolbar.getHeight()) + ",i-->" + (-i));
         changeContentLayout(alpha);
     }
 

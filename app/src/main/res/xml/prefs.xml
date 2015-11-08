@@ -5,7 +5,7 @@
         android:key="settings_settings"
         android:title="General settings">
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:enabled="true"
             android:key="auto refresh?"
             android:summary="Auto refresh when this app is launched?"

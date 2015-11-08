@@ -15,7 +15,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.BoxSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import org.json.JSONException;
@@ -108,7 +108,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         View view = inflater.inflate(R.layout.fragment_base, container, false);
         ButterKnife.bind(this, view);
         mRefresh.setColorSchemeResources(R.color.colorPrimary);
-        mRefresh.setProgressViewOffset(false, 0, 100);
+        mRefresh.setProgressViewOffset(false, 0, DensityUtil.dp2px(getContext(), 32f));
         mSharePreferences =
                 getActivity().getSharedPreferences(
                         LAST_RECORD, Context.MODE_PRIVATE);
@@ -148,6 +148,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         }
     }
 
+
     /**
      * 初始化“正在上映”和“即将上映”对应的fragment
      */
@@ -183,7 +184,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         super.onResume();
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (isFirstRefresh || sharedPreferences.getBoolean(AUTO_REFRESH, true)) {
+        if (isFirstRefresh || sharedPreferences.getBoolean(AUTO_REFRESH, false)) {
             updateData();
             isFirstRefresh = false;
         }
@@ -240,7 +241,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                 });
         request.setTag(VOLLEY_TAG + mTitlePos);
         request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
+                20000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
@@ -357,7 +358,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                 });
         request.setTag(VOLLEY_TAG + mTitlePos);
         request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
+                15000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.getHttpQueue().add(request);
@@ -372,7 +373,6 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     @Override
     public void onItemClick(String id) {
 
-        Log.i("xyz", "id-->" + id);
         if (id.equals(SimpleSubjectAdapter.FOOT_VIEW_ID)) {
             loadMore();
         } else {

@@ -1,5 +1,6 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -44,8 +45,7 @@ public class CollectFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        mRefreshLayout.setRefreshing(true);
-        update();
+        new MyAsyncTask().execute();
     }
 
     @Override
@@ -57,13 +57,7 @@ public class CollectFragment extends BaseFragment
     @Override
     public void onRefresh() {
         mRefreshLayout.setRefreshing(true);
-        update();
-    }
-
-    private void update() {
-        mData = MyApplication.getDataSource().filmOfAll();
-        mAdapter.updateList(mData);
-        mRefreshLayout.setRefreshing(false);
+        new MyAsyncTask().execute();
     }
 
     @Override
@@ -94,5 +88,25 @@ public class CollectFragment extends BaseFragment
                         super.onShown(snackbar);
                     }
                 }).show();
+    }
+
+    private class MyAsyncTask extends AsyncTask<Void,Void,List<SubjectBean>>{
+
+        @Override
+        protected void onPreExecute() {
+            mRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
+        protected List<SubjectBean> doInBackground(Void... voids) {
+            return MyApplication.getDataSource().filmOfAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<SubjectBean> subjectBeans) {
+            mData = subjectBeans;
+            mAdapter.updateList(mData);
+            mRefreshLayout.setRefreshing(false);
+        }
     }
 }

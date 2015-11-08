@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class BaseFragment extends Fragment {
         mRecView.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mRefreshLayout.setProgressViewOffset(false, 0, 100);
+        mRefreshLayout.setProgressViewOffset(false, 0, DensityUtil.dp2px(getContext(), 32f));
         initData();
         initEvent();
         return view;

@@ -1,5 +1,6 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -105,15 +106,7 @@ public class TopPagerFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         if (isFirstLoad) {
-            List<SimpleSubjectBean> data;
-            if ((data = MyApplication.getDataSource().
-                    getTop(mStart)) != null) {
-                mData = data;
-                mAdapter.updateList(mData, TOP250_TOTAL);
-                setOnScrollListener();
-            } else {
-                volley_Get(mStart);
-            }
+            new MyAsyncTask().execute(mStart);
             isFirstLoad = false;
         }
     }
@@ -276,5 +269,31 @@ public class TopPagerFragment extends BaseFragment
         Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_visible);
         mFloatBtn.setAnimation(anim);
         mFloatBtn.setVisibility(View.VISIBLE);
+    }
+
+    private class MyAsyncTask extends AsyncTask<String, Void, List<SimpleSubjectBean>> {
+
+        @Override
+        protected List<SimpleSubjectBean> doInBackground(String... strings) {
+            String start = strings[0];
+            return MyApplication.getDataSource().getTop(start);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mRefreshLayout.setRefreshing(true);
+        }
+
+        @Override
+        protected void onPostExecute(List<SimpleSubjectBean> data) {
+            if (data != null) {
+                mData = data;
+                mAdapter.updateList(mData, TOP250_TOTAL);
+                mRefreshLayout.setRefreshing(false);
+                setOnScrollListener();
+            } else {
+                volley_Get(mStart);
+            }
+        }
     }
 }
