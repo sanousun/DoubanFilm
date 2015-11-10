@@ -15,4 +15,5 @@
     <color name="silver">#e5e5e5</color>
     <color name="brassiness">#b5a642</color>
     <color name="search_view_hint_color">#e3f2fd</color>
+    <color name="background_gray">#44000000</color>
 </resources>

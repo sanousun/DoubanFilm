@@ -22,6 +22,7 @@
     <!--SubjectItem-->
     <string name="genres">类型:</string>
     <string name="directors">导演:</string>
+    <string name="director">(导演)</string>
     <string name="casts">主演:</string>
     <string name="collect">(</string>
     <string name="count">人评价)</string>

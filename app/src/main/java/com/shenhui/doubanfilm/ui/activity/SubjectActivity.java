@@ -13,7 +13,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -118,8 +117,6 @@ public class SubjectActivity extends AppCompatActivity
     @Bind(R.id.ll_subj_film)
     LinearLayout mFilmLayout;
     //film summary
-    @Bind(R.id.card_subj_summary)
-    CardView mSummary;
     @Bind(R.id.tv_subj_summary)
     TextView mSummaryText;
 
@@ -299,7 +296,7 @@ public class SubjectActivity extends AppCompatActivity
                         getString(R.string.count)));
         mTitle.setText(String.format("%s   ", mSubject.getTitle()));
         SpannableString year = new SpannableString(
-                String.format(" %s ", mSubject.getYear()));
+                String.format("  %s  ", mSubject.getYear()));
         year.setSpan(new ForegroundColorSpan(Color.WHITE),
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         year.setSpan(new BackgroundColorSpan(Color.parseColor("#5ea4ff")),
@@ -324,7 +321,7 @@ public class SubjectActivity extends AppCompatActivity
                 getString(R.string.summary), Color.parseColor("#5ea4ff")));
         mSummaryText.append(mSubject.getSummary());
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
-        mSummary.setOnClickListener(this);
+        mSummaryText.setOnClickListener(this);
         //获得导演演员数据列表
         addCastData(mSubject.getDirectors(), true);
         addCastData(mSubject.getCasts(), false);
@@ -527,7 +524,7 @@ public class SubjectActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.card_subj_summary:
+            case R.id.tv_subj_summary:
                 if (isSummaryShow) {
                     isSummaryShow = false;
                     mSummaryText.setEllipsize(TextUtils.TruncateAt.END);

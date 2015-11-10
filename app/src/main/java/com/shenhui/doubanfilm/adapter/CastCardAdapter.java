@@ -45,10 +45,10 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
             imageLoader.displayImage(sub.getImage(),
                     holder.image, options);
         }
-        if (sub.getIsDir()) {
-            holder.text_dir.setVisibility(View.VISIBLE);
-        }
         holder.text.setText(sub.getName());
+        if (sub.getIsDir()) {
+            holder.text.append(mContext.getString(R.string.director));
+        }
     }
 
     @Override
@@ -62,8 +62,6 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
         ImageView image;
         @Bind(R.id.cast_item_text)
         TextView text;
-        @Bind(R.id.cast_dir_text)
-        TextView text_dir;
 
         public ViewHolder(View itemView) {
             super(itemView);
