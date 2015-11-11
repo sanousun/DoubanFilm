@@ -25,6 +25,7 @@ import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import org.json.JSONException;
@@ -86,6 +87,8 @@ public class TopPagerFragment extends BaseFragment
     protected void initData() {
         mAdapter = new SimpleSubjectAdapter(getActivity(), mData);
         mRecView.setAdapter(mAdapter);
+        int padding = -DensityUtil.dp2px(getContext(), 2f);
+        mRecView.setPadding(padding, padding, padding, padding);
     }
 
     @Override

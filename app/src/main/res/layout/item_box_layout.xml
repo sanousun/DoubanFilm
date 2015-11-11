@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="2dp">
+    android:layout_margin="2dp"
+    android:background="@color/white">
 
     <TextView
-        android:id="@+id/tv_grid_rank"
+        android:id="@+id/tv_box_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:textSize="14sp"
         android:textStyle="italic" />
 
     <ImageView
-        android:id="@+id/iv_grid_isNew"
+        android:id="@+id/iv_box_isNew"
         android:layout_width="14dp"
         android:layout_height="20dp"
-        android:layout_gravity="right"
-        android:layout_marginRight="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_new" />
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/fl_box"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_grid_image"
+            android:id="@+id/iv_box_image"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_gravity="center_horizontal"
@@ -38,53 +36,58 @@
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/tv_grid_title"
+            android:id="@+id/tv_box_title"
             android:layout_width="match_parent"
             android:layout_height="24dp"
+            android:layout_gravity="bottom"
+            android:background="@color/background_gray"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp" />
+    </FrameLayout>
 
-        <FrameLayout
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fl_box"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:id="@+id/tv_box_noRating"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_rating"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_box_rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <RatingBar
+                android:id="@+id/rb_box_rating"
+                style="@style/MyRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5" />
 
             <TextView
-                android:id="@+id/tv_grid_noRating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/tv_box_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="2dp"
                 android:gravity="center"
-                android:text="@string/no_rating"
-                android:textSize="12sp"
-                android:visibility="gone" />
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:textStyle="italic" />
 
-            <LinearLayout
-                android:id="@+id/ll_grid_rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+        </LinearLayout>
 
-                <RatingBar
-                    android:id="@+id/rb_grid_rating"
-                    style="@style/MyRatingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:numStars="5" />
+    </FrameLayout>
 
-                <TextView
-                    android:id="@+id/tv_grid_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="2dp"
-                    android:gravity="center"
-                    android:textColor="@color/red"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
-
-            </LinearLayout>
-        </FrameLayout>
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+</RelativeLayout>

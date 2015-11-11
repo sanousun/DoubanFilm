@@ -117,21 +117,21 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_grid_rank)
+        @Bind(R.id.tv_box_rank)
         TextView text_rank;
-        @Bind(R.id.iv_grid_isNew)
+        @Bind(R.id.iv_box_isNew)
         ImageView image_isNew;
-        @Bind(R.id.iv_grid_image)
+        @Bind(R.id.iv_box_image)
         ImageView image_film;
-        @Bind(R.id.tv_grid_title)
+        @Bind(R.id.tv_box_title)
         TextView text_title;
-        @Bind(R.id.tv_grid_noRating)
+        @Bind(R.id.tv_box_noRating)
         TextView text_no_rating;
-        @Bind(R.id.rb_grid_rating)
+        @Bind(R.id.rb_box_rating)
         RatingBar ratingBar;
-        @Bind(R.id.tv_grid_rating)
+        @Bind(R.id.tv_box_rating)
         TextView text_rating;
-        @Bind(R.id.ll_grid_rating)
+        @Bind(R.id.ll_box_rating)
         LinearLayout ratingLayout;
 
         public ViewHolder(View itemView) {

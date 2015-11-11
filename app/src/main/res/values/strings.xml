@@ -4,11 +4,11 @@
     <string name="ic_search">搜索</string>
     <string name="ic_setting">设置</string>
     <string name="ic_sub_collect">收藏</string>
-    <!--MainActivity-->
-    <!--NavigationView-->
+    <!--MainActivity_NavigationView-->
     <string name="nav_home">首页</string>
     <string name="nav_collect">收藏</string>
     <string name="nav_top250">豆瓣top250</string>
+    <!--MainActivity_NavigationView_header-->
     <string name="user_name">用户昵称</string>
     <string name="user_introduction">用户介绍</string>
     <string name="user_edit">用户设置...</string>
@@ -16,6 +16,7 @@
     <string name="select_header">请选择获得头像方式</string>
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
+    <!--MainActivity-->
     <string name="collect_completed">收藏成功!  (＾－＾)V</string>
     <string name="collect_cancel">取消收藏!  ︿(￣︶￣)︿</string>
     <string name="exit">再按一次退出程序</string>
@@ -33,8 +34,10 @@
     <string name="no_rating">暂无评分</string>
     <string name="overflow">取消收藏</string>
     <string name="douban_rating">豆瓣评分：</string>
-    <!--CardItem-->
-    <string name="dir">导演</string>
+    <!--SubjectActivity-->
+    <string name="cast_list">演员列表：</string>
+    <string name="recommend_list">相关推荐：</string>
+    <string name="recommend_load_fail">获取失败请重试...</string>
     <!--CelebrityActivity-->
     <string name="gender">性别：</string>
     <string name="bron_place">出生地：</string>

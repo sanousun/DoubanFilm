@@ -98,24 +98,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_cel_works"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:textColor="@color/gray" />
 
-                <TextView
-                    android:id="@+id/tv_cel_works"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_cel_works"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="8dp" />
-
-            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_cel_works"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/tv_cel_works"
+                android:layout_marginTop="8dp" />
 
         </RelativeLayout>
 

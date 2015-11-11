@@ -108,10 +108,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         View view = inflater.inflate(R.layout.fragment_base, container, false);
         ButterKnife.bind(this, view);
         mRefresh.setColorSchemeResources(R.color.colorPrimary);
-        mRefresh.setProgressViewOffset(false, 0, DensityUtil.dp2px(getContext(), 32f));
-        mSharePreferences =
-                getActivity().getSharedPreferences(
-                        LAST_RECORD, Context.MODE_PRIVATE);
+        mRefresh.setProgressViewOffset(
+                false, 0, DensityUtil.dp2px(getContext(), 32f));
+        mSharePreferences = getActivity().getSharedPreferences(
+                LAST_RECORD, Context.MODE_PRIVATE);
         initData();
         initEvent();
         return view;
@@ -153,6 +153,8 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      * 初始化“正在上映”和“即将上映”对应的fragment
      */
     private void initSimpleRecyclerView(boolean isComing) {
+        int padding = DensityUtil.dp2px(getContext(), 2f);
+        setPaddingForRecyclerView(-padding);
         LinearLayoutManager inManager = new LinearLayoutManager(getActivity());
         inManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecView.setLayoutManager(inManager);
@@ -169,6 +171,8 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      * 初始化“北美票房”对应的fragment
      */
     private void initBoxRecyclerView() {
+        int padding = DensityUtil.dp2px(getContext(), 2f);
+        setPaddingForRecyclerView(padding);
         GridLayoutManager boxManager = new GridLayoutManager(getActivity(), 3);
         mRecView.setLayoutManager(boxManager);
         if (getRecord() != null) {
@@ -177,6 +181,14 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         mBoxAdapter = new BoxAdapter(getActivity(), mBoxData);
         mBoxAdapter.setOnItemClickListener(this);
         mRecView.setAdapter(mBoxAdapter);
+    }
+
+    /**
+     * 为RecyclerView设置-2dp的padding用于抵消item的margin
+     * 或者可以增加2dp的padding
+     */
+    private void setPaddingForRecyclerView(int padding) {
+        mRecView.setPadding(padding, padding, padding, padding);
     }
 
     @Override

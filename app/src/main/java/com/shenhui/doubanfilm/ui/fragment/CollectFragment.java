@@ -15,6 +15,7 @@ import com.shenhui.doubanfilm.adapter.CollectAdapter;
 import com.shenhui.doubanfilm.adapter.CollectAdapter.OnItemClickListener;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SubjectBean;
+import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class CollectFragment extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = super.onCreateView(inflater, container, savedInstanceState);
+        int padding = DensityUtil.dp2px(getContext(), 4f);
+        mRecView.setPadding(padding, padding, padding, padding);
         return mView;
     }
 
@@ -90,7 +93,7 @@ public class CollectFragment extends BaseFragment
                 }).show();
     }
 
-    private class MyAsyncTask extends AsyncTask<Void,Void,List<SubjectBean>>{
+    private class MyAsyncTask extends AsyncTask<Void, Void, List<SubjectBean>> {
 
         @Override
         protected void onPreExecute() {

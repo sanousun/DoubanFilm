@@ -171,20 +171,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="演员列表："
+                    android:text="@string/cast_list"
                     android:textColor="@color/gray" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/re_subj_cast"
                     android:layout_width="match_parent"
                     android:layout_height="136dp"
-                    android:background="@color/white"/>
+                    android:background="@color/white" />
 
                 <TextView
+                    android:id="@+id/tv_subj_recommend_tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="相关推荐："
                     android:textColor="@color/gray" />
 
                 <android.support.v7.widget.RecyclerView

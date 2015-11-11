@@ -39,15 +39,21 @@ public class FilmCardAdapter extends BaseAdapter<FilmCardAdapter.ViewHolder> {
         this.callback = callback;
     }
 
+    public void updateData(List<SimpleCardBean> data) {
+        mData = data;
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         SimpleCardBean sub = mData.get(position);
         imageLoader.displayImage(sub.getImage(),
                 holder.image, options);
-        if (sub.getIsDir()) {
-            holder.text_dir.setVisibility(View.VISIBLE);
-        }
+
         holder.text.setText(sub.getName());
+        if (sub.getIsDir()) {
+            holder.text.append(mContext.getString(R.string.director));
+        }
         if (position > 3) {
             showItemAnim(holder.itemView, position);
         }
@@ -64,8 +70,6 @@ public class FilmCardAdapter extends BaseAdapter<FilmCardAdapter.ViewHolder> {
         ImageView image;
         @Bind(R.id.sub_item_text)
         TextView text;
-        @Bind(R.id.sub_dir_text)
-        TextView text_dir;
 
         public ViewHolder(View itemView) {
             super(itemView);

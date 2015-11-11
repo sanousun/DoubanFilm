@@ -125,6 +125,8 @@ public class SubjectActivity extends AppCompatActivity
     RecyclerView mCast;
 
     //film recommend
+    @Bind(R.id.tv_subj_recommend_tip)
+    TextView mRecommendTip;
     @Bind(R.id.re_subj_recommend)
     RecyclerView mRecommend;
 
@@ -133,10 +135,13 @@ public class SubjectActivity extends AppCompatActivity
     private String mContent;
     private SubjectBean mSubject;
     private List<SimpleCardBean> mCastData = new ArrayList<>();
+    private CastCardAdapter mCastCardAdapter;
+
+    private String mRecommendTags;
     private List<SimpleCardBean> mCommendData = new ArrayList<>();
+    private FilmCardAdapter mCommendCardAdapter;
 
     private boolean isSummaryShow = false;
-    private FilmCardAdapter mCommendAdapter;
 
     private File mFile;
 
@@ -185,7 +190,9 @@ public class SubjectActivity extends AppCompatActivity
 
     private void initView() {
         //设置圆形刷新球的偏移量
-        mRefresh.setProgressViewOffset(false, 0, DensityUtil.dp2px(getApplication(), 32f));
+        mRefresh.setProgressViewOffset(false,
+                -DensityUtil.dp2px(getApplication(), 8f),
+                DensityUtil.dp2px(getApplication(), 32f));
         mToolbar.setTitle("");
 
         setSupportActionBar(mToolbar);
@@ -194,19 +201,28 @@ public class SubjectActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        //用于collapsingToolbar缩放时content动画
+        //用于collapsingToolbar缩放时content中内容和图片的动作
         mImageWidth = mImage.getLayoutParams().width + DensityUtil.dp2px(getApplication(), 8f);
         mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
 
         mCast.setLayoutManager(new LinearLayoutManager(
                 SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mCastCardAdapter = new CastCardAdapter(this, mCastData);
+        mCast.setAdapter(mCastCardAdapter);
+
         mRecommend.setLayoutManager(new LinearLayoutManager(
                 SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mCommendCardAdapter = new FilmCardAdapter(this, mCommendData);
+        mRecommend.setAdapter(mCommendCardAdapter);
     }
 
     private void initEvent() {
         mRefresh.setOnRefreshListener(this);
         mBtn.setOnClickListener(this);
+        mCastCardAdapter.setOnItemClickListener(this);
+        mCommendCardAdapter.setOnItemClickListener(this);
+        mRecommendTip.setOnClickListener(this);
+        mRecommendTip.setClickable(false);
     }
 
     @Override
@@ -262,7 +278,7 @@ public class SubjectActivity extends AppCompatActivity
      * 得到网络返回数据初始化界面
      */
     private void initAfterGetData() {
-
+        if (mSubject == null) return;
         if (mSubject.getTitle() != null) {
             mCollapsingToolbarLayout.setTitle(mSubject.getTitle());
         }
@@ -286,9 +302,13 @@ public class SubjectActivity extends AppCompatActivity
                     }
                 });
 
-        float rate = (float) (mSubject.getRating().getAverage() / 2);
-        mRatingBar.setRating(rate);
-        mRating.setText(String.format("%s", rate * 2));
+        //豆瓣抽风不给评分了::>_<::
+        if (mSubject.getRating() != null) {
+            float rate = (float) (mSubject.getRating().getAverage() / 2);
+            mRatingBar.setRating(rate);
+            mRating.setText(String.format("%s", rate * 2));
+        }
+
         mCollect.setText(
                 String.format("%s%d%s",
                         getString(R.string.collect),
@@ -323,11 +343,10 @@ public class SubjectActivity extends AppCompatActivity
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
         mSummaryText.setOnClickListener(this);
         //获得导演演员数据列表
+        mCastData = new ArrayList<>();
         addCastData(mSubject.getDirectors(), true);
         addCastData(mSubject.getCasts(), false);
-        CastCardAdapter mCastCardAdapter = new CastCardAdapter(SubjectActivity.this, mCastData);
-        mCastCardAdapter.setOnItemClickListener(SubjectActivity.this);
-        mCast.setAdapter(mCastCardAdapter);
+        mCastCardAdapter.updateData(mCastData);
         StringBuilder tag = new StringBuilder();
         //显示View
         mFilmLayout.setVisibility(View.VISIBLE);
@@ -336,7 +355,8 @@ public class SubjectActivity extends AppCompatActivity
             tag.append(mSubject.getGenres().get(i));
             if (i == 1) break;
         }
-        volley_Get_Recommend(tag.toString());
+        mRecommendTags = tag.toString();
+        volley_Get_Recommend();
     }
 
 
@@ -359,18 +379,22 @@ public class SubjectActivity extends AppCompatActivity
     /**
      * 通过查询tag获得recommend数据
      */
-    private void volley_Get_Recommend(String tag) {
+    private void volley_Get_Recommend() {
 
-        String url = Constant.API + Constant.SEARCH_TAG + tag;
+        if (TextUtils.isEmpty(mRecommendTags)) return;
+        String url = Constant.API + Constant.SEARCH_TAG + mRecommendTags;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Gson gson = new GsonBuilder().create();
                         try {
+                            mRecommendTip.setText(getString(R.string.recommend_list));
+                            mRecommendTip.setClickable(false);
                             String json = response.getString(JSON_SUBJECTS);
                             List<SimpleSubjectBean> data = gson.fromJson(json,
                                     Constant.simpleSubTypeList);
+                            mCommendData = new ArrayList<>();
                             for (SimpleSubjectBean simpleSub : data) {
                                 mCommendData.add(new SimpleCardBean(
                                         simpleSub.getAlt(),
@@ -378,11 +402,7 @@ public class SubjectActivity extends AppCompatActivity
                                         simpleSub.getTitle(),
                                         simpleSub.getImages().getLarge()));
                             }
-                            mCommendAdapter = new FilmCardAdapter(
-                                    SubjectActivity.this, mCommendData);
-                            mCommendAdapter.setOnItemClickListener(
-                                    SubjectActivity.this);
-                            mRecommend.setAdapter(mCommendAdapter);
+                            mCommendCardAdapter.updateData(mCommendData);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -391,9 +411,8 @@ public class SubjectActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SubjectActivity.this,
-                                error.toString(),
-                                Toast.LENGTH_SHORT).show();
+                        mRecommendTip.setText(getString(R.string.recommend_load_fail));
+                        mRecommendTip.setClickable(true);
                     }
                 });
         request.setTag(mId);
@@ -479,6 +498,7 @@ public class SubjectActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //将电影信息存入到数据库中
         mSubject.setLocalImageFile(mFile.getPath());
         String content = new Gson().toJson(mSubject, Constant.subType);
         MyApplication.getDataSource().insertOrUpDataFilm(mId, content);
@@ -507,6 +527,9 @@ public class SubjectActivity extends AppCompatActivity
         changeContentLayout(alpha);
     }
 
+    /**
+     * 使content中内容位置和图片透明度随着AppBarLayout的伸缩而改变
+     */
     private void changeContentLayout(float a) {
         setContentGravity(a == 1 ? Gravity.START : Gravity.CENTER_HORIZONTAL);
         mImage.setAlpha(a);
@@ -535,10 +558,13 @@ public class SubjectActivity extends AppCompatActivity
                     mSummaryText.setSingleLine(false);
                 }
                 break;
-            case R.id.btn_subj_skip:
+            case R.id.btn_subj_skip://跳往豆瓣电影的移动版网页
                 if (mSubject == null) break;
                 WebActivity.toWebActivity(this,
                         mSubject.getMobile_url(), mSubject.getTitle());
+                break;
+            case R.id.tv_subj_recommend_tip:
+                volley_Get_Recommend();
                 break;
         }
     }

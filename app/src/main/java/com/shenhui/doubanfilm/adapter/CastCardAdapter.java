@@ -38,6 +38,11 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
         this.callback = callback;
     }
 
+    public void updateData(List<SimpleCardBean> data) {
+        mData = data;
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         SimpleCardBean sub = mData.get(position);
@@ -71,7 +76,8 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
                 public void onClick(View view) {
                     if (callback != null) {
                         int pos = getLayoutPosition();
-                        callback.itemClick(mData.get(pos).getId(), mData.get(pos).getIsFilm());
+                        callback.itemClick(mData.get(pos).getId(),
+                                mData.get(pos).getIsFilm());
                     }
                 }
             });
