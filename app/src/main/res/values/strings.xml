@@ -25,6 +25,8 @@
     <string name="directors">导演:</string>
     <string name="director">(导演)</string>
     <string name="casts">主演:</string>
+    <string name="dir_and_cast">(导演兼主演)</string>
+    <string name="cast">(主演)</string>
     <string name="collect">(</string>
     <string name="count">人评价)</string>
     <string name="box">票房:</string>
@@ -38,6 +40,7 @@
     <string name="cast_list">演员列表：</string>
     <string name="recommend_list">相关推荐：</string>
     <string name="recommend_load_fail">获取失败请重试...</string>
+    <string name="recommend_loading">正在加载推荐...</string>
     <!--CelebrityActivity-->
     <string name="gender">性别：</string>
     <string name="bron_place">出生地：</string>
@@ -76,6 +79,5 @@
     <!--SimpleSubjectAdapter_FootView_tips-->
     <string name="foot_loading">正在加载更多...</string>
     <string name="foot_fail">加载失败，请点击重试。</string>
-
 
 </resources>

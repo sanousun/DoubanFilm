@@ -139,11 +139,11 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         SimpleSubjectBean sub = mData.get(position);
         ItemViewHolder holder = (ItemViewHolder) viewHolder;
         if (!isComingFilm) {
-            holder.rating.setVisibility(View.VISIBLE);
+            holder.layout_rating.setVisibility(View.VISIBLE);
             float rate = (float) sub.getRating().getAverage();
-            holder.ratingBar.setRating(rate / 2);
+            holder.rating_bar.setRating(rate / 2);
             holder.text_rating.setText(String.format("%s", rate));
-            holder.collect_count.setText(
+            holder.text_collect_count.setText(
                     String.format("%s%d%s",
                             mContext.getString(R.string.collect),
                             sub.getCollect_count(),
@@ -151,28 +151,28 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         }
         String title = sub.getTitle();
         String original_title = sub.getOriginal_title();
-        holder.title.setText(title);
+        holder.text_title.setText(title);
         if (original_title.equals(title)) {
-            holder.original_title.setVisibility(View.GONE);
+            holder.text_original_title.setVisibility(View.GONE);
         } else {
-            holder.original_title.setText(original_title);
-            holder.original_title.setVisibility(View.VISIBLE);
+            holder.text_original_title.setText(original_title);
+            holder.text_original_title.setVisibility(View.VISIBLE);
         }
 
-        holder.genres.setText(
+        holder.text_genres.setText(
                 StringUtil.getListString(sub.getGenres(), ','));
-        holder.directors.setText(
+        holder.text_director.setText(
                 StringUtil.getSpannableString(
                         mContext.getString(R.string.directors), Color.GRAY));
-        holder.directors.append(
+        holder.text_director.append(
                 CelebrityUtil.list2String(sub.getDirectors(), '/'));
-        holder.casts.setText(
+        holder.text_cast.setText(
                 StringUtil.getSpannableString(
                         mContext.getString(R.string.casts), Color.GRAY));
-        holder.casts.append(
+        holder.text_cast.append(
                 CelebrityUtil.list2String(sub.getCasts(), '/'));
         imageLoader.displayImage(sub.getImages().getLarge(),
-                holder.image, options, imageLoadingListener);
+                holder.image_film, options, imageLoadingListener);
     }
 
     private void showFootView() {
@@ -187,8 +187,8 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             case FOOT_LOADING:
                 params.height = DensityUtil.dp2px(mContext, 40f);
                 mFootView.itemView.setLayoutParams(params);
-                mFootView.progressBar.setVisibility(View.VISIBLE);
-                mFootView.tip.setText(mContext.getString(R.string.foot_loading));
+                mFootView.progress_bar.setVisibility(View.VISIBLE);
+                mFootView.text_load_tip.setText(mContext.getString(R.string.foot_loading));
                 mFootView.itemView.setClickable(false);
                 break;
             case FOOT_COMPLETED:
@@ -199,8 +199,8 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             case FOOT_FAIL:
                 params.height = DensityUtil.dp2px(mContext, 40f);
                 mFootView.itemView.setLayoutParams(params);
-                mFootView.progressBar.setVisibility(View.GONE);
-                mFootView.tip.setText(mContext.getString(R.string.foot_fail));
+                mFootView.progress_bar.setVisibility(View.GONE);
+                mFootView.text_load_tip.setText(mContext.getString(R.string.foot_fail));
                 mFootView.itemView.setClickable(true);
         }
     }
@@ -221,26 +221,26 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
     class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.iv_coming_images)
-        ImageView image;
-        @Bind(R.id.ll_coming_rating)
-        LinearLayout rating;
-        @Bind(R.id.rb_coming_rating)
-        RatingBar ratingBar;
-        @Bind(R.id.tv_coming_rating)
+        @Bind(R.id.iv_item_simple_subject_image)
+        ImageView image_film;
+        @Bind(R.id.ll_item_simple_subject_rating)
+        LinearLayout layout_rating;
+        @Bind(R.id.rb_item_simple_subject_rating)
+        RatingBar rating_bar;
+        @Bind(R.id.tv_item_simple_subject_rating)
         TextView text_rating;
-        @Bind(R.id.tv_coming_collect_count)
-        TextView collect_count;
-        @Bind(R.id.tv_coming_title)
-        TextView title;
-        @Bind(R.id.tv_coming_original_title)
-        TextView original_title;
-        @Bind(R.id.tv_coming_genres)
-        TextView genres;
-        @Bind(R.id.tv_coming_director)
-        TextView directors;
-        @Bind(R.id.tv_coming_casts1)
-        TextView casts;
+        @Bind(R.id.tv_item_simple_subject_count)
+        TextView text_collect_count;
+        @Bind(R.id.tv_item_simple_subject_title)
+        TextView text_title;
+        @Bind(R.id.tv_item_simple_subject_original_title)
+        TextView text_original_title;
+        @Bind(R.id.tv_item_simple_subject_genres)
+        TextView text_genres;
+        @Bind(R.id.tv_item_simple_subject_director)
+        TextView text_director;
+        @Bind(R.id.tv_item_simple_subject_cast)
+        TextView text_cast;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -262,13 +262,13 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     class FootViewHolder extends RecyclerView.ViewHolder {
 
-        private ProgressBar progressBar;
-        private TextView tip;
+        private ProgressBar progress_bar;
+        private TextView text_load_tip;
 
         public FootViewHolder(final View itemView) {
             super(itemView);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.pb_tip);
-            tip = (TextView) itemView.findViewById(R.id.tv_tip);
+            progress_bar = (ProgressBar) itemView.findViewById(R.id.pb_view_load_tip);
+            text_load_tip = (TextView) itemView.findViewById(R.id.tv_view_load_tip);
             mFootView = this;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

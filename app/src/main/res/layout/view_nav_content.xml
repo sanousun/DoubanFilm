@@ -7,7 +7,7 @@
     <include layout="@layout/view_toolbar"/>
 
     <RelativeLayout
-        android:id="@+id/main_container"
+        android:id="@+id/rl_main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -7,10 +7,10 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_nav_header"
+        android:id="@+id/iv_view_nav_header"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/lks_for_blank_url"
@@ -18,34 +18,34 @@
         app:border_width="2dp" />
 
     <TextView
-        android:id="@+id/tv_nav_name"
+        android:id="@+id/tv_view_nav_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_nav_header"
-        android:layout_marginLeft="16dp"
+        android:layout_below="@id/iv_view_nav_header"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tv_nav_intro"
+        android:id="@+id/tv_view_nav_intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_nav_name"
-        android:layout_marginLeft="16dp"
+        android:layout_below="@id/tv_view_nav_name"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:textColor="@color/white"
         android:textSize="14sp" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_nav_edit"
+        android:id="@+id/iv_view_nav_edit"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/ic_create"
         app:border_color="@color/white"
         app:border_width="2dp" />

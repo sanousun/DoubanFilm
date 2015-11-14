@@ -8,7 +8,7 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/iv_coming_images"
+        android:id="@+id/iv_item_simple_subject_image"
         android:layout_width="100dp"
         android:layout_height="142dp"
         android:layout_gravity="center_vertical"
@@ -23,7 +23,7 @@
         android:padding="8dp">
 
         <LinearLayout
-            android:id="@+id/ll_coming_rating"
+            android:id="@+id/ll_item_simple_subject_rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -31,21 +31,21 @@
             android:visibility="gone">
 
             <RatingBar
-                android:id="@+id/rb_coming_rating"
+                android:id="@+id/rb_item_simple_subject_rating"
                 style="@style/MyRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5" />
 
             <TextView
-                android:id="@+id/tv_coming_rating"
+                android:id="@+id/tv_item_simple_subject_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:textColor="@color/red" />
 
             <TextView
-                android:id="@+id/tv_coming_collect_count"
+                android:id="@+id/tv_item_simple_subject_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -55,7 +55,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_coming_title"
+            android:id="@+id/tv_item_simple_subject_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -64,7 +64,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/tv_coming_original_title"
+            android:id="@+id/tv_item_simple_subject_original_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -73,7 +73,7 @@
 
 
         <TextView
-            android:id="@+id/tv_coming_genres"
+            android:id="@+id/tv_item_simple_subject_genres"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -81,7 +81,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/tv_coming_director"
+            android:id="@+id/tv_item_simple_subject_director"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -91,7 +91,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/tv_coming_casts1"
+            android:id="@+id/tv_item_simple_subject_cast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

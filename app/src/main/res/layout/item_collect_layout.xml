@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/iv_col_image"
+            android:id="@+id/iv_item_collect_image"
             android:layout_width="144dp"
             android:layout_height="196dp"
             android:scaleType="centerCrop" />
@@ -29,39 +29,35 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/tv_col_title"
+                    android:id="@+id/tv_item_collect_title"
                     android:layout_width="136dp"
                     android:layout_height="wrap_content"
-                    android:text="火星救援"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tv_col_year"
+                    android:id="@+id/tv_item_collect_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:background="@color/blue"
                     android:padding="1dp"
-                    android:text="  2015  "
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/tv_col_genres"
+                    android:id="@+id/tv_item_collect_genres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="剧情，科幻，冒险"
                     android:textColor="@color/blue" />
 
                 <TextView
-                    android:id="@+id/tv_col_cel"
+                    android:id="@+id/tv_item_collect_cel"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginTop="4dp"
                     android:layout_weight="1"
-                    android:text="导演：雷德利斯科特/主演：马特达蒙，杰西卡差斯坦"
                     android:textSize="12sp" />
 
                 <LinearLayout
@@ -78,7 +74,7 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/tv_col_delete"
+                        android:id="@+id/tv_item_collect_delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?android:attr/selectableItemBackground"
@@ -88,7 +84,7 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/tv_col_enter"
+                        android:id="@+id/tv_item_collect_enter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
@@ -109,13 +105,12 @@
                 android:background="@drawable/circle" />
 
             <TextView
-                android:id="@+id/tv_col_rating"
+                android:id="@+id/tv_item_collect_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
-                android:text="8.4"
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 

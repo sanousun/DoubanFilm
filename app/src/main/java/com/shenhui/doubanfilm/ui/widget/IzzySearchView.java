@@ -62,10 +62,10 @@ public class IzzySearchView extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_izzy_search, this, true);
 
-        mQueryTextView = (SearchAutoComplete) findViewById(R.id.search_src_text);
+        mQueryTextView = (SearchAutoComplete) findViewById(R.id.view_search_src_text);
         mQueryTextView.setSearchView(this);
 
-        mClearTextButton = (ImageView) findViewById(R.id.search_close_btn);
+        mClearTextButton = (ImageView) findViewById(R.id.view_search_close_btn);
 
         mClearTextButton.setOnClickListener(new OnClickListener() {
 

@@ -99,7 +99,7 @@
                                 android:id="@+id/tv_subj_rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="4dp"
+                                android:layout_marginStart="4dp"
                                 android:textColor="@color/red"
                                 android:textStyle="italic|bold" />
 
@@ -116,7 +116,8 @@
                             android:id="@+id/tv_subj_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="18sp" />
 
@@ -124,7 +125,7 @@
                             android:id="@+id/tv_subj_original_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="2dp"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -133,14 +134,14 @@
                             android:id="@+id/tv_subj_genres"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="2dp"
                             android:textColor="@color/gray" />
 
                         <TextView
                             android:id="@+id/tv_subj_ake"
                             android:layout_width="212dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:textColor="@color/blue" />
 
@@ -148,7 +149,7 @@
                             android:id="@+id/tv_subj_countries"
                             android:layout_width="212dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="2dp"
                             android:gravity="center"
                             android:textColor="@color/blue" />
 
@@ -174,11 +175,7 @@
                     android:text="@string/cast_list"
                     android:textColor="@color/gray" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/re_subj_cast"
-                    android:layout_width="match_parent"
-                    android:layout_height="136dp"
-                    android:background="@color/white" />
+                <include layout="@layout/view_cast_layout" />
 
                 <TextView
                     android:id="@+id/tv_subj_recommend_tip"
@@ -190,7 +187,10 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/re_subj_recommend"
                     android:layout_width="match_parent"
-                    android:layout_height="176dp" />
+                    android:layout_height="180dp"
+                    android:paddingLeft="-2dp"
+                    android:paddingRight="-2dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

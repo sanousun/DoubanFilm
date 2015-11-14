@@ -23,7 +23,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.FilmCardAdapter;
+import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
 import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
@@ -38,7 +38,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class CelebrityActivity extends BaseActivity
-        implements FilmCardAdapter.OnItemClickListener {
+        implements SimpleFilmAdapter.OnItemClickListener {
 
     private static final String VOLLEY_TAG = "CelActivity";
     private static final String KEY_CEL_ID = "cel_id";
@@ -203,14 +203,14 @@ public class CelebrityActivity extends BaseActivity
 
         for (WorksEntity work : mCelebrity.getWorks()) {
             SimpleCardBean data = new SimpleCardBean(
-                    work.getSubject().getAlt(),
                     work.getSubject().getId(),
                     work.getSubject().getTitle(),
-                    work.getSubject().getImages().getLarge());
+                    work.getSubject().getImages().getLarge(),
+                    true);
             mWorksData.add(data);
         }
-        FilmCardAdapter mWorksAdapter =
-                new FilmCardAdapter(CelebrityActivity.this, mWorksData);
+        SimpleFilmAdapter mWorksAdapter =
+                new SimpleFilmAdapter(CelebrityActivity.this, mWorksData);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
 

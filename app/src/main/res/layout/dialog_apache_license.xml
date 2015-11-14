@@ -10,7 +10,7 @@
 
         <TextView
             android:padding="8dp"
-            android:id="@+id/tv_dialog"
+            android:id="@+id/tv_dialog_apache_license"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </ScrollView>

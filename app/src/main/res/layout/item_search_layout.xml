@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/iv_search_images"
+            android:id="@+id/iv_item_search_images"
             android:layout_width="120dp"
             android:layout_height="170dp"
             android:layout_gravity="center_vertical"
@@ -32,21 +32,21 @@
                 android:orientation="horizontal">
 
                 <RatingBar
-                    android:id="@+id/rb_search_rating"
+                    android:id="@+id/rb_item_search_rating"
                     style="@style/MyRatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5" />
 
                 <TextView
-                    android:id="@+id/tv_search_rating"
+                    android:id="@+id/tv_item_search_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:textColor="@color/red" />
 
                 <TextView
-                    android:id="@+id/tv_search_collect_count"
+                    android:id="@+id/tv_item_search_collect_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray"
@@ -55,7 +55,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_search_title"
+                android:id="@+id/tv_item_search_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -64,7 +64,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_search_original_title"
+                android:id="@+id/tv_item_search_original_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -73,7 +73,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tv_search_genres"
+                android:id="@+id/tv_item_search_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -81,7 +81,7 @@
 
 
             <TextView
-                android:id="@+id/tv_search_directors"
+                android:id="@+id/tv_item_search_director"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -89,7 +89,7 @@
                 android:textColor="@color/blue" />
 
             <TextView
-                android:id="@+id/tv_search_casts"
+                android:id="@+id/tv_item_search_cast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"

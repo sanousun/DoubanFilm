@@ -17,20 +17,21 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
+public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder> {
 
     private Context mContext;
     private List<SimpleCardBean> mData;
     private OnItemClickListener callback;
 
-    public CastCardAdapter(Context context, List<SimpleCardBean> data) {
+    public SimpleFilmAdapter(Context context, List<SimpleCardBean> data) {
         this.mContext = context;
         this.mData = data;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_cast_card_layout, parent, false);
+        View v = LayoutInflater.from(mContext).
+                inflate(R.layout.item_simple_film_layout, parent, false);
         return new ViewHolder(v);
     }
 
@@ -46,13 +47,12 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         SimpleCardBean sub = mData.get(position);
-        if (sub.getImage() != null) {
-            imageLoader.displayImage(sub.getImage(),
-                    holder.image, options);
-        }
-        holder.text.setText(sub.getName());
-        if (sub.getIsDir()) {
-            holder.text.append(mContext.getString(R.string.director));
+        imageLoader.displayImage(sub.getImage(),
+                holder.image_film, options);
+
+        holder.text_title.setText(sub.getName());
+        if (position > 3) {
+            showItemAnim(holder.itemView, position);
         }
     }
 
@@ -63,10 +63,10 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.cast_item_image)
-        ImageView image;
-        @Bind(R.id.cast_item_text)
-        TextView text;
+        @Bind(R.id.iv_item_simple_film_image)
+        ImageView image_film;
+        @Bind(R.id.tv_item_simple_film_text)
+        TextView text_title;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -74,17 +74,19 @@ public class CastCardAdapter extends BaseAdapter<CastCardAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int pos = getLayoutPosition();
                     if (callback != null) {
-                        int pos = getLayoutPosition();
                         callback.itemClick(mData.get(pos).getId(),
                                 mData.get(pos).getIsFilm());
                     }
                 }
             });
         }
+
     }
 
     public interface OnItemClickListener {
-        void itemClick(String id, boolean isCom);
+        void itemClick(String id, boolean isFilm);
     }
+
 }

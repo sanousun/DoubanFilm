@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/tv_box_rank"
+        android:id="@+id/tv_item_box_rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -14,21 +14,20 @@
         android:textStyle="italic" />
 
     <ImageView
-        android:id="@+id/iv_box_isNew"
+        android:id="@+id/iv_item_box_isNew"
         android:layout_width="14dp"
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_new" />
 
-
     <FrameLayout
-        android:id="@+id/fl_box"
+        android:id="@+id/fl_item_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_box_image"
+            android:id="@+id/iv_item_box_image"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_gravity="center_horizontal"
@@ -36,7 +35,7 @@
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/tv_box_title"
+            android:id="@+id/tv_item_box_title"
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:layout_gravity="bottom"
@@ -49,11 +48,11 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fl_box"
+        android:layout_below="@id/fl_item_box"
         android:layout_gravity="bottom">
 
         <TextView
-            android:id="@+id/tv_box_noRating"
+            android:id="@+id/tv_item_box_noRating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -62,7 +61,7 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/ll_box_rating"
+            android:id="@+id/ll_item_box_rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -70,14 +69,14 @@
             android:padding="4dp">
 
             <RatingBar
-                android:id="@+id/rb_box_rating"
+                android:id="@+id/rb_item_box_rating"
                 style="@style/MyRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5" />
 
             <TextView
-                android:id="@+id/tv_box_rating"
+                android:id="@+id/tv_item_box_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="2dp"

@@ -34,7 +34,8 @@ public class PrefsFragment extends PreferenceFragment implements Preference.OnPr
         apacheLicenseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         apacheLicenseDialog.setCancelable(true);
         apacheLicenseDialog.setContentView(R.layout.dialog_apache_license);
-        TextView textView = (TextView) apacheLicenseDialog.findViewById(R.id.tv_dialog);
+        TextView textView = (TextView) apacheLicenseDialog.findViewById
+                (R.id.tv_dialog_apache_license);
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.licences_header)).append("\n");
         String[] basedOnProjects = getResources().getStringArray(R.array.apache_licensed_projects);

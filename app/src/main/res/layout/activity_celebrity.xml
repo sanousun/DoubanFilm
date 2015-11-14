@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp"
         android:visibility="gone">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             app:cardCornerRadius="2dp"
             app:cardElevation="2dp">
 
@@ -102,12 +102,15 @@
                 android:id="@+id/tv_cel_works"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:textColor="@color/gray" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_cel_works"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:paddingLeft="-2dp"
+                android:paddingRight="-2dp"
                 android:layout_below="@id/tv_cel_works"
                 android:layout_marginTop="8dp" />
 

@@ -100,10 +100,10 @@ public class MainActivity extends AppCompatActivity
     protected void initView() {
         homeItem = mNavView.getMenu().findItem(R.id.nav_home);
         View mNavHeader = mNavView.inflateHeaderView(R.layout.view_nav_header);
-        mNavImage = (CircleImageView) mNavHeader.findViewById(R.id.iv_nav_header);
-        mNavEdit = (CircleImageView) mNavHeader.findViewById(R.id.iv_nav_edit);
-        mUserName = (TextView) mNavHeader.findViewById(R.id.tv_nav_name);
-        mUserIntro = (TextView) mNavHeader.findViewById(R.id.tv_nav_intro);
+        mNavImage = (CircleImageView) mNavHeader.findViewById(R.id.iv_view_nav_header);
+        mNavEdit = (CircleImageView) mNavHeader.findViewById(R.id.iv_view_nav_edit);
+        mUserName = (TextView) mNavHeader.findViewById(R.id.tv_view_nav_name);
+        mUserIntro = (TextView) mNavHeader.findViewById(R.id.tv_view_nav_intro);
     }
 
     protected void initData() {
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
             mFragmentManager.beginTransaction().
-                    add(R.id.main_container, homeFragment, mTitle).
+                    add(R.id.rl_main_container, homeFragment, mTitle).
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
                     commit();
             mCurFragment = homeFragment;
@@ -151,11 +151,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_nav_edit:
+            case R.id.iv_view_nav_edit:
                 View v = LayoutInflater.from(MainActivity.this).
                         inflate(R.layout.dialog_user_edit, null);
-                final EditText nameEdit = (EditText) v.findViewById(R.id.edit_user_name);
-                final EditText introEdit = (EditText) v.findViewById(R.id.edit_user_intro);
+                final EditText nameEdit = (EditText) v.findViewById(R.id.edit_dialog_user_name);
+                final EditText introEdit = (EditText) v.findViewById(R.id.edit_dialog_user_intro);
                 new AlertDialog.Builder(MainActivity.this).setTitle(getString(R.string.user_edit)).
                         setView(v).
                         setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                             }
                         }).show();
                 break;
-            case R.id.iv_nav_header:
+            case R.id.iv_view_nav_header:
                 new AlertDialog.Builder(MainActivity.this).
                         setTitle(getString(R.string.select_header)).
                         setItems(getResources().getStringArray(R.array.select_header_item),
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity
         if (fragment == null) {
             transaction.hide(mCurFragment);
             fragment = createFragmentByTitle(title);
-            transaction.add(R.id.main_container, fragment, title);
+            transaction.add(R.id.rl_main_container, fragment, title);
             mCurFragment = fragment;
         } else if (fragment != mCurFragment) {
             transaction.hide(mCurFragment).show(fragment);

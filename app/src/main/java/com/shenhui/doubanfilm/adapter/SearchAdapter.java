@@ -9,17 +9,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,7 +42,7 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         SimpleSubjectBean sub = mData.get(position);
-        holder.ratingBar.setRating(((float) sub.getRating().getAverage()) / 2);
+        holder.rating_bar.setRating(((float) sub.getRating().getAverage()) / 2);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
         holder.text_collect_count.setText(
                 String.format("%s%d%s",
@@ -62,13 +57,13 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         }
         holder.text_genres.setText(
                 StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_directors.setText(
+        holder.text_director.setText(
                 mContext.getString(R.string.directors));
-        holder.text_directors.append(
+        holder.text_director.append(
                 CelebrityUtil.list2String(sub.getDirectors(), '/'));
-        holder.text_casts.setText(
+        holder.text_cast.setText(
                 mContext.getString(R.string.casts));
-        holder.text_casts.append(
+        holder.text_cast.append(
                 CelebrityUtil.list2String(sub.getCasts(), '/'));
 
         imageLoader.displayImage(sub.getImages().getLarge(),
@@ -82,24 +77,24 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.iv_search_images)
+        @Bind(R.id.iv_item_search_images)
         ImageView image_film;
-        @Bind(R.id.rb_search_rating)
-        RatingBar ratingBar;
-        @Bind(R.id.tv_search_rating)
+        @Bind(R.id.rb_item_search_rating)
+        RatingBar rating_bar;
+        @Bind(R.id.tv_item_search_rating)
         TextView text_rating;
-        @Bind(R.id.tv_search_collect_count)
+        @Bind(R.id.tv_item_search_collect_count)
         TextView text_collect_count;
-        @Bind(R.id.tv_search_title)
+        @Bind(R.id.tv_item_search_title)
         TextView text_title;
-        @Bind(R.id.tv_search_original_title)
+        @Bind(R.id.tv_item_search_original_title)
         TextView text_original_title;
-        @Bind(R.id.tv_search_genres)
+        @Bind(R.id.tv_item_search_genres)
         TextView text_genres;
-        @Bind(R.id.tv_search_directors)
-        TextView text_directors;
-        @Bind(R.id.tv_search_casts)
-        TextView text_casts;
+        @Bind(R.id.tv_item_search_director)
+        TextView text_director;
+        @Bind(R.id.tv_item_search_cast)
+        TextView text_cast;
 
         public ViewHolder(View itemView) {
             super(itemView);

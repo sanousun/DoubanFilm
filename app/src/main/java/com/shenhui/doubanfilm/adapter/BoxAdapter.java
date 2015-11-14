@@ -73,7 +73,7 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         float rating = (float) simSubject.getRating().getAverage();
         if (rating == 0) {
             holder.text_no_rating.setVisibility(View.VISIBLE);
-            holder.ratingLayout.setVisibility(View.GONE);
+            holder.layout_rating.setVisibility(View.GONE);
         } else {
             holder.ratingBar.setRating(rating / 2);
             holder.text_rating.setText(String.format("%s", rating));
@@ -117,22 +117,22 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.tv_box_rank)
+        @Bind(R.id.tv_item_box_rank)
         TextView text_rank;
-        @Bind(R.id.iv_box_isNew)
+        @Bind(R.id.iv_item_box_isNew)
         ImageView image_isNew;
-        @Bind(R.id.iv_box_image)
+        @Bind(R.id.iv_item_box_image)
         ImageView image_film;
-        @Bind(R.id.tv_box_title)
+        @Bind(R.id.tv_item_box_title)
         TextView text_title;
-        @Bind(R.id.tv_box_noRating)
+        @Bind(R.id.tv_item_box_noRating)
         TextView text_no_rating;
-        @Bind(R.id.rb_box_rating)
+        @Bind(R.id.rb_item_box_rating)
         RatingBar ratingBar;
-        @Bind(R.id.tv_box_rating)
+        @Bind(R.id.tv_item_box_rating)
         TextView text_rating;
-        @Bind(R.id.ll_box_rating)
-        LinearLayout ratingLayout;
+        @Bind(R.id.ll_item_box_rating)
+        LinearLayout layout_rating;
 
         public ViewHolder(View itemView) {
             super(itemView);

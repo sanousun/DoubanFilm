@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tl_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -14,7 +13,7 @@
         android:paddingRight="16dp">
 
         <EditText
-            android:id="@+id/edit_user_name"
+            android:id="@+id/edit_dialog_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/user_name" />
@@ -22,7 +21,6 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/tl_user_intro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="8dp"
@@ -30,7 +28,7 @@
         android:paddingRight="16dp">
 
         <EditText
-            android:id="@+id/edit_user_intro"
+            android:id="@+id/edit_dialog_user_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/user_introduction" />

@@ -87,23 +87,23 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         SubjectBean sub = mData.get(position);
-        float rate = (float) sub.getRating().getAverage();
-        holder.rating.setText(String.format("%s", rate));
+        if (sub.getRating() != null) {
+            float rate = (float) sub.getRating().getAverage();
+            holder.text_rating.setText(String.format("%s", rate));
+        }
         String title = sub.getTitle();
-        holder.title.setText(title);
-        holder.year.setText(String.format("  %s  ", sub.getYear()));
-        holder.genres.setText(StringUtil.getListString(sub.getGenres(), ','));
-        StringBuilder sb = new StringBuilder();
-        sb.append(mContext.getString(R.string.directors)).
-                append(CelebrityUtil.list2String(sub.getDirectors(), ',')).
-                append('/').
-                append(mContext.getString(R.string.casts)).
-                append(CelebrityUtil.list2String(sub.getCasts(), ','));
-        holder.celebrity.setText(sb.toString());
+        holder.text_title.setText(title);
+        holder.text_year.setText(String.format("  %s  ", sub.getYear()));
+        holder.text_genres.setText(StringUtil.getListString(sub.getGenres(), ','));
+        holder.text_cast.setText(String.format("%s%s/%s%s",
+                mContext.getString(R.string.directors),
+                CelebrityUtil.list2String(sub.getDirectors(), ','),
+                mContext.getString(R.string.casts),
+                CelebrityUtil.list2String(sub.getCasts(), ',')));
         if (sub.getLocalImageFile() != null) {
             imageLoader.displayImage(
                     String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),
-                    holder.image, options);
+                    holder.image_film, options);
         }
     }
 
@@ -114,22 +114,22 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-        @Bind(R.id.iv_col_image)
-        ImageView image;
-        @Bind(R.id.tv_col_rating)
-        TextView rating;
-        @Bind(R.id.tv_col_title)
-        TextView title;
-        @Bind(R.id.tv_col_year)
-        TextView year;
-        @Bind(R.id.tv_col_genres)
-        TextView genres;
-        @Bind(R.id.tv_col_cel)
-        TextView celebrity;
-        @Bind(R.id.tv_col_delete)
-        TextView delete;
-        @Bind(R.id.tv_col_enter)
-        TextView enter;
+        @Bind(R.id.iv_item_collect_image)
+        ImageView image_film;
+        @Bind(R.id.tv_item_collect_rating)
+        TextView text_rating;
+        @Bind(R.id.tv_item_collect_title)
+        TextView text_title;
+        @Bind(R.id.tv_item_collect_year)
+        TextView text_year;
+        @Bind(R.id.tv_item_collect_genres)
+        TextView text_genres;
+        @Bind(R.id.tv_item_collect_cel)
+        TextView text_cast;
+        @Bind(R.id.tv_item_collect_delete)
+        TextView btn_delete;
+        @Bind(R.id.tv_item_collect_enter)
+        TextView btn_enter;
 
         private OnResponseClickListener mListener;
 
@@ -137,13 +137,13 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
             super(itemView);
             ButterKnife.bind(this, itemView);
             mListener = listener;
-            delete.setOnClickListener(this);
-            enter.setOnClickListener(this);
+            btn_delete.setOnClickListener(this);
+            btn_enter.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (view == delete) {
+            if (view == btn_delete) {
                 mListener.onDeleteClick(view, getAdapterPosition());
             } else {
                 mListener.onEnterClick(getAdapterPosition());
