@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="@drawable/nav_header_bg">
+    android:background="@drawable/bg_nav_header">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -13,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/lks_for_blank_url"
+        android:src="@drawable/def_header"
         app:border_color="@color/white"
         app:border_width="2dp" />
 

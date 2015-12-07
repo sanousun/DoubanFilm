@@ -20,9 +20,9 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
 
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     protected DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.noimage).
+            showImageOnLoading(R.drawable.no_image).
+            showImageOnFail(R.drawable.no_image).
+            showImageForEmptyUri(R.drawable.no_image).
             imageScaleType(ImageScaleType.EXACTLY_STRETCHED).
             cacheInMemory(true).
             cacheOnDisk(true).

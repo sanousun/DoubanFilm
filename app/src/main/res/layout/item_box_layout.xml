@@ -19,7 +19,7 @@
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_new" />
+        android:src="@drawable/bg_film_new" />
 
     <FrameLayout
         android:id="@+id/fl_item_box"

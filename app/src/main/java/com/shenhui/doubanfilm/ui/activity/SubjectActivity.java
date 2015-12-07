@@ -78,8 +78,8 @@ public class SubjectActivity extends AppCompatActivity
     private static final String URI_FOR_FILE = "file:/";
     private static final String URI_FOR_IMAGE = ".png";
 
-    private int[] cast_id = {R.id.view_cast_layout_1, R.id.view_cast_layout_2,
-            R.id.view_cast_layout_3, R.id.view_cast_layout_4,
+    private int[] cast_id = {R.id.view_cast_layout_1,
+            R.id.view_cast_layout_2, R.id.view_cast_layout_3, R.id.view_cast_layout_4,
             R.id.view_cast_layout_5, R.id.view_cast_layout_6};
 
     private List<View> cast_view = new ArrayList<>();
@@ -138,7 +138,7 @@ public class SubjectActivity extends AppCompatActivity
 
     private String mRecommendTags;
     private List<SimpleCardBean> mRecommendData = new ArrayList<>();
-    private SimpleFilmAdapter mRecommendCardAdapter;
+    private SimpleFilmAdapter mRecommendFilmAdapter;
 
     private boolean isSummaryShow = false;
 
@@ -151,9 +151,9 @@ public class SubjectActivity extends AppCompatActivity
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageForEmptyUri(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.lks_for_blank_url).
+            showImageForEmptyUri(R.drawable.no_image).
+            showImageOnFail(R.drawable.no_image).
+            showImageForEmptyUri(R.drawable.def_header).
             cacheInMemory(true).
             cacheOnDisk(true).
             considerExifParams(true).
@@ -206,21 +206,21 @@ public class SubjectActivity extends AppCompatActivity
 
         for (int id : cast_id) {
             View view = findViewById(id);
-            view.setVisibility(View.GONE);
             view.setOnClickListener(this);
+            view.setVisibility(View.GONE);
             cast_view.add(view);
         }
 
         mRecommend.setLayoutManager(new LinearLayoutManager(
                 SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        mRecommendCardAdapter = new SimpleFilmAdapter(this, mRecommendData);
-        mRecommend.setAdapter(mRecommendCardAdapter);
+        mRecommendFilmAdapter = new SimpleFilmAdapter(this, mRecommendData);
+        mRecommend.setAdapter(mRecommendFilmAdapter);
     }
 
     private void initEvent() {
         mRefresh.setOnRefreshListener(this);
         mBtn.setOnClickListener(this);
-        mRecommendCardAdapter.setOnItemClickListener(this);
+        mRecommendFilmAdapter.setOnItemClickListener(this);
         mRecommendTip.setOnClickListener(this);
         mRecommendTip.setClickable(false);
     }
@@ -345,6 +345,24 @@ public class SubjectActivity extends AppCompatActivity
         mSummaryText.setEllipsize(TextUtils.TruncateAt.END);
         mSummaryText.setOnClickListener(this);
         //获得导演演员数据列表
+        getCastData();
+        //显示View
+        mFilmLayout.setVisibility(View.VISIBLE);
+        //加载推荐
+        mRecommendTip.setText(getString(R.string.recommend_loading));
+        StringBuilder tag = new StringBuilder();
+        for (int i = 0; i < mSubject.getGenres().size(); i++) {
+            tag.append(mSubject.getGenres().get(i));
+            if (i == 1) break;
+        }
+        mRecommendTags = tag.toString();
+        volley_Get_Recommend();
+    }
+
+    /**
+     * 获得导演演员的数据
+     */
+    private void getCastData() {
         int j = 0;
         boolean isDirWithCast = false;
         for (int i = 0; (i < mSubject.getDirectors().size() && i < 2); i++) {
@@ -375,17 +393,6 @@ public class SubjectActivity extends AppCompatActivity
             tv.setText(cel.getName());
             view.setVisibility(View.VISIBLE);
         }
-        //显示View
-        mFilmLayout.setVisibility(View.VISIBLE);
-        //加载推荐
-        mRecommendTip.setText(getString(R.string.recommend_loading));
-        StringBuilder tag = new StringBuilder();
-        for (int i = 0; i < mSubject.getGenres().size(); i++) {
-            tag.append(mSubject.getGenres().get(i));
-            if (i == 1) break;
-        }
-        mRecommendTags = tag.toString();
-        volley_Get_Recommend();
     }
 
     /**
@@ -414,7 +421,7 @@ public class SubjectActivity extends AppCompatActivity
                                         simpleSub.getImages().getLarge(),
                                         true));
                             }
-                            mRecommendCardAdapter.updateData(mRecommendData);
+                            mRecommendFilmAdapter.updateData(mRecommendData);
                             mRecommend.setVisibility(View.VISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -579,22 +586,28 @@ public class SubjectActivity extends AppCompatActivity
                 volley_Get_Recommend();
                 break;
             case R.id.view_cast_layout_1:
-                CelebrityActivity.toActivity(this, mSubject.getDirectors().get(0).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getDirectors().get(0).getId());
                 break;
             case R.id.view_cast_layout_2:
-                CelebrityActivity.toActivity(this, mSubject.getDirectors().get(1).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getDirectors().get(1).getId());
                 break;
             case R.id.view_cast_layout_3:
-                CelebrityActivity.toActivity(this, mSubject.getCasts().get(0).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getCasts().get(0).getId());
                 break;
             case R.id.view_cast_layout_4:
-                CelebrityActivity.toActivity(this, mSubject.getCasts().get(1).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getCasts().get(1).getId());
                 break;
             case R.id.view_cast_layout_5:
-                CelebrityActivity.toActivity(this, mSubject.getCasts().get(2).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getCasts().get(2).getId());
                 break;
             case R.id.view_cast_layout_6:
-                CelebrityActivity.toActivity(this, mSubject.getCasts().get(3).getId());
+                CelebrityActivity.toActivity(
+                        this, mSubject.getCasts().get(3).getId());
                 break;
         }
     }

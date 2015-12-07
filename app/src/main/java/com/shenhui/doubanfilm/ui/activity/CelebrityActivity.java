@@ -70,9 +70,9 @@ public class CelebrityActivity extends BaseActivity
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
     private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.noimage).
-            showImageForEmptyUri(R.drawable.noimage).
-            showImageOnFail(R.drawable.noimage).
+            showImageOnLoading(R.drawable.no_image).
+            showImageForEmptyUri(R.drawable.no_image).
+            showImageOnFail(R.drawable.no_image).
             cacheInMemory(true).
             cacheOnDisk(true).
             considerExifParams(true).

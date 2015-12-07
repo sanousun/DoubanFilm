@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             Bitmap header = BitmapFactory.decodeFile(mFile.getPath());
             mNavImage.setImageBitmap(header);
         } else {
-            mNavImage.setImageResource(R.drawable.lks_for_blank_url);
+            mNavImage.setImageResource(R.drawable.def_header);
         }
         mNavView.getMenu().getItem(0).setChecked(true);
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
@@ -327,7 +327,6 @@ public class MainActivity extends AppCompatActivity
                 case CAMERA_REQUEST_CODE:
                     resizeImage(getImageUri());
                     break;
-
                 case RESIZE_REQUEST_CODE:
                     if (data != null) {
                         showResizeImage(data);

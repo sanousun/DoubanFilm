@@ -201,7 +201,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="16dp"
-            android:src="@drawable/skip"
+            android:src="@drawable/ic_skip"
             android:visibility="gone"
             app:layout_anchor="@id/appbarLayout_subj"
             app:layout_anchorGravity="bottom|right|end" />
