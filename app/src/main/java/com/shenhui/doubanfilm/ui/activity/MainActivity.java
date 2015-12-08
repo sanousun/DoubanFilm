@@ -207,8 +207,6 @@ public class MainActivity extends AppCompatActivity
     private void switchFragment(String title) {
         mTitle = title;
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.setCustomAnimations(
-                R.anim.fragment_in, R.anim.fragment_out);
         Fragment fragment = mFragmentManager.findFragmentByTag(title);
         if (fragment == null) {
             transaction.hide(mCurFragment);
