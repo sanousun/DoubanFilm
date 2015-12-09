@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity
                                     editor.putString(USER_INTRO, intro);
                                     mUserIntro.setText(intro);
                                 }
-                                editor.commit();
+                                editor.apply();
                                 dialogInterface.cancel();
                             }
                         }).show();
