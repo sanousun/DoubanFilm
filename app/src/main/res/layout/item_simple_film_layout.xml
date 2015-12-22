@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/iv_item_simple_film_image"
-        android:layout_width="110dp"
+        android:layout_width="108dp"
         android:layout_height="160dp"
         android:scaleType="centerCrop" />
 

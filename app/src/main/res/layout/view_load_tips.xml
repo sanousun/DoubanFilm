@@ -10,11 +10,11 @@
         android:id="@+id/pb_view_load_tip"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="16dp" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_view_load_tip"
+        android:layout_marginStart="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/foot_loading"

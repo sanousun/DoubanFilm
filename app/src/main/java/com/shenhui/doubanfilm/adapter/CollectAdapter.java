@@ -95,11 +95,11 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         holder.text_title.setText(title);
         holder.text_year.setText(String.format("  %s  ", sub.getYear()));
         holder.text_genres.setText(StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_cast.setText(String.format("%s%s/%s%s",
-                mContext.getString(R.string.directors),
-                CelebrityUtil.list2String(sub.getDirectors(), ','),
-                mContext.getString(R.string.casts),
-                CelebrityUtil.list2String(sub.getCasts(), ',')));
+        holder.text_cast.setText(
+                String.format("%s%s//%s%s", mContext.getString(R.string.directors),
+                        CelebrityUtil.list2String(sub.getDirectors(), ','),
+                        mContext.getString(R.string.casts),
+                        CelebrityUtil.list2String(sub.getCasts(), ',')));
         if (sub.getLocalImageFile() != null) {
             imageLoader.displayImage(
                     String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),

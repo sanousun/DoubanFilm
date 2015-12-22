@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
@@ -10,8 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
         android:textSize="14sp"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        tools:text="rank" />
 
     <ImageView
         android:id="@+id/iv_item_box_isNew"
@@ -19,7 +22,8 @@
         android:layout_height="20dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
-        android:src="@drawable/bg_film_new" />
+        android:src="@drawable/bg_film_new"
+        tools:ignore="ContentDescription" />
 
     <FrameLayout
         android:id="@+id/fl_item_box"
@@ -29,10 +33,11 @@
         <ImageView
             android:id="@+id/iv_item_box_image"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="168dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="22dp"
-            android:scaleType="centerCrop" />
+            android:layout_marginTop="24dp"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_item_box_title"

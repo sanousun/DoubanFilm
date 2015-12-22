@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,38 +8,36 @@
 
     <LinearLayout
         android:id="@+id/view_search_edit_frame"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="4.0dip"
-        android:layout_marginLeft="8.0dip"
-        android:layout_marginRight="8.0dip"
-        android:layout_marginTop="4.0dip"
-        android:layout_weight="1.0"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/view_search_plate"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1.0"
             android:orientation="horizontal">
 
             <view
                 android:id="@+id/view_search_src_text"
                 class="com.shenhui.doubanfilm.ui.widget.IzzySearchView$SearchAutoComplete"
-                android:layout_width="0.0dip"
-                android:layout_height="36.0dip"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
                 android:layout_gravity="bottom"
-                android:layout_weight="1.0"
+                android:layout_weight="1"
                 android:background="@null"
                 android:ellipsize="end"
                 android:imeOptions="actionSearch"
                 android:inputType="textAutoComplete|textNoSuggestions"
-                android:minWidth="160dip"
-                android:paddingLeft="8dip"
-                android:paddingRight="8dip"
+                android:minWidth="160dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textCursorDrawable="@null" />
@@ -49,9 +48,13 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:focusable="true"
-                android:paddingLeft="8.0dip"
-                android:paddingRight="8.0dip"
-                android:src="@drawable/ic_clear" />
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:src="@drawable/ic_clear"
+                tools:ignore="ContentDescription"/>
+
         </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

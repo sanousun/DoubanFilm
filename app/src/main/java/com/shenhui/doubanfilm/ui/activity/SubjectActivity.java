@@ -23,12 +23,13 @@ import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.transition.Slide;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -85,7 +86,7 @@ public class SubjectActivity extends AppCompatActivity
             R.id.view_cast_layout_2, R.id.view_cast_layout_3, R.id.view_cast_layout_4,
             R.id.view_cast_layout_5, R.id.view_cast_layout_6};
 
-    private List<View> cast_view = new ArrayList<>();
+    private CastViewHolder[] castViewHolders = new CastViewHolder[6];
 
     @Bind(R.id.refresh_subj)
     SwipeRefreshLayout mRefresh;
@@ -173,20 +174,10 @@ public class SubjectActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
-            window.clearFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                            | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(
-                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
+            //设置activity的进入特效
+            window.setEnterTransition(new Slide().setDuration(1000));
         }
 
         super.onCreate(savedInstanceState);
@@ -216,19 +207,15 @@ public class SubjectActivity extends AppCompatActivity
 
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
         //用于collapsingToolbar缩放时content中内容和图片的动作
         mImageWidth = mImage.getLayoutParams().width + DensityUtil.dp2px(getApplication(), 8f);
         mContentParams = (FrameLayout.LayoutParams) mLinearContent.getLayoutParams();
 
-        for (int id : cast_id) {
-            View view = findViewById(id);
-            view.setOnClickListener(this);
-            view.setVisibility(View.GONE);
-            cast_view.add(view);
+        for (int i = 0; i < 6; i++) {
+            View view = findViewById(cast_id[i]);
+            castViewHolders[i] = new CastViewHolder(view);
         }
 
         mRecommend.setLayoutManager(new LinearLayoutManager(
@@ -267,6 +254,7 @@ public class SubjectActivity extends AppCompatActivity
                     @Override
                     public void onResponse(String response) {
                         mContent = response;
+                        Log.i("xyz", "response-->" + response);
                         //如果film已经收藏,更新数据
                         if (isCollect) {
                             filmSave();
@@ -322,18 +310,16 @@ public class SubjectActivity extends AppCompatActivity
                     }
                 });
 
-        //豆瓣抽风不给评分了::>_<::
+        //豆瓣抽风不给评分了::>_<::,现在好了
         if (mSubject.getRating() != null) {
             float rate = (float) (mSubject.getRating().getAverage() / 2);
             mRatingBar.setRating(rate);
             mRating.setText(String.format("%s", rate * 2));
         }
 
-        mCollect.setText(
-                String.format("%s%d%s",
-                        getString(R.string.collect),
-                        mSubject.getCollect_count(),
-                        getString(R.string.count)));
+        mCollect.setText(getString(R.string.collect));
+        mCollect.append(String.format("%s", mSubject.getCollect_count()));
+        mCollect.append(getString(R.string.count));
         mTitle.setText(String.format("%s   ", mSubject.getTitle()));
         SpannableString year = new SpannableString(
                 String.format("  %s  ", mSubject.getYear()));
@@ -341,7 +327,7 @@ public class SubjectActivity extends AppCompatActivity
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         year.setSpan(new BackgroundColorSpan(Color.parseColor("#5ea4ff")),
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        year.setSpan(new RelativeSizeSpan(0.7f),
+        year.setSpan(new RelativeSizeSpan(0.88f),
                 0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTitle.append(year);
 
@@ -383,35 +369,29 @@ public class SubjectActivity extends AppCompatActivity
      * 获得导演演员的数据
      */
     private void getCastData() {
-        int j = 0;
         boolean isDirWithCast = false;
         for (int i = 0; (i < mSubject.getDirectors().size() && i < 2); i++) {
-            View view = cast_view.get(i);
-            CelebrityEntity cel = mSubject.getDirectors().get(j++);
-            ImageView iv = (ImageView) view.findViewById(R.id.iv_item_simple_cast_image);
-            imageLoader.displayImage(cel.getAvatars().getLarge(), iv, options);
-            TextView tv = (TextView) view.findViewById(R.id.tv_item_simple_cast_text);
-            if (i == 0 && cel.getId().equals(mSubject.getCasts().get(0).getId())) {
-                tv.setText(cel.getName() + getString(R.string.dir_and_cast));
+            CelebrityEntity cel = mSubject.getDirectors().get(i);
+            //判断导演是不是主演，如果是打上“导演兼主演”标签
+            //为满足一些特殊的数据，需要做null判断
+            if (i == 0 && mSubject.getCasts().get(0).getId() != null
+                    && cel.getId() != null
+                    && cel.getId().equals(mSubject.getCasts().get(0).getId())) {
                 isDirWithCast = true;
+                castViewHolders[i].bindDataForDir(cel, true);
             } else {
-                tv.setText(cel.getName() + getString(R.string.director));
+                isDirWithCast = false;
+                castViewHolders[i].bindDataForDir(cel, false);
             }
-            view.setVisibility(View.VISIBLE);
         }
 
-        j = 2;
-        for (int i = 0; (i < mSubject.getCasts().size() && i < 4); i++) {
-            if (i == 0 && isDirWithCast) {
-                i++;
-            }
-            View view = cast_view.get(j++);
+        int j = 2;
+        for (int i = 0; i < 4; i++) {
+            //判断主演是否是导演，如果是就跳过
+            if (i == 0 && isDirWithCast) i++;
+            if (i == mSubject.getCasts().size()) break;
             CelebrityEntity cel = mSubject.getCasts().get(i);
-            ImageView iv = (ImageView) view.findViewById(R.id.iv_item_simple_cast_image);
-            imageLoader.displayImage(cel.getAvatars().getLarge(), iv, options);
-            TextView tv = (TextView) view.findViewById(R.id.tv_item_simple_cast_text);
-            tv.setText(cel.getName());
-            view.setVisibility(View.VISIBLE);
+            castViewHolders[j++].bindData(cel);
         }
     }
 
@@ -559,20 +539,22 @@ public class SubjectActivity extends AppCompatActivity
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-        //利用AppBarLayout的回调接口启用或者关闭滑动刷新
+        //利用AppBarLayout的回调接口启用或者关闭下拉刷新
         mRefresh.setEnabled(i == 0);
+        //设置AppBarLayout下方内容的滚动效果
         float alpha = (-1.0f * i) /
-                (appBarLayout.getHeight() - mToolbar.getHeight());
+                (0.8f * (appBarLayout.getHeight() - mToolbar.getHeight()));
+        if (alpha > 1f) alpha = 1f;
         changeContentLayout(alpha);
     }
 
     /**
      * 使content中内容位置和图片透明度随着AppBarLayout的伸缩而改变
      */
-    private void changeContentLayout(float a) {
-        setContentGravity(a == 1 ? Gravity.START : Gravity.CENTER_HORIZONTAL);
-        mImage.setAlpha(a);
-        mContentParams.leftMargin = (int) (mImageWidth * a);
+    private void changeContentLayout(float alpha) {
+        setContentGravity(alpha == 1 ? Gravity.START : Gravity.CENTER_HORIZONTAL);
+        mImage.setAlpha(alpha);
+        mContentParams.leftMargin = (int) (mImageWidth * alpha);
         mLinearContent.setLayoutParams(mContentParams);
     }
 
@@ -605,30 +587,63 @@ public class SubjectActivity extends AppCompatActivity
             case R.id.tv_subj_recommend_tip:
                 volley_Get_Recommend();
                 break;
-            case R.id.view_cast_layout_1:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getDirectors().get(0).getId());
-                break;
-            case R.id.view_cast_layout_2:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getDirectors().get(1).getId());
-                break;
-            case R.id.view_cast_layout_3:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getCasts().get(0).getId());
-                break;
-            case R.id.view_cast_layout_4:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getCasts().get(1).getId());
-                break;
-            case R.id.view_cast_layout_5:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getCasts().get(2).getId());
-                break;
-            case R.id.view_cast_layout_6:
-                CelebrityActivity.toActivity(
-                        this, mSubject.getCasts().get(3).getId());
-                break;
+        }
+    }
+
+    class CastViewHolder implements View.OnClickListener {
+
+        CelebrityEntity mCastData;
+        View mCastView;
+        ImageView mImage;
+        TextView mName;
+
+        CastViewHolder(View castView) {
+            mCastView = castView;
+            mImage = (ImageView) castView.findViewById(R.id.iv_item_simple_cast_image);
+            mName = (TextView) castView.findViewById(R.id.tv_item_simple_cast_text);
+            mCastView.setVisibility(View.GONE);
+        }
+
+        void setCastData(CelebrityEntity data) {
+            mCastData = data;
+        }
+
+        void bindData(CelebrityEntity data) {
+            setCastData(data);
+            mName.setText(data.getName());
+
+            mCastView.setVisibility(View.VISIBLE);
+            mCastView.setOnClickListener(this);
+
+            if (data.getAvatars() == null) return;
+            imageLoader.displayImage(data.getAvatars().getLarge(), mImage, options);
+        }
+
+        void bindDataForDir(CelebrityEntity data, boolean isCast) {
+            setCastData(data);
+            if (isCast) {
+                mName.setText(data.getName() + getString(R.string.dir_and_cast));
+            } else {
+                mName.setText(data.getName() + getString(R.string.director));
+            }
+
+            mCastView.setVisibility(View.VISIBLE);
+            mCastView.setOnClickListener(this);
+
+            if (data.getAvatars() == null) return;
+            imageLoader.displayImage(data.getAvatars().getLarge(), mImage, options);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mCastData != null) {
+                if (mCastData.getId() == null) {
+                    Toast.makeText(SubjectActivity.this, "暂无资料", Toast.LENGTH_SHORT);
+                } else {
+                    CelebrityActivity.toActivity(
+                            SubjectActivity.this, mCastData.getId());
+                }
+            }
         }
     }
 }

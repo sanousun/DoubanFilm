@@ -11,7 +11,7 @@ public class StringUtil {
     public static SpannableString getSpannableString(String str, int color) {
         SpannableString span = new SpannableString(str);
         span.setSpan(new ForegroundColorSpan(
-                color), 0, span.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                color), 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return span;
     }
 
