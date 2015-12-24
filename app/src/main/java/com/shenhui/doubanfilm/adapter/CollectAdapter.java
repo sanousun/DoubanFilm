@@ -53,7 +53,8 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         return new ViewHolder(view, new OnResponseClickListener() {
             @Override
             public void onEnterClick(int pos) {
-                callback.itemClick(mData.get(pos).getId());
+                callback.itemClick(mData.get(pos).getId(),
+                        mData.get(pos).getImages().getLarge());
             }
 
             @Override
@@ -95,11 +96,11 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         holder.text_title.setText(title);
         holder.text_year.setText(String.format("  %s  ", sub.getYear()));
         holder.text_genres.setText(StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_cast.setText(
-                String.format("%s%s//%s%s", mContext.getString(R.string.directors),
-                        CelebrityUtil.list2String(sub.getDirectors(), ','),
-                        mContext.getString(R.string.casts),
-                        CelebrityUtil.list2String(sub.getCasts(), ',')));
+        holder.text_cast.setText(mContext.getString(R.string.directors));
+        holder.text_cast.append(String.format("%s//",
+                CelebrityUtil.list2String(sub.getDirectors(), ',')));
+        holder.text_cast.append(mContext.getString(R.string.casts));
+        holder.text_cast.append(CelebrityUtil.list2String(sub.getCasts(), ','));
         if (sub.getLocalImageFile() != null) {
             imageLoader.displayImage(
                     String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),
@@ -152,7 +153,7 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void itemClick(String id);
+        void itemClick(String id, String imageUrl);
 
         void itemRemove(int pos, String id);
     }

@@ -143,11 +143,9 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             float rate = (float) sub.getRating().getAverage();
             holder.rating_bar.setRating(rate / 2);
             holder.text_rating.setText(String.format("%s", rate));
-            holder.text_collect_count.setText(
-                    String.format("%s%d%s",
-                            mContext.getString(R.string.collect),
-                            sub.getCollect_count(),
-                            mContext.getString(R.string.count)));
+            holder.text_collect_count.setText(mContext.getString(R.string.collect));
+            holder.text_collect_count.append(String.format("%d", sub.getCollect_count()));
+            holder.text_collect_count.append(mContext.getString(R.string.count));
         }
         String title = sub.getTitle();
         String original_title = sub.getOriginal_title();
@@ -250,7 +248,8 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
                     if (mCallback != null) {
                         int position = getLayoutPosition();
-                        mCallback.onItemClick(mData.get(position).getId());
+                        mCallback.onItemClick(mData.get(position).getId(),
+                                mData.get(position).getImages().getLarge());
                     }
                 }
             });
@@ -275,7 +274,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
                     if (mCallback != null) {
                         setFootView(FOOT_LOADING);
-                        mCallback.onItemClick(FOOT_VIEW_ID);
+                        mCallback.onItemClick(FOOT_VIEW_ID, null);
                     }
                 }
             });

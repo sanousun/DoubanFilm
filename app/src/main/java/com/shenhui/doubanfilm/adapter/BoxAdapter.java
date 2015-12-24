@@ -143,7 +143,8 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
                     if (mCallback != null) {
                         int position = getLayoutPosition();
                         mCallback.onItemClick(
-                                mData.get(position).getSubject().getId());
+                                mData.get(position).getSubject().getId(),
+                                mData.get(position).getSubject().getImages().getLarge());
                     }
                 }
             });

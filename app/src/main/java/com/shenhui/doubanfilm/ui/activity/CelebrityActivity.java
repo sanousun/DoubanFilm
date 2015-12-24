@@ -218,8 +218,8 @@ public class CelebrityActivity extends BaseActivity
     }
 
     @Override
-    public void itemClick(String id, boolean isCom) {
-        SubjectActivity.toActivity(this, id);
+    public void itemClick(String id, String imageUrl, boolean isCom) {
+        SubjectActivity.toActivity(this, id, imageUrl);
     }
 
 }

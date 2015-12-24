@@ -1,5 +1,7 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +26,7 @@ import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
@@ -250,8 +253,8 @@ public class TopPagerFragment extends BaseFragment
     }
 
     @Override
-    public void onItemClick(String id) {
-        SubjectActivity.toActivity(getActivity(), id);
+    public void onItemClick(String id, String imageUrl) {
+        SubjectActivity.toActivity(getActivity(), id, imageUrl);
     }
 
     @Override
@@ -263,15 +266,27 @@ public class TopPagerFragment extends BaseFragment
     }
 
     private void animForGone() {
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_gone);
-        mFloatBtn.setAnimation(anim);
-        mFloatBtn.setVisibility(View.GONE);
+        Animator animator = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_gone);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mFloatBtn.setVisibility(View.GONE);
+            }
+        });
+        animator.setTarget(mFloatBtn);
+        animator.start();
     }
 
     private void animForVisible() {
-        Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_visible);
-        mFloatBtn.setAnimation(anim);
-        mFloatBtn.setVisibility(View.VISIBLE);
+        Animator animator = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_visible);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                mFloatBtn.setVisibility(View.VISIBLE);
+            }
+        });
+        animator.setTarget(mFloatBtn);
+        animator.start();
     }
 
     private class MyAsyncTask extends AsyncTask<String, Void, List<SimpleSubjectBean>> {

@@ -117,13 +117,13 @@ public class MainActivity extends AppCompatActivity
         mDrawer.setDrawerListener(mToggle);
         //初始化Viewpager
         mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.beginTransaction().
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         mCurFragment = mFragmentManager.findFragmentByTag(mTitle);
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
             mFragmentManager.beginTransaction().
-                    add(R.id.rl_main_container, homeFragment, mTitle).
-                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
-                    commit();
+                    add(R.id.rl_main_container, homeFragment, mTitle).commit();
             mCurFragment = homeFragment;
         }
 

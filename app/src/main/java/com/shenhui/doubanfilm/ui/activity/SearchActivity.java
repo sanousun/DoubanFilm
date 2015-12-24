@@ -161,7 +161,7 @@ public class SearchActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemClick(String id) {
-        SubjectActivity.toActivity(this, id);
+    public void onItemClick(String id, String imageUrl) {
+        SubjectActivity.toActivity(this, id, imageUrl);
     }
 }

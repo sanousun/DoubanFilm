@@ -32,7 +32,7 @@ public class WebActivity extends AppCompatActivity {
     Toolbar mToolbar;
     @Bind(R.id.pb_web)
     ProgressBar mProgressBar;
-    @Bind(R.id.wv_web)
+    @Bind(R.id.wv_container_web)
     RelativeLayout mRelativeLayout;
 
     private String mUrl, mTitle;

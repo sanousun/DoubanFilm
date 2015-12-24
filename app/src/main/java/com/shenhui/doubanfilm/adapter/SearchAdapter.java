@@ -44,11 +44,9 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         SimpleSubjectBean sub = mData.get(position);
         holder.rating_bar.setRating(((float) sub.getRating().getAverage()) / 2);
         holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
-        holder.text_collect_count.setText(
-                String.format("%s%d%s",
-                        mContext.getString(R.string.collect),
-                        sub.getCollect_count(),
-                        mContext.getString(R.string.count)));
+        holder.text_collect_count.setText(mContext.getString(R.string.collect));
+        holder.text_collect_count.append(String.format("%d", sub.getCollect_count()));
+        holder.text_collect_count.append(mContext.getString(R.string.count));
         holder.text_title.setText(sub.getTitle());
         if (sub.getOriginal_title().equals(sub.getTitle())) {
             holder.text_original_title.setVisibility(View.GONE);
@@ -104,7 +102,8 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
                 public void onClick(View view) {
                     if (mCallback != null) {
                         int position = getLayoutPosition();
-                        mCallback.onItemClick(mData.get(position).getId());
+                        mCallback.onItemClick(mData.get(position).getId(),
+                                mData.get(position).getImages().getLarge());
                     }
                 }
             });

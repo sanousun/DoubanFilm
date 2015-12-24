@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
 import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.bean.BoxSubjectBean;
+import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
@@ -383,12 +385,12 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     }
 
     @Override
-    public void onItemClick(String id) {
+    public void onItemClick(String id, String imageUrl) {
 
         if (id.equals(SimpleSubjectAdapter.FOOT_VIEW_ID)) {
             loadMore();
         } else {
-            SubjectActivity.toActivity(getActivity(), id);
+            SubjectActivity.toActivity(getActivity(), id, imageUrl);
         }
     }
 
@@ -415,25 +417,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
      */
     private void animatorForGone() {
         Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_gone);
-        anim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
+        anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animator) {
                 mBtn.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
             }
         });
         anim.setTarget(mBtn);
@@ -442,25 +429,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
 
     private void animatorForVisible() {
         Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_visible);
-        anim.addListener(new Animator.AnimatorListener() {
+        anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animator) {
                 mBtn.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
             }
         });
         anim.setTarget(mBtn);

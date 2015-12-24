@@ -64,8 +64,8 @@ public class CollectFragment extends BaseFragment
     }
 
     @Override
-    public void itemClick(String id) {
-        SubjectActivity.toActivity(getActivity(), id);
+    public void itemClick(String id, String imageUrl) {
+        SubjectActivity.toActivity(getActivity(), id, imageUrl);
     }
 
     @Override

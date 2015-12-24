@@ -77,6 +77,7 @@ public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder>
                     int pos = getLayoutPosition();
                     if (callback != null) {
                         callback.itemClick(mData.get(pos).getId(),
+                                mData.get(pos).getImage(),
                                 mData.get(pos).getIsFilm());
                     }
                 }
@@ -86,7 +87,7 @@ public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder>
     }
 
     public interface OnItemClickListener {
-        void itemClick(String id, boolean isFilm);
+        void itemClick(String id, String imageUrl, boolean isFilm);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.shenhui.doubanfilm.base;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 
 public class BaseAdapter<T extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<T> {
@@ -49,30 +52,22 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
     }
 
     public void showItemAnim(final View view, int pos) {
-        final Context context = view.getContext();
+        final Context mContext = view.getContext();
         if (pos > mLastPosition) {
-            view.setAlpha(0);
+            view.setAlpha(0.0f);
             view.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
+                    Animator animator = AnimatorInflater.loadAnimator(
+                            mContext, R.animator.slide_from_right);
+                    animator.addListener(new AnimatorListenerAdapter() {
                         @Override
-                        public void onAnimationStart(Animation animation) {
-                            view.setAlpha(1);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
+                        public void onAnimationEnd(Animator animator) {
+                            view.setAlpha(1.0f);
                         }
                     });
-                    view.setAnimation(animation);
+                    animator.setTarget(view);
+                    animator.start();
                 }
             });
             mLastPosition = pos;
@@ -80,6 +75,6 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String id);
+        void onItemClick(String id, String imageUrl);
     }
 }
