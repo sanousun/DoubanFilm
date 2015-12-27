@@ -581,7 +581,7 @@ public class SubjectActivity extends AppCompatActivity
         //利用AppBarLayout的回调接口启用或者关闭下拉刷新
         mRefresh.setEnabled(i == 0);
         //设置AppBarLayout下方内容的滚动效果
-        float alpha = Math.abs(i) / appBarLayout.getTotalScrollRange();
+        float alpha = Math.abs(i) * 1.0f / appBarLayout.getTotalScrollRange();
         changeContentLayout(alpha);
     }
 

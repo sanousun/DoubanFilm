@@ -117,12 +117,11 @@ public class MainActivity extends AppCompatActivity
         mDrawer.setDrawerListener(mToggle);
         //初始化Viewpager
         mFragmentManager = getSupportFragmentManager();
-        mFragmentManager.beginTransaction().
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         mCurFragment = mFragmentManager.findFragmentByTag(mTitle);
         if (mCurFragment == null) {
             Fragment homeFragment = new HomeFragment();
             mFragmentManager.beginTransaction().
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
                     add(R.id.rl_main_container, homeFragment, mTitle).commit();
             mCurFragment = homeFragment;
         }
@@ -217,7 +216,8 @@ public class MainActivity extends AppCompatActivity
             transaction.hide(mCurFragment).show(fragment);
             mCurFragment = fragment;
         }
-        transaction.commit();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).
+                commit();
         supportInvalidateOptionsMenu();
         if (mTitle != null) {
             ActionBar actionBar = getSupportActionBar();
@@ -236,8 +236,9 @@ public class MainActivity extends AppCompatActivity
                 return new CollectFragment();
             case "豆瓣top250":
                 return new TopFragment();
+            default:
+                return new BaseFragment();
         }
-        return new BaseFragment();
     }
 
     /**

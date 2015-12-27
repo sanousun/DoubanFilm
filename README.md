@@ -7,7 +7,7 @@
 单机版的收藏功能，以及加入豆瓣top250电影的介绍，我会继续完善这个app。
 
 ## 截图
-![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot1.png)
-![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot2.png)
-![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot3.png)
-![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot4.png)
+![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot_1.png)
+![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot_2.png)
+![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot_3.png)
+![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/Screenshot_4.png)
