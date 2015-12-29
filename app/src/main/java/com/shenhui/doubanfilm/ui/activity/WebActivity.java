@@ -28,12 +28,12 @@ public class WebActivity extends AppCompatActivity {
     private static final String EXTRA_URL = "extra_url";
     private static final String EXTRA_TITLE = "extra_title";
 
-    @Bind(R.id.toolbar)
+    @Bind(R.id.tb_web)
     Toolbar mToolbar;
     @Bind(R.id.pb_web)
     ProgressBar mProgressBar;
     @Bind(R.id.wv_container_web)
-    RelativeLayout mRelativeLayout;
+    RelativeLayout mWebViewContainer;
 
     private String mUrl, mTitle;
     private WebView mWebView;
@@ -57,7 +57,7 @@ public class WebActivity extends AppCompatActivity {
         mUrl = getIntent().getStringExtra(EXTRA_URL);
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
         mWebView = new WebView(getApplicationContext());
-        mRelativeLayout.addView(mWebView);
+        mWebViewContainer.addView(mWebView);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
