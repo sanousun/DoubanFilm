@@ -37,4 +37,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    compile 'de.psdev.licensesdialog:licensesdialog:1.8.0'
 }

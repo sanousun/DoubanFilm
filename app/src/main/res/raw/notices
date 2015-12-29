@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notices>
+    <notice>
+        <name>android-volley</name>
+        <url>https://github.com/mcxiaoke/android-volley</url>
+        <copyright>Copyright (C) 2014 Xiaoke Zhang\n
+            Copyright (C) 2011 The Android Open Source Project
+        </copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>okhttp</name>
+        <url>https://github.com/square/okhttp</url>
+        <copyright></copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Android-Universal-Image-Loader</name>
+        <url>https://github.com/nostra13/Android-Universal-Image-Loader</url>
+        <copyright>Copyright 2011-2015 Sergey Tarasevich</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>butterknife</name>
+        <url>https://github.com/JakeWharton/butterknife</url>
+        <copyright>Copyright 2013 Jake Wharton</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>gson</name>
+        <url>https://github.com/google/gson</url>
+        <copyright>Copyright 2008 Google Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>leakcanary</name>
+        <url>https://github.com/square/leakcanary</url>
+        <copyright>Copyright 2015 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>CircleImageView</name>
+        <url>https://github.com/hdodenhof/CircleImageView</url>
+        <copyright>Copyright 2014 - 2015 Henning Dodenhof</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>LicensesDialog</name>
+        <url>https://github.com/PSDev/LicensesDialog</url>
+        <copyright>Copyright 2013 Philip Schiffer</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+</notices>

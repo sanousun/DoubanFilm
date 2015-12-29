@@ -4,24 +4,4 @@
         <item>从相册中查找</item>
         <item>拍照</item>
     </string-array>
-    <string-array name="apache_licensed_projects">
-        <item>
-            --------------------\nAndroid-Universal-Image-Loader\n--------------------\n
-            Copyright (C) 2014 Xiaoke Zhang\n
-            Copyright (C) 2011 The Android Open Source Project\n
-        </item>
-        <item>
-            --------------------\nandroid-volley\n--------------------\n
-            Copyright 2011-2015 Sergey Tarasevich\n
-        </item>
-        <item>
-            --------------------\nCircleImageView\n--------------------\n
-            Copyright 2014 - 2015 Henning Dodenhof\n
-        </item>
-        <item>
-            --------------------\nButterknife\n--------------------\n
-            Copyright 2013 Jake Wharton\n
-        </item>
-
-    </string-array>
 </resources>

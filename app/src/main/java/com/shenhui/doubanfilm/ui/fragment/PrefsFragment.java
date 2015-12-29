@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
 
+import de.psdev.licensesdialog.LicensesDialog;
+
 public class PrefsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     private static final String ABOUT = "about";
@@ -30,20 +32,11 @@ public class PrefsFragment extends PreferenceFragment implements Preference.OnPr
 
     private void showApacheLicenseDialog() {
 
-        Dialog apacheLicenseDialog = new Dialog(getActivity());
-        apacheLicenseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        apacheLicenseDialog.setCancelable(true);
-        apacheLicenseDialog.setContentView(R.layout.dialog_apache_license);
-        TextView textView = (TextView) apacheLicenseDialog.findViewById
-                (R.id.tv_dialog_apache_license);
-        StringBuilder sb = new StringBuilder();
-        sb.append(getString(R.string.licences_header)).append("\n");
-        String[] basedOnProjects = getResources().getStringArray(R.array.apache_licensed_projects);
-        for (String str : basedOnProjects) {
-            sb.append(str).append("\n");
-        }
-        sb.append("\n\n").append(getString(R.string.license));
-        textView.setText(sb.toString());
-        apacheLicenseDialog.show();
+        new LicensesDialog.
+                Builder(getActivity()).
+                setNotices(R.raw.notices).
+                setIncludeOwnLicense(true).
+                build().
+                showAppCompat();
     }
 }
