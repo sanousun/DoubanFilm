@@ -1,11 +1,8 @@
 package com.shenhui.doubanfilm.ui.fragment;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.view.Window;
-import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
 
