@@ -24,7 +24,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
-import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
 import com.shenhui.doubanfilm.bean.WorksEntity;

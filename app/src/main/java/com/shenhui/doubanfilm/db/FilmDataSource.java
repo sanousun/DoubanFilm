@@ -33,7 +33,7 @@ public final class FilmDataSource {
      * 创建DBHelper通过open()得到数据库
      */
     public FilmDataSource(Context context) {
-        mHelper = new DBHelper(context);
+        mHelper = DBHelper.getInstance(context);
     }
 
     /**
@@ -105,7 +105,7 @@ public final class FilmDataSource {
     /**
      * 得到所有的collectTable中的电影
      */
-    public List<SubjectBean> filmOfAll() {
+    public List<SubjectBean> getFilmForCollected() {
         Cursor cursor = mDatabase.query(
                 DBHelper.TABLE_NAME_COL, allColumnsForCol, null, null, null, null, null);
         cursor.moveToFirst();

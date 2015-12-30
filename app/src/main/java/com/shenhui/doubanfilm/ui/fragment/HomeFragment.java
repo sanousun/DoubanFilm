@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    private class HomePagerAdapter extends FragmentStatePagerAdapter {
+    class HomePagerAdapter extends FragmentStatePagerAdapter {
 
         public HomePagerAdapter(FragmentManager fm) {
             super(fm);

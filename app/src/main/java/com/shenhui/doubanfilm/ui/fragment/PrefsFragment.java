@@ -8,7 +8,8 @@ import com.shenhui.doubanfilm.R;
 
 import de.psdev.licensesdialog.LicensesDialog;
 
-public class PrefsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class PrefsFragment extends PreferenceFragment
+        implements Preference.OnPreferenceClickListener {
 
     private static final String ABOUT = "about";
 

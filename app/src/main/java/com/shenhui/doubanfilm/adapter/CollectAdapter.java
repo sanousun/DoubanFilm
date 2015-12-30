@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;

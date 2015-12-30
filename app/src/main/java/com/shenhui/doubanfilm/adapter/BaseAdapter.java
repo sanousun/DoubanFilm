@@ -1,4 +1,4 @@
-package com.shenhui.doubanfilm.base;
+package com.shenhui.doubanfilm.adapter;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -6,8 +6,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

@@ -10,7 +10,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;

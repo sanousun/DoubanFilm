@@ -13,7 +13,6 @@ import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CollectAdapter;
 import com.shenhui.doubanfilm.adapter.CollectAdapter.OnItemClickListener;
-import com.shenhui.doubanfilm.base.BaseFragment;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
@@ -71,12 +70,13 @@ public class CollectFragment extends BaseFragment
     @Override
     public void itemRemove(final int pos, final String id) {
         Snackbar.make(mView, getString(R.string.cancel), Snackbar.LENGTH_LONG).
-                setAction(getString(R.string.ok), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        MyApplication.getDataSource().deleteFilm(id);
-                    }
-                }).
+                setAction(getString(R.string.ok),
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                MyApplication.getDataSource().deleteFilm(id);
+                            }
+                        }).
                 setCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
@@ -102,11 +102,12 @@ public class CollectFragment extends BaseFragment
 
         @Override
         protected List<SubjectBean> doInBackground(Void... voids) {
-            return MyApplication.getDataSource().filmOfAll();
+            return MyApplication.getDataSource().getFilmForCollected();
         }
 
         @Override
         protected void onPostExecute(List<SubjectBean> subjectBeans) {
+            mData.clear();
             mData = subjectBeans;
             mAdapter.updateList(mData);
             mRefreshLayout.setRefreshing(false);

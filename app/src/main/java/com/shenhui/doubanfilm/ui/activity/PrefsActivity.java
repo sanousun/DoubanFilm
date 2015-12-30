@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseActivity;
 import com.shenhui.doubanfilm.ui.fragment.PrefsFragment;
 
 public class PrefsActivity extends BaseActivity {

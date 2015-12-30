@@ -2,7 +2,6 @@ package com.shenhui.doubanfilm.ui.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -19,8 +18,6 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -73,9 +70,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.app.ActivityOptions.makeSceneTransitionAnimation;
+
 public class SubjectActivity extends AppCompatActivity
-        implements SimpleFilmAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,
-        AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
+        implements SimpleFilmAdapter.OnItemClickListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        AppBarLayout.OnOffsetChangedListener,
+        View.OnClickListener {
+
     //intent中subjectId的key用于查询数据
     private static final String KEY_SUBJECT_ID = "subject_id";
     private static final String KEY_IMAGE_URL = "image_url";
@@ -175,7 +177,7 @@ public class SubjectActivity extends AppCompatActivity
         intent.putExtra(KEY_IMAGE_URL, imageUrl);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             activity.startActivity(intent,
-                    ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+                    makeSceneTransitionAnimation(activity).toBundle());
         } else {
             activity.startActivity(intent);
         }
@@ -186,7 +188,7 @@ public class SubjectActivity extends AppCompatActivity
         Intent intent = new Intent(context, SubjectActivity.class);
         intent.putExtra(KEY_SUBJECT_ID, id);
         image.setTransitionName(SHARE_IMAGE);
-        context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
+        context.startActivity(intent, makeSceneTransitionAnimation(
                 context, image, image.getTransitionName()).toBundle());
     }
 
@@ -280,19 +282,8 @@ public class SubjectActivity extends AppCompatActivity
         mRecommendFilmAdapter.setOnItemClickListener(this);
         mRecommendTip.setOnClickListener(this);
         mRecommendTip.setClickable(false);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         //利用appBarLayout的回调接口禁止或启用swipeRefreshLayout
         mHeaderContainer.addOnOffsetChangedListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mHeaderContainer.removeOnOffsetChangedListener(this);
     }
 
     private void volleyGetSubject() {
@@ -347,15 +338,11 @@ public class SubjectActivity extends AppCompatActivity
         mCollect.append(String.format("%s", mSubject.getCollect_count()));
         mCollect.append(getString(R.string.count));
         mTitle.setText(String.format("%s   ", mSubject.getTitle()));
-        SpannableString year = new SpannableString(
-                String.format("  %s  ", mSubject.getYear()));
-        year.setSpan(new ForegroundColorSpan(Color.WHITE),
-                0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        year.setSpan(new BackgroundColorSpan(Color.parseColor("#5ea4ff")),
-                0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        year.setSpan(new RelativeSizeSpan(0.88f),
-                0, year.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTitle.append(year);
+        mTitle.append(StringUtil.getSpannableString1(
+                String.format("  %s  ", mSubject.getYear()),
+                new ForegroundColorSpan(Color.WHITE),
+                new BackgroundColorSpan(Color.parseColor("#5ea4ff")),
+                new RelativeSizeSpan(0.88f)));
 
         if (!mSubject.getOriginal_title().equals(mSubject.getTitle())) {
             mOriginal_title.setText(mSubject.getOriginal_title());
@@ -571,11 +558,17 @@ public class SubjectActivity extends AppCompatActivity
         Toast.makeText(this, R.string.collect_cancel, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * SwipeRefreshLayout onRefreshListener
+     */
     @Override
     public void onRefresh() {
         volleyGetSubject();
     }
 
+    /**
+     * AppBarLayout onOffsetChangeListener
+     */
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
         //利用AppBarLayout的回调接口启用或者关闭下拉刷新

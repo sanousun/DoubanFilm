@@ -54,7 +54,7 @@ public class TopFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    private class TopPagerAdapter extends FragmentPagerAdapter {
+    class TopPagerAdapter extends FragmentPagerAdapter {
 
         public TopPagerAdapter(FragmentManager fm) {
             super(fm);

@@ -15,6 +15,14 @@ public class StringUtil {
         return span;
     }
 
+    public static SpannableString getSpannableString1(String str, Object... whats) {
+        SpannableString span = new SpannableString(str);
+        for (Object what:whats) {
+            span.setSpan(what, 0, span.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return span;
+    }
+
     public static String getListString(List<String> list, char s) {
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {

@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -23,8 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.shenhui.doubanfilm.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
-import com.shenhui.doubanfilm.base.BaseAdapter;
-import com.shenhui.doubanfilm.base.BaseFragment;
+import com.shenhui.doubanfilm.adapter.BaseAdapter;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 import com.shenhui.doubanfilm.support.Constant;

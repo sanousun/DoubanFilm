@@ -16,6 +16,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "film.db";
     public static final int DATABASE_VERSION = 1;
 
+    private static DBHelper dbHelper;
+
     /**
      * 建立collect的表
      */
@@ -34,7 +36,18 @@ public class DBHelper extends SQLiteOpenHelper {
             COLUMN_TOP + " CHAR(8) UNIQUE, " +
             COLUMN_CONTENT + " NOT NULL);";
 
-    public DBHelper(Context context) {
+    public static DBHelper getInstance(Context context) {
+        if (dbHelper == null) {
+            synchronized (DBHelper.class) {
+                if (dbHelper == null) {
+                    dbHelper = new DBHelper(context);
+                }
+            }
+        }
+        return dbHelper;
+    }
+
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
