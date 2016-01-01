@@ -213,7 +213,7 @@ public class TopPagerFragment extends BaseFragment
                                                  int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     if (newState == SCROLL_STATE_IDLE
-                            && lastVisibleItem + 3 > mAdapter.getItemCount()) {
+                            && lastVisibleItem + 2 > mAdapter.getItemCount()) {
                         if (mAdapter.getItemCount() - 1 < mAdapter.getTotal()) {
                             loadMore();
                         }
@@ -227,14 +227,14 @@ public class TopPagerFragment extends BaseFragment
                     lastVisibleItem = manager.findLastVisibleItemPosition();
                     if (manager.findFirstVisibleItemPosition() == 0) {
                         if (isShow) {
-                            animForGone();
+                            animatorForGone();
                             isShow = false;
                         }
                     } else if (dy < -50 && !isShow) {
-                        animForVisible();
+                        animatorForVisible();
                         isShow = true;
                     } else if (dy > 20 && isShow) {
-                        animForGone();
+                        animatorForGone();
                         isShow = false;
                     }
                 }
@@ -262,7 +262,7 @@ public class TopPagerFragment extends BaseFragment
         }
     }
 
-    private void animForGone() {
+    private void animatorForGone() {
         Animator animator = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_gone);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -274,7 +274,7 @@ public class TopPagerFragment extends BaseFragment
         animator.start();
     }
 
-    private void animForVisible() {
+    private void animatorForVisible() {
         Animator animator = AnimatorInflater.loadAnimator(getActivity(), R.animator.scale_visible);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override

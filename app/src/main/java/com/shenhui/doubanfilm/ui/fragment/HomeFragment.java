@@ -37,6 +37,12 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
     private void initData() {
         PagerAdapter mPagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mViewPager.setOffscreenPageLimit(3);
@@ -45,12 +51,6 @@ public class HomeFragment extends Fragment {
         mTabLayout.setTabTextColors(Color.parseColor("#aaffffff"), Color.WHITE);
         mTabLayout.setTabsFromPagerAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     class HomePagerAdapter extends FragmentStatePagerAdapter {
