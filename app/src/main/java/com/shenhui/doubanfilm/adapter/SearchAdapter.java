@@ -38,33 +38,8 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-
-        SimpleSubjectBean sub = mData.get(position);
-        holder.rating_bar.setRating(((float) sub.getRating().getAverage()) / 2);
-        holder.text_rating.setText(String.format("%s", sub.getRating().getAverage()));
-        holder.text_collect_count.setText(mContext.getString(R.string.collect));
-        holder.text_collect_count.append(String.format("%d", sub.getCollect_count()));
-        holder.text_collect_count.append(mContext.getString(R.string.count));
-        holder.text_title.setText(sub.getTitle());
-        if (sub.getOriginal_title().equals(sub.getTitle())) {
-            holder.text_original_title.setVisibility(View.GONE);
-        } else {
-            holder.text_original_title.setText(sub.getOriginal_title());
-        }
-        holder.text_genres.setText(
-                StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_director.setText(
-                mContext.getString(R.string.directors));
-        holder.text_director.append(
-                CelebrityUtil.list2String(sub.getDirectors(), '/'));
-        holder.text_cast.setText(
-                mContext.getString(R.string.casts));
-        holder.text_cast.append(
-                CelebrityUtil.list2String(sub.getCasts(), '/'));
-
-        imageLoader.displayImage(sub.getImages().getLarge(),
-                holder.image_film, options);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.update();
     }
 
     @Override
@@ -72,7 +47,7 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         return mData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.iv_item_search_images)
         ImageView image_film;
@@ -93,19 +68,42 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
         @Bind(R.id.tv_item_search_cast)
         TextView text_cast;
 
+        SimpleSubjectBean subj;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mCallback != null) {
-                        int position = getLayoutPosition();
-                        mCallback.onItemClick(mData.get(position).getId(),
-                                mData.get(position).getImages().getLarge());
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
+
+        public void update() {
+            subj = mData.get(getLayoutPosition());
+            rating_bar.setRating(((float) subj.getRating().getAverage()) / 2);
+            text_rating.setText(String.format("%s", subj.getRating().getAverage()));
+            text_collect_count.setText(mContext.getString(R.string.collect));
+            text_collect_count.append(String.format("%d", subj.getCollect_count()));
+            text_collect_count.append(mContext.getString(R.string.count));
+            text_title.setText(subj.getTitle());
+            if (subj.getOriginal_title().equals(subj.getTitle())) {
+                text_original_title.setVisibility(View.GONE);
+            } else {
+                text_original_title.setText(subj.getOriginal_title());
+            }
+            text_genres.setText(StringUtil.getListString(subj.getGenres(), ','));
+            text_director.setText(mContext.getString(R.string.directors));
+            text_director.append(CelebrityUtil.list2String(subj.getDirectors(), '/'));
+            text_cast.setText(mContext.getString(R.string.casts));
+            text_cast.append(CelebrityUtil.list2String(subj.getCasts(), '/'));
+            imageLoader.displayImage(subj.getImages().getLarge(), image_film, options);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mCallback != null) {
+                int position = getLayoutPosition();
+                mCallback.onItemClick(mData.get(position).getId(),
+                        mData.get(position).getImages().getLarge());
+            }
         }
     }
 }

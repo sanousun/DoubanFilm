@@ -16,7 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.GsonBuilder;
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SearchAdapter;
 import com.shenhui.doubanfilm.adapter.BaseAdapter;
@@ -142,14 +142,13 @@ public class SearchActivity extends AppCompatActivity
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        request.setTag(VOLLEY_TAG);
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request, VOLLEY_TAG);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG);
+        MyApplication.removeRequest(VOLLEY_TAG);
     }
 
     @Override

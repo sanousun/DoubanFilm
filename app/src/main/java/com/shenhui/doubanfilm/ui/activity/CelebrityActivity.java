@@ -14,14 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
@@ -68,14 +67,7 @@ public class CelebrityActivity extends BaseActivity
     private List<SimpleCardBean> mWorksData = new ArrayList<>();
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.no_image).
-            showImageForEmptyUri(R.drawable.no_image).
-            showImageOnFail(R.drawable.no_image).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
+    private DisplayImageOptions options = MyApplication.getLoaderOptions();
 
     public static void toActivity(Context context, String id) {
         Intent intent = new Intent(context, CelebrityActivity.class);
@@ -94,8 +86,7 @@ public class CelebrityActivity extends BaseActivity
 
     private void initView() {
         mWorksView.setLayoutManager(
-                new LinearLayoutManager(this,
-                        LinearLayoutManager.HORIZONTAL, false));
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void initData() {
@@ -106,7 +97,7 @@ public class CelebrityActivity extends BaseActivity
 
     protected void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG);
+        MyApplication.removeRequest(VOLLEY_TAG);
     }
 
     @Override
@@ -157,11 +148,7 @@ public class CelebrityActivity extends BaseActivity
                         Toast.LENGTH_SHORT).show();
             }
         });
-        request.setTag(VOLLEY_TAG);
-        request.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request, VOLLEY_TAG);
     }
 
     /**
@@ -170,16 +157,13 @@ public class CelebrityActivity extends BaseActivity
     private void setViewAfterGetData() {
         if (mCelebrity == null) return;
         setActionBarTitle(mCelebrity.getName());
-        imageLoader.displayImage(mCelebrity.getAvatars().getMedium(),
-                mImage, options);
+        imageLoader.displayImage(mCelebrity.getAvatars().getMedium(), mImage, options);
         mName.setText(mCelebrity.getName());
         mNameEn.setText(mCelebrity.getName_en());
         String gender = getResources().getString(R.string.gender);
-        mGender.setText(String.format("%s%s", gender,
-                mCelebrity.getGender()));
+        mGender.setText(String.format("%s%s", gender, mCelebrity.getGender()));
         String bronPlace = getResources().getString(R.string.bron_place);
-        mBronPlace.setText(String.format("%s%s", bronPlace,
-                mCelebrity.getBorn_place()));
+        mBronPlace.setText(String.format("%s%s", bronPlace, mCelebrity.getBorn_place()));
 
         if (mCelebrity.getAka().size() > 0) {
             mAke.setText(StringUtil.getSpannableString(
@@ -209,9 +193,10 @@ public class CelebrityActivity extends BaseActivity
             mWorksData.add(data);
         }
         SimpleFilmAdapter mWorksAdapter =
-                new SimpleFilmAdapter(CelebrityActivity.this, mWorksData);
+                new SimpleFilmAdapter(CelebrityActivity.this);
         mWorksAdapter.setOnItemClickListener(this);
         mWorksView.setAdapter(mWorksAdapter);
+        mWorksAdapter.update(mWorksData);
 
         mCelLayout.setVisibility(View.VISIBLE);
     }

@@ -37,7 +37,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -48,7 +47,7 @@ import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
 import com.shenhui.doubanfilm.bean.CelebrityEntity;
@@ -160,14 +159,7 @@ public class SubjectActivity extends AppCompatActivity
     private FrameLayout.LayoutParams mIntroduceContainerParams;
 
     private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageForEmptyUri(R.drawable.no_image).
-            showImageOnFail(R.drawable.no_image).
-            showImageForEmptyUri(R.drawable.def_header).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
+    private DisplayImageOptions options = MyApplication.getLoaderOptions();
 
     //----------------------------------------------------------------------------------------
 
@@ -250,8 +242,9 @@ public class SubjectActivity extends AppCompatActivity
 
         mRecommend.setLayoutManager(new LinearLayoutManager(
                 SubjectActivity.this, LinearLayoutManager.HORIZONTAL, false));
-        mRecommendFilmAdapter = new SimpleFilmAdapter(this, mRecommendData);
+        mRecommendFilmAdapter = new SimpleFilmAdapter(this);
         mRecommend.setAdapter(mRecommendFilmAdapter);
+        mRecommendFilmAdapter.update(mRecommendData);
 
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mId + URI_FOR_IMAGE);
         String imageUri = (mFile.exists() ?
@@ -310,11 +303,7 @@ public class SubjectActivity extends AppCompatActivity
                         mRefresh.setRefreshing(false);
                     }
                 });
-        stringRequest.setTag(mId);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(stringRequest);
+        MyApplication.addRequest(stringRequest,mId);
     }
 
 
@@ -438,7 +427,7 @@ public class SubjectActivity extends AppCompatActivity
                                         simpleSub.getImages().getLarge(),
                                         true));
                             }
-                            mRecommendFilmAdapter.updateData(mRecommendData);
+                            mRecommendFilmAdapter.update(mRecommendData);
                             mRecommend.setVisibility(View.VISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -452,17 +441,13 @@ public class SubjectActivity extends AppCompatActivity
                         mRecommendTip.setClickable(true);
                     }
                 });
-        request.setTag(mId);
-        request.setRetryPolicy(new DefaultRetryPolicy(10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,mId);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(mId);
+        MyApplication.removeRequest(mId);
     }
 
     @Override

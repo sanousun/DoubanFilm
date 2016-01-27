@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FilmDataSource {
+public final class DataSource {
 
     private SQLiteDatabase mDatabase;
     private DBHelper mHelper;
@@ -32,7 +32,7 @@ public final class FilmDataSource {
     /**
      * 创建DBHelper通过open()得到数据库
      */
-    public FilmDataSource(Context context) {
+    public DataSource(Context context) {
         mHelper = DBHelper.getInstance(context);
     }
 

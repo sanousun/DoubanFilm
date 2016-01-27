@@ -31,6 +31,10 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
 
     private SubjectBean undoSub;
 
+    public void setOnItemClickListener(OnItemClickListener callback) {
+        this.callback = callback;
+    }
+
     public CollectAdapter(Context context, List<SubjectBean> data) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
@@ -40,27 +44,6 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
     public void updateList(List<SubjectBean> data) {
         this.mData = data;
         notifyDataSetChanged();
-    }
-
-    public void setOnItemClickListener(OnItemClickListener callback) {
-        this.callback = callback;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_collect_layout, parent, false);
-        return new ViewHolder(view, new OnResponseClickListener() {
-            @Override
-            public void onEnterClick(int pos) {
-                callback.itemClick(mData.get(pos).getId(),
-                        mData.get(pos).getImages().getLarge());
-            }
-
-            @Override
-            public void onDeleteClick(View v, final int pos) {
-                removeItem(pos);
-            }
-        });
     }
 
     /**
@@ -85,26 +68,14 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
     }
 
     @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.item_collect_layout, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SubjectBean sub = mData.get(position);
-        if (sub.getRating() != null) {
-            float rate = (float) sub.getRating().getAverage();
-            holder.text_rating.setText(String.format("%s", rate));
-        }
-        String title = sub.getTitle();
-        holder.text_title.setText(title);
-        holder.text_year.setText(String.format("  %s  ", sub.getYear()));
-        holder.text_genres.setText(StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_cast.setText(mContext.getString(R.string.directors));
-        holder.text_cast.append(String.format("%s//",
-                CelebrityUtil.list2String(sub.getDirectors(), ',')));
-        holder.text_cast.append(mContext.getString(R.string.casts));
-        holder.text_cast.append(CelebrityUtil.list2String(sub.getCasts(), ','));
-        if (sub.getLocalImageFile() != null) {
-            imageLoader.displayImage(
-                    String.format("%s%s", URI_FOR_FILE, sub.getLocalImageFile()),
-                    holder.image_film, options);
-        }
+        holder.update();
     }
 
     @Override
@@ -131,22 +102,44 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         @Bind(R.id.tv_item_collect_enter)
         TextView btn_enter;
 
-        private OnResponseClickListener mListener;
+        SubjectBean subj;
 
-        public ViewHolder(View itemView, OnResponseClickListener listener) {
+        public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            mListener = listener;
             btn_delete.setOnClickListener(this);
             btn_enter.setOnClickListener(this);
+        }
+
+        public void update() {
+            subj = mData.get(getLayoutPosition());
+            if (subj.getRating() != null) {
+                float rate = (float) subj.getRating().getAverage();
+                text_rating.setText(String.format("%s", rate));
+            }
+            String title = subj.getTitle();
+            text_title.setText(title);
+            text_year.setText(String.format("  %s  ", subj.getYear()));
+            text_genres.setText(StringUtil.getListString(subj.getGenres(), ','));
+            text_cast.setText(mContext.getString(R.string.directors));
+            text_cast.append(String.format("%s//",
+                    CelebrityUtil.list2String(subj.getDirectors(), ',')));
+            text_cast.append(mContext.getString(R.string.casts));
+            text_cast.append(CelebrityUtil.list2String(subj.getCasts(), ','));
+            if (subj.getLocalImageFile() != null) {
+                imageLoader.displayImage(
+                        String.format("%s%s", URI_FOR_FILE, subj.getLocalImageFile()),
+                        image_film, options);
+            }
         }
 
         @Override
         public void onClick(View view) {
             if (view == btn_delete) {
-                mListener.onDeleteClick(view, getAdapterPosition());
+                removeItem(getLayoutPosition());
             } else {
-                mListener.onEnterClick(getAdapterPosition());
+                callback.itemClick(mData.get(getLayoutPosition()).getId(),
+                        mData.get(getLayoutPosition()).getImages().getLarge());
             }
         }
     }
@@ -155,11 +148,5 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         void itemClick(String id, String imageUrl);
 
         void itemRemove(int pos, String id);
-    }
-
-    public interface OnResponseClickListener {
-        void onEnterClick(int pos);
-
-        void onDeleteClick(View v, int pos);
     }
 }

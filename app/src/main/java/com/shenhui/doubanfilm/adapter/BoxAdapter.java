@@ -49,6 +49,11 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         this.mInflater = LayoutInflater.from(context);
     }
 
+    public void updateList(List<BoxSubjectBean> data) {
+        this.mData = data;
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_box_layout, parent, false);
@@ -56,31 +61,8 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        BoxSubjectBean subject = mData.get(position);
-        int rank = subject.getRank();
-        setRankTextColor(holder, rank);
-        if (rank < 4) {
-            holder.text_rank.setText(RANK[rank]);
-        } else {
-            holder.text_rank.setText(String.format("%d%s", rank, RANK[0]));
-        }
-        holder.image_isNew.setVisibility(
-                subject.getNewX() ? View.VISIBLE : View.GONE);
-
-        SimpleSubjectBean simSubject = subject.getSubject();
-        float rating = (float) simSubject.getRating().getAverage();
-        if (rating == 0) {
-            holder.text_no_rating.setVisibility(View.VISIBLE);
-            holder.layout_rating.setVisibility(View.GONE);
-        } else {
-            holder.ratingBar.setRating(rating / 2);
-            holder.text_rating.setText(String.format("%s", rating));
-        }
-        holder.text_title.setText(simSubject.getTitle());
-
-        imageLoader.displayImage(simSubject.getImages().getLarge(),
-                holder.image_film, options, imageLoadingListener);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.update();
     }
 
     @Override
@@ -88,33 +70,8 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         return mData.size();
     }
 
-    public void setRankTextColor(ViewHolder holder, int rank) {
-        switch (rank) {
-            case FIRST:
-                holder.text_rank.setTextColor(
-                        Color.parseColor(GOLD));
-                break;
-            case SECOND:
-                holder.text_rank.setTextColor(
-                        Color.parseColor(SILVERY));
-                break;
-            case THIRD:
-                holder.text_rank.setTextColor(
-                        Color.parseColor(COPPER));
-                break;
-            default:
-                holder.text_rank.setTextColor(
-                        Color.GRAY);
-                break;
-        }
-    }
 
-    public void updateList(List<BoxSubjectBean> data) {
-        this.mData = data;
-        this.notifyDataSetChanged();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.tv_item_box_rank)
         TextView text_rank;
@@ -133,25 +90,65 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
         @Bind(R.id.ll_item_box_rating)
         LinearLayout layout_rating;
 
+        BoxSubjectBean subject;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mCallback != null) {
-                        int position = getLayoutPosition();
-                        mCallback.onItemClick(
-                                mData.get(position).getSubject().getId(),
-                                mData.get(position).getSubject().getImages().getLarge());
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
+
+        public void update() {
+            subject = mData.get(getLayoutPosition());
+            int rank = subject.getRank();
+            text_rank.setTextColor(getRankTextColor(rank));
+            if (rank < 4) {
+                text_rank.setText(RANK[rank]);
+            } else {
+                text_rank.setText(String.format("%d%s", rank, RANK[0]));
+            }
+            image_isNew.setVisibility(subject.getNewX() ? View.VISIBLE : View.GONE);
+            SimpleSubjectBean simSubject = subject.getSubject();
+            float rating = (float) simSubject.getRating().getAverage();
+            if (rating == 0) {
+                text_no_rating.setVisibility(View.VISIBLE);
+                layout_rating.setVisibility(View.GONE);
+            } else {
+                ratingBar.setRating(rating / 2);
+                text_rating.setText(String.format("%s", rating));
+            }
+            text_title.setText(simSubject.getTitle());
+
+            imageLoader.displayImage(simSubject.getImages().getLarge(),
+                    image_film, options, imageLoadingListener);
+        }
+
+        private int getRankTextColor(int rank) {
+            switch (rank) {
+                case FIRST:
+                    return Color.parseColor(GOLD);
+                case SECOND:
+                    return Color.parseColor(SILVERY);
+                case THIRD:
+                    return Color.parseColor(COPPER);
+                default:
+                    return Color.GRAY;
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mCallback != null) {
+                int position = getLayoutPosition();
+                mCallback.onItemClick(
+                        mData.get(position).getSubject().getId(),
+                        mData.get(position).getSubject().getImages().getLarge());
+
+            }
         }
     }
 
-    private static class AnimateFirstDisplayListener
-            extends SimpleImageLoadingListener {
+    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
         static final List<String> displayedImages =
                 Collections.synchronizedList(new LinkedList<String>());
 

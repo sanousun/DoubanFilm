@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.CollectAdapter;
 import com.shenhui.doubanfilm.adapter.CollectAdapter.OnItemClickListener;

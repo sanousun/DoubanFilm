@@ -20,13 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.BoxAdapter;
 import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
@@ -133,7 +132,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG + mTitlePos);
+        MyApplication.removeRequest(VOLLEY_TAG + mTitlePos);
     }
 
     @Override
@@ -267,12 +266,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                         mRefresh.setRefreshing(false);
                     }
                 });
-        request.setTag(VOLLEY_TAG + mTitlePos);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,VOLLEY_TAG + mTitlePos);
     }
 
     /**
@@ -293,7 +287,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                     super.onScrollStateChanged(recyclerView, newState);
                     if (newState == SCROLL_STATE_IDLE
                             && lastVisibleItem + 2 > mSimAdapter.getItemCount()
-                            && mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotal()) {
+                            && mSimAdapter.getItemCount() - 1 < mSimAdapter.getTotalDataCount()) {
                         loadMore();
                     }
                 }
@@ -343,15 +337,10 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mSimAdapter.setFootView(SimpleSubjectAdapter.FOOT_FAIL);
+                mSimAdapter.loadFail();
             }
         });
-        request.setTag(VOLLEY_TAG + mTitlePos);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,VOLLEY_TAG + mTitlePos);
     }
 
     /**
@@ -385,12 +374,7 @@ public class HomePagerFragment extends Fragment implements BaseAdapter.OnItemCli
                         mRefresh.setRefreshing(false);
                     }
                 });
-        request.setTag(VOLLEY_TAG + mTitlePos);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                15000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,VOLLEY_TAG + mTitlePos);
     }
 
     @Override

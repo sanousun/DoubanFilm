@@ -8,23 +8,42 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder> {
+public class SimpleFilmAdapter extends RecyclerView.Adapter<SimpleFilmAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<SimpleCardBean> mData;
+    private List<SimpleCardBean> mData = new ArrayList<>();
     private OnItemClickListener callback;
 
-    public SimpleFilmAdapter(Context context, List<SimpleCardBean> data) {
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions options = MyApplication.getLoaderOptions();
+
+    public SimpleFilmAdapter(Context context) {
         this.mContext = context;
-        this.mData = data;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener callback) {
+        this.callback = callback;
+    }
+
+    public void update(List<SimpleCardBean> data) {
+        mData.clear();
+        notifyDataSetChanged();
+        for (int i = 0; i < data.size(); i++) {
+            mData.add(data.get(i));
+            notifyItemInserted(i);
+        }
     }
 
     @Override
@@ -34,25 +53,9 @@ public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder>
         return new ViewHolder(v);
     }
 
-    public void setOnItemClickListener(OnItemClickListener callback) {
-        this.callback = callback;
-    }
-
-    public void updateData(List<SimpleCardBean> data) {
-        mData = data;
-        this.notifyDataSetChanged();
-    }
-
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        SimpleCardBean sub = mData.get(position);
-        imageLoader.displayImage(sub.getImage(),
-                holder.image_film, options);
-
-        holder.text_title.setText(sub.getName());
-        if (position > 3) {
-            showItemAnim(holder.itemView, position);
-        }
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.update();
     }
 
     @Override
@@ -60,29 +63,36 @@ public class SimpleFilmAdapter extends BaseAdapter<SimpleFilmAdapter.ViewHolder>
         return mData.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.iv_item_simple_film_image)
         ImageView image_film;
         @Bind(R.id.tv_item_simple_film_text)
         TextView text_title;
 
+        SimpleCardBean subj;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getLayoutPosition();
-                    if (callback != null) {
-                        callback.itemClick(mData.get(pos).getId(),
-                                mData.get(pos).getImage(),
-                                mData.get(pos).getIsFilm());
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
         }
 
+        public void update() {
+            subj = mData.get(getLayoutPosition());
+            imageLoader.displayImage(subj.getImage(), image_film, options);
+            text_title.setText(subj.getName());
+        }
+
+        @Override
+        public void onClick(View view) {
+            int pos = getLayoutPosition();
+            if (callback != null) {
+                callback.itemClick(mData.get(pos).getId(),
+                        mData.get(pos).getImage(),
+                        mData.get(pos).getIsFilm());
+            }
+        }
     }
 
     public interface OnItemClickListener {

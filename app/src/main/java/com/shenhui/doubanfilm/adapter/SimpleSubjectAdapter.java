@@ -48,7 +48,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
     /**
      * 用于加载更多数据
      */
-    private int total = 0;
+    private int mTotalDataCount = 0;
     /**
      * 判断是否属于“即将上映”
      */
@@ -78,22 +78,22 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         return mData.size();
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setTotalDataCount(int totalDataCount) {
+        this.mTotalDataCount = totalDataCount;
     }
 
     /**
      * 返回adapter数据的总数
      */
-    public int getTotal() {
-        return total;
+    public int getTotalDataCount() {
+        return mTotalDataCount;
     }
 
     /**
      * 判断是否已经加载完毕
      */
-    public boolean loadCompleted() {
-        return mData.size() >= getTotal();
+    public boolean isLoadCompleted() {
+        return mData.size() >= getTotalDataCount();
     }
 
     /**
@@ -104,101 +104,43 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void loadFail() {
+        mFootView.setFootView(FOOT_FAIL);
+    }
+
     /**
      * 用于更新数据
-     *
      * @param data  更新的数据
-     * @param total 数据的总量，采取多次加载
+     * @param totalDataCount 数据的总量，采取多次加载
      */
-    public void updateList(List<SimpleSubjectBean> data, int total) {
+    public void updateList(List<SimpleSubjectBean> data, int totalDataCount) {
         this.mData = data;
-        setTotal(total);
+        setTotalDataCount(totalDataCount);
         notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_FOOT) {
-            View view = LayoutInflater.from(mContext).inflate
-                    (R.layout.view_load_tips, parent, false);
-            return new FootViewHolder(view);
+            if (mFootView == null) {
+                View view = LayoutInflater.from(mContext).
+                        inflate(R.layout.view_load_tips, parent, false);
+                mFootView = new FootViewHolder(view);
+            }
+            return mFootView;
         } else {
-            View view = LayoutInflater.from(mContext).inflate
-                    (R.layout.item_simple_subject_layout, parent, false);
+            View view = LayoutInflater.from(mContext).
+                    inflate(R.layout.item_simple_subject_layout, parent, false);
             return new ItemViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (position == mData.size()) {
-            showFootView();
-            return;
-        }
-        SimpleSubjectBean sub = mData.get(position);
-        ItemViewHolder holder = (ItemViewHolder) viewHolder;
-        if (!isComingFilm) {
-            holder.layout_rating.setVisibility(View.VISIBLE);
-            float rate = (float) sub.getRating().getAverage();
-            holder.rating_bar.setRating(rate / 2);
-            holder.text_rating.setText(String.format("%s", rate));
-            holder.text_collect_count.setText(mContext.getString(R.string.collect));
-            holder.text_collect_count.append(String.format("%d", sub.getCollect_count()));
-            holder.text_collect_count.append(mContext.getString(R.string.count));
-        }
-        String title = sub.getTitle();
-        String original_title = sub.getOriginal_title();
-        holder.text_title.setText(title);
-        if (original_title.equals(title)) {
-            holder.text_original_title.setVisibility(View.GONE);
+        if (viewHolder.getItemViewType() == TYPE_FOOT) {
+            ((FootViewHolder) viewHolder).update();
         } else {
-            holder.text_original_title.setText(original_title);
-            holder.text_original_title.setVisibility(View.VISIBLE);
-        }
-
-        holder.text_genres.setText(
-                StringUtil.getListString(sub.getGenres(), ','));
-        holder.text_director.setText(
-                StringUtil.getSpannableString(
-                        mContext.getString(R.string.directors), Color.GRAY));
-        holder.text_director.append(
-                CelebrityUtil.list2String(sub.getDirectors(), '/'));
-        holder.text_cast.setText(
-                StringUtil.getSpannableString(
-                        mContext.getString(R.string.casts), Color.GRAY));
-        holder.text_cast.append(
-                CelebrityUtil.list2String(sub.getCasts(), '/'));
-        imageLoader.displayImage(sub.getImages().getLarge(),
-                holder.image_film, options, imageLoadingListener);
-    }
-
-    private void showFootView() {
-        if (loadCompleted()) setFootView(FOOT_COMPLETED);
-        else setFootView(FOOT_LOADING);
-    }
-
-    public void setFootView(int event) {
-        if (mFootView == null) return;
-        ViewGroup.LayoutParams params = mFootView.itemView.getLayoutParams();
-        switch (event) {
-            case FOOT_LOADING:
-                params.height = DensityUtil.dp2px(mContext, 40f);
-                mFootView.itemView.setLayoutParams(params);
-                mFootView.progress_bar.setVisibility(View.VISIBLE);
-                mFootView.text_load_tip.setText(mContext.getString(R.string.foot_loading));
-                mFootView.itemView.setClickable(false);
-                break;
-            case FOOT_COMPLETED:
-                params.height = 0;
-                mFootView.itemView.setLayoutParams(params);
-                mFootView.itemView.setClickable(false);
-                break;
-            case FOOT_FAIL:
-                params.height = DensityUtil.dp2px(mContext, 40f);
-                mFootView.itemView.setLayoutParams(params);
-                mFootView.progress_bar.setVisibility(View.GONE);
-                mFootView.text_load_tip.setText(mContext.getString(R.string.foot_fail));
-                mFootView.itemView.setClickable(true);
+            ((ItemViewHolder) viewHolder).update();
         }
     }
 
@@ -216,7 +158,7 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.iv_item_simple_subject_image)
         ImageView image_film;
@@ -239,44 +181,106 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
         @Bind(R.id.tv_item_simple_subject_cast)
         TextView text_cast;
 
+        SimpleSubjectBean sub;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mCallback != null) {
-                        int position = getLayoutPosition();
-                        mCallback.onItemClick(mData.get(position).getId(),
-                                mData.get(position).getImages().getLarge());
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
+
+        public void update() {
+            sub = mData.get(getLayoutPosition());
+            if (!isComingFilm) {
+                layout_rating.setVisibility(View.VISIBLE);
+                float rate = (float) sub.getRating().getAverage();
+                rating_bar.setRating(rate / 2);
+                text_rating.setText(String.format("%s", rate));
+                text_collect_count.setText(mContext.getString(R.string.collect));
+                text_collect_count.append(String.format("%d", sub.getCollect_count()));
+                text_collect_count.append(mContext.getString(R.string.count));
+            }
+            String title = sub.getTitle();
+            String original_title = sub.getOriginal_title();
+            text_title.setText(title);
+            if (original_title.equals(title)) {
+                text_original_title.setVisibility(View.GONE);
+            } else {
+                text_original_title.setText(original_title);
+                text_original_title.setVisibility(View.VISIBLE);
+            }
+            text_genres.setText(StringUtil.getListString(sub.getGenres(), ','));
+            text_director.setText(StringUtil.getSpannableString(
+                    mContext.getString(R.string.directors), Color.GRAY));
+            text_director.append(CelebrityUtil.list2String(sub.getDirectors(), '/'));
+            text_cast.setText(StringUtil.getSpannableString(
+                    mContext.getString(R.string.casts), Color.GRAY));
+            text_cast.append(CelebrityUtil.list2String(sub.getCasts(), '/'));
+            imageLoader.displayImage(sub.getImages().getLarge(),
+                    image_film, options, imageLoadingListener);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mCallback != null) {
+                int position = getLayoutPosition();
+                mCallback.onItemClick(mData.get(position).getId(),
+                        mData.get(position).getImages().getLarge());
+            }
         }
     }
 
     /**
      * recyclerView上拉加载更多的footViewHolder
      */
-    class FootViewHolder extends RecyclerView.ViewHolder {
+    class FootViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ProgressBar progress_bar;
         private TextView text_load_tip;
+
 
         public FootViewHolder(final View itemView) {
             super(itemView);
             progress_bar = (ProgressBar) itemView.findViewById(R.id.pb_view_load_tip);
             text_load_tip = (TextView) itemView.findViewById(R.id.tv_view_load_tip);
-            mFootView = this;
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mCallback != null) {
-                        setFootView(FOOT_LOADING);
-                        mCallback.onItemClick(FOOT_VIEW_ID, null);
-                    }
-                }
-            });
+            itemView.setOnClickListener(this);
+        }
+
+        public void update() {
+            if (isLoadCompleted()) setFootView(FOOT_COMPLETED);
+            else setFootView(FOOT_LOADING);
+        }
+
+        public void setFootView(int event) {
+            ViewGroup.LayoutParams params = itemView.getLayoutParams();
+            switch (event) {
+                case FOOT_LOADING:
+                    params.height = DensityUtil.dp2px(mContext, 40f);
+                    itemView.setLayoutParams(params);
+                    progress_bar.setVisibility(View.VISIBLE);
+                    text_load_tip.setText(mContext.getString(R.string.foot_loading));
+                    itemView.setClickable(false);
+                    break;
+                case FOOT_COMPLETED:
+                    params.height = 0;
+                    itemView.setLayoutParams(params);
+                    itemView.setClickable(false);
+                    break;
+                case FOOT_FAIL:
+                    params.height = DensityUtil.dp2px(mContext, 40f);
+                    itemView.setLayoutParams(params);
+                    progress_bar.setVisibility(View.GONE);
+                    text_load_tip.setText(mContext.getString(R.string.foot_fail));
+                    itemView.setClickable(true);
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mCallback != null) {
+                setFootView(FOOT_LOADING);
+                mCallback.onItemClick(FOOT_VIEW_ID, null);
+            }
         }
     }
 

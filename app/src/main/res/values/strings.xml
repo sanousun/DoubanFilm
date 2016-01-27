@@ -11,7 +11,7 @@
     <!--MainActivity_NavigationView_header-->
     <string name="user_name">用户昵称</string>
     <string name="user_introduction">用户介绍</string>
-    <string name="user_edit">用户设置...</string>
+    <string name="user_edit">用户设置…</string>
     <string name="ok">确定</string>
     <string name="select_header">请选择获得头像方式</string>
     <string name="openDrawer">open</string>
@@ -39,8 +39,8 @@
     <!--SubjectActivity-->
     <string name="cast_list">演员列表：</string>
     <string name="recommend_list">相关推荐：</string>
-    <string name="recommend_load_fail">获取失败请重试...</string>
-    <string name="recommend_loading">正在加载推荐...</string>
+    <string name="recommend_load_fail">获取失败请重试…</string>
+    <string name="recommend_loading">正在加载推荐…</string>
     <!--CelebrityActivity-->
     <string name="gender">性别：</string>
     <string name="bron_place">出生地：</string>
@@ -48,25 +48,13 @@
     <string name="cel_ake_en">更多英文名：</string>
     <!--adapter-->
     <string name="load_completed">加载完毕！</string>
-    <string name="loading">正在加载更多...</string>
+    <string name="loading">正在加载更多…</string>
     <!--SearchActivity-->
-    <string name="searching">正在搜索...</string>
-    <string name="query_hint">请输入要查询的电影...</string>
-    <string name="search_message">正在搜索...</string>
-    <string name="search_no_result">搜索无结果...</string>
-    <string name="search_error">刷新失败，请检查网络...</string>
-    <!--about-->
-    <string name="licences_header">电影app开发基于以下开源项目：\n</string>
-    <string name="license">
-        Apache License, Version 2.0 (the "License");you may not use this file except in
-        compliance with the License.You may obtain a copy of the License at\n\n
-        http://www.apache.org/licenses/LICENSE-2.0\n\n
-        Unless required by applicable law or agreed to in writing, software
-        distributed under the License is distributed on an "AS IS" BASIS,
-        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.\n
-    </string>
+    <string name="searching">正在搜索…</string>
+    <string name="query_hint">请输入要查询的电影…</string>
+    <string name="search_message">正在搜索…</string>
+    <string name="search_no_result">搜索无结果…</string>
+    <string name="search_error">刷新失败，请检查网络…</string>
     <!--CollectAdapter-->
     <string name="delete">移除</string>
     <string name="enter">详细</string>
@@ -75,9 +63,9 @@
     <string name="open">在浏览器中打开</string>
     <string name="web_no_tips">打开失败，没有找到可以打开该链接的其它应用 :(</string>
     <string name="skip">去豆瓣查看</string>
-    <string name="cancel">是否要取消收藏...</string>
+    <string name="cancel">是否要取消收藏…</string>
     <!--SimpleSubjectAdapter_FootView_tips-->
-    <string name="foot_loading">正在加载更多...</string>
+    <string name="foot_loading">正在加载更多…</string>
     <string name="foot_fail">加载失败，请点击重试。</string>
 
 </resources>

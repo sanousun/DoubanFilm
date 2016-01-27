@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 
 public class BaseAdapter<T extends RecyclerView.ViewHolder>
@@ -20,15 +21,7 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
     protected OnItemClickListener mCallback;
 
     protected ImageLoader imageLoader = ImageLoader.getInstance();
-    protected DisplayImageOptions options = new DisplayImageOptions.Builder().
-            showImageOnLoading(R.drawable.no_image).
-            showImageOnFail(R.drawable.no_image).
-            showImageForEmptyUri(R.drawable.no_image).
-            imageScaleType(ImageScaleType.EXACTLY_STRETCHED).
-            cacheInMemory(true).
-            cacheOnDisk(true).
-            considerExifParams(true).
-            build();
+    protected DisplayImageOptions options = MyApplication.getLoaderOptions();
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mCallback = listener;

@@ -18,7 +18,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.shenhui.doubanfilm.MyApplication;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleSubjectAdapter;
 import com.shenhui.doubanfilm.adapter.BaseAdapter;
@@ -144,12 +144,7 @@ public class TopPagerFragment extends BaseFragment
                             mRefreshLayout.setRefreshing(false);
                     }
                 });
-        request.setTag(VOLLEY_TAG + mPosition);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,VOLLEY_TAG + mPosition);
     }
 
     private void loadMore() {
@@ -187,12 +182,7 @@ public class TopPagerFragment extends BaseFragment
                         Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
-        request.setTag(VOLLEY_TAG + mPosition);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        MyApplication.getHttpQueue().add(request);
+        MyApplication.addRequest(request,VOLLEY_TAG + mPosition);
     }
 
 
@@ -214,7 +204,7 @@ public class TopPagerFragment extends BaseFragment
                     super.onScrollStateChanged(recyclerView, newState);
                     if (newState == SCROLL_STATE_IDLE
                             && lastVisibleItem + 2 > mAdapter.getItemCount()) {
-                        if (mAdapter.getItemCount() - 1 < mAdapter.getTotal()) {
+                        if (mAdapter.getItemCount() - 1 < mAdapter.getTotalDataCount()) {
                             loadMore();
                         }
                     }
@@ -246,7 +236,7 @@ public class TopPagerFragment extends BaseFragment
     @Override
     public void onStop() {
         super.onStop();
-        MyApplication.getHttpQueue().cancelAll(VOLLEY_TAG + mPosition);
+        MyApplication.removeRequest(VOLLEY_TAG + mPosition);
     }
 
     @Override
