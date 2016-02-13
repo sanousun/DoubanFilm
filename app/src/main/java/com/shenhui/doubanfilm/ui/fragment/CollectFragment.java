@@ -40,7 +40,7 @@ public class CollectFragment extends BaseFragment
 
     @Override
     protected void initData() {
-        mAdapter = new CollectAdapter(getActivity(), mData);
+        mAdapter = new CollectAdapter(getContext());
         mRecView.setAdapter(mAdapter);
     }
 
@@ -107,9 +107,7 @@ public class CollectFragment extends BaseFragment
 
         @Override
         protected void onPostExecute(List<SubjectBean> subjectBeans) {
-            mData.clear();
-            mData = subjectBeans;
-            mAdapter.updateList(mData);
+            mAdapter.update(subjectBeans);
             mRefreshLayout.setRefreshing(false);
         }
     }

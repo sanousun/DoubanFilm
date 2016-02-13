@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_NAME_COL = "film_collect";
+    public static final String TABLE_NAME_COLL = "film_collect";
     public static final String TABLE_NAME_TOP = "film_top_250";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_FILM = "film_id";
@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * 建立collect的表
      */
     private static final String DATABASE_CREATE_COL
-            = "CREATE TABLE " + TABLE_NAME_COL + "(" +
+            = "CREATE TABLE " + TABLE_NAME_COLL + "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_FILM + " CHAR(8) UNIQUE, " +
             COLUMN_CONTENT + " NOT NULL);";
@@ -59,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_COL);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_COLL);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_TOP);
         onCreate(sqLiteDatabase);
     }

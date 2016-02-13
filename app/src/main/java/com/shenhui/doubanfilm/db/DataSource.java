@@ -54,7 +54,7 @@ public final class DataSource {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_FILM, id);
         values.put(DBHelper.COLUMN_CONTENT, content);
-        mDatabase.insert(DBHelper.TABLE_NAME_COL, null, values);
+        mDatabase.insert(DBHelper.TABLE_NAME_COLL, null, values);
     }
 
     /**
@@ -64,14 +64,14 @@ public final class DataSource {
         ContentValues values = new ContentValues();
         values.put(DBHelper.COLUMN_FILM, id);
         values.put(DBHelper.COLUMN_CONTENT, content);
-        mDatabase.update(DBHelper.TABLE_NAME_COL, values, DBHelper.COLUMN_FILM + " = " + id, null);
+        mDatabase.update(DBHelper.TABLE_NAME_COLL, values, DBHelper.COLUMN_FILM + " = " + id, null);
     }
 
     /**
      * 通过filmId的到对应的film
      */
     public SubjectBean filmOfId(String id) {
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_COL, allColumnsForCol,
+        Cursor cursor = mDatabase.query(DBHelper.TABLE_NAME_COLL, allColumnsForCol,
                 DBHelper.COLUMN_FILM + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         SubjectBean sub = cursorToSubject(cursor);
@@ -107,9 +107,10 @@ public final class DataSource {
      */
     public List<SubjectBean> getFilmForCollected() {
         Cursor cursor = mDatabase.query(
-                DBHelper.TABLE_NAME_COL, allColumnsForCol, null, null, null, null, null);
+                DBHelper.TABLE_NAME_COLL, allColumnsForCol, null, null, null, null, null);
         cursor.moveToFirst();
         List<SubjectBean> res = new ArrayList<>();
+        if (cursor.getCount() == 0) return res;
         do {
             String content = cursor.getString(cursor.getColumnIndex(DBHelper.COLUMN_CONTENT));
             SubjectBean sub = new Gson().fromJson(content, Constant.subType);
@@ -123,7 +124,7 @@ public final class DataSource {
      * 删除filmId对应的film数据
      */
     public void deleteFilm(String id) {
-        mDatabase.delete(DBHelper.TABLE_NAME_COL, DBHelper.COLUMN_FILM + " = " + id, null);
+        mDatabase.delete(DBHelper.TABLE_NAME_COLL, DBHelper.COLUMN_FILM + " = " + id, null);
     }
 
     //------------------------操作收藏电影-------------------------------

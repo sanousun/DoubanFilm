@@ -14,7 +14,10 @@ import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.Subject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,21 +38,29 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         this.callback = callback;
     }
 
-    public CollectAdapter(Context context, List<SubjectBean> data) {
+    public CollectAdapter(Context context) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        this.mData = new ArrayList<>();
     }
 
-    public void updateList(List<SubjectBean> data) {
-        this.mData = data;
+    public void add(List<SubjectBean> data) {
+        for (int i = 0; i < data.size(); i++) {
+            mData.add(data.get(i));
+            notifyItemInserted(i);
+        }
+    }
+
+    public void update(List<SubjectBean> data) {
+        this.mData.clear();
         notifyDataSetChanged();
+        add(data);
     }
 
     /**
      * 移除相应的item
      */
-    private void removeItem(int pos) {
+    private void remove(int pos) {
         notifyItemRemoved(pos);
         undoSub = mData.get(pos);
         mData.remove(pos);
@@ -136,7 +147,7 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
             if (view == btn_delete) {
-                removeItem(getLayoutPosition());
+                remove(getLayoutPosition());
             } else {
                 callback.itemClick(mData.get(getLayoutPosition()).getId(),
                         mData.get(getLayoutPosition()).getImages().getLarge());
