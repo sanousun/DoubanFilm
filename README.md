@@ -7,9 +7,9 @@
 单机版的收藏功能，以及加入豆瓣top250电影的介绍，我会继续完善这个app。
 
 ## 第三方工具
-网络请求：volley+okhttp
-图片加载：univerial-image-loader
-内存监控：leakcanary
+网络请求：volley+okhttp<br/>
+图片加载：univerial-image-loader<br/>
+内存监控：leakcanary<br/>
 数据来源：豆瓣api
 
 ## 截图
