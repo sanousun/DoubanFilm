@@ -1,22 +1,37 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="preference_screen">
+                  android:key="preference_screen">
 
     <PreferenceCategory
         android:key="settings_settings"
-        android:title="General settings">
+        android:title="设置">
         <CheckBoxPreference
             android:defaultValue="false"
             android:enabled="true"
             android:key="auto refresh?"
-            android:summary="Auto refresh when this app is launched?"
-            android:title="Auto refresh">
+            android:summary="切换页面是否自动刷新？"
+            android:title="自动刷新">
 
         </CheckBoxPreference>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Others">
+    <PreferenceCategory
+        android:key="author"
+        android:title="关于作者">
+        <Preference
+            android:summary="https://github.com/sanousun"
+            android:title="github"/>
+        <Preference
+            android:summary="sanousun@163.com"
+            android:title="email"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="关于">
+        <Preference
+            android:summary="豆瓣api"
+            android:title="数据来源"/>
         <Preference
             android:key="about"
-            android:title="About" />
+            android:title="开源项目来源"/>
     </PreferenceCategory>
 </PreferenceScreen>

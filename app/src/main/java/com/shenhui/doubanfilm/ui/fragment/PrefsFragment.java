@@ -3,6 +3,7 @@ package com.shenhui.doubanfilm.ui.fragment;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AlertDialog;
 
 import com.shenhui.doubanfilm.R;
 
@@ -12,6 +13,7 @@ public class PrefsFragment extends PreferenceFragment
         implements Preference.OnPreferenceClickListener {
 
     private static final String ABOUT = "about";
+    private static final String AUTHOR = "author";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class PrefsFragment extends PreferenceFragment
     public boolean onPreferenceClick(Preference preference) {
         if (preference.getKey().equals(ABOUT)) {
             showApacheLicenseDialog();
+            return true;
         }
         return false;
     }

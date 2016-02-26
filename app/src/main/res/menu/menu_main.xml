@@ -9,10 +9,4 @@
         android:title="@string/ic_search"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_action_settings"
-        android:title="@string/ic_setting"
-        app:showAsAction="always" />
-
 </menu>
