@@ -293,14 +293,15 @@ public class MainActivity extends AppCompatActivity
     public void onClick(DialogInterface dialogInterface, int i) {
         switch (i) {
             case 0:
+                //打开系统图库
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, IMAGE_REQUEST_CODE);
                 break;
             case 1:
-                Intent cameraIntent = new Intent(
-                        "android.media.action.IMAGE_CAPTURE");
+                //打开系统相机
+                Intent cameraIntent = new Intent("android.media.action.IMAGE_CAPTURE");
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
                 cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);

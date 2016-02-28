@@ -15,7 +15,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.db.DataSource;
-import com.shenhui.doubanfilm.support.OkHttpStack;
 import com.squareup.leakcanary.LeakCanary;
 
 import java.sql.SQLException;
@@ -29,6 +28,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // TODO: 2016/2/27 正式版需要去除LeakCanary
         LeakCanary.install(this);
         initImageLoader(getApplicationContext());
         mQueue = Volley.newRequestQueue(getApplicationContext(), new OkHttpStack());

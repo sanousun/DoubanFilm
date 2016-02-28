@@ -1,4 +1,4 @@
-package com.shenhui.doubanfilm.support;
+package com.shenhui.doubanfilm.app;
 
 import com.android.volley.toolbox.HurlStack;
 import com.squareup.okhttp.OkHttpClient;
