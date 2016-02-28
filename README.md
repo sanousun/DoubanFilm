@@ -27,4 +27,4 @@ sanousun@163.com
 ![](https://github.com/sanousun/DoubanFilm/blob/master/screenshot/screenshot.jpg)
 
 ##这是后来开发的一个关于天气的应用
-［天气应用］（https://github.com/sanousun/MDweather）
+[天气应用](https://github.com/sanousun/MDweather)
