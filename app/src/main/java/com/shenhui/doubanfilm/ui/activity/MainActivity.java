@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             mNavImage.setImageResource(R.drawable.def_header);
         }
-        mNavView.getMenu().getItem(0).setChecked(true);
+        mNavView.setItemIconTintList(null);
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
         mUserName.setText(userSP.getString(USER_NAME, getString(R.string.user_name)));
         mUserIntro.setText(userSP.getString(USER_INTRO, getString(R.string.user_introduction)));

@@ -21,7 +21,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_setting"
-                    android:icon="@drawable/ic_action_settings"
+                    android:icon="@mipmap/ic_action_settings"
                     android:title="@string/ic_setting"/>
             </menu>
         </item>

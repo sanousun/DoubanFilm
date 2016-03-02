@@ -13,7 +13,6 @@ public class PrefsFragment extends PreferenceFragment
         implements Preference.OnPreferenceClickListener {
 
     private static final String ABOUT = "about";
-    private static final String AUTHOR = "author";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
