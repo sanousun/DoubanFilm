@@ -21,7 +21,7 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="14dp"
         android:layout_marginRight="14dp"
-        android:src="@drawable/ic_up"
-        android:visibility="gone" />
+        android:src="@drawable/ic_top"
+        android:visibility="visible" />
 
 </FrameLayout>

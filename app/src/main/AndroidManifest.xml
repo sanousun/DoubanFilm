@@ -21,13 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CelebrityActivity" />
-        <activity android:name=".ui.activity.PrefsActivity" />
-        <activity android:name=".ui.activity.SearchActivity" />
+        <activity
+            android:name=".ui.activity.CelebrityActivity" />
+        <activity
+            android:name=".ui.activity.PrefsActivity" />
+        <activity
+            android:name=".ui.activity.SearchActivity" />
         <activity
             android:name=".ui.activity.SubjectActivity"
             android:theme="@style/AppTheme.StatusBar" />
-        <activity android:name=".ui.activity.WebActivity" />
+        <activity
+            android:name=".ui.activity.WebActivity" />
     </application>
 
 </manifest>

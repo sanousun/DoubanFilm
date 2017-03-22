@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_sub_search"
-        android:icon="@mipmap/ic_action_search"
+        android:icon="@drawable/ic_search"
         android:title="@string/ic_search"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_sub_collect"
-        android:icon="@mipmap/ic_action_uncollect"
+        android:icon="@drawable/ic_uncollect"
         android:title="@string/ic_sub_collect"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom"/>
 
 </menu>

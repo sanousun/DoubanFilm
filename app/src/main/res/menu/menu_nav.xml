@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_home"
             android:checked="true"
-            android:icon="@drawable/ic_action_home"
+            android:icon="@drawable/ic_home"
             android:title="@string/nav_home"/>
         <item
             android:id="@+id/nav_collect"
-            android:icon="@drawable/ic_action_collect"
+            android:icon="@drawable/ic_collections"
             android:title="@string/nav_collect"/>
         <item
             android:id="@+id/nav_top250"
-            android:icon="@drawable/ic_action_top250"
+            android:icon="@drawable/ic_movie"
             android:title="@string/nav_top250"/>
 
         <item
@@ -21,7 +21,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_setting"
-                    android:icon="@mipmap/ic_action_settings"
+                    android:icon="@drawable/ic_setting"
                     android:title="@string/ic_setting"/>
             </menu>
         </item>
