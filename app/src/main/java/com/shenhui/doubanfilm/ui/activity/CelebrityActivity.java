@@ -205,5 +205,4 @@ public class CelebrityActivity extends BaseActivity
     public void itemClick(String id, String imageUrl, boolean isCom) {
         SubjectActivity.toActivity(this, id, imageUrl);
     }
-
 }

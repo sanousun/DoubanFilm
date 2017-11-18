@@ -3,8 +3,6 @@ package com.shenhui.doubanfilm.ui.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.view.MenuCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,17 +11,16 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.GsonBuilder;
-import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.adapter.SearchAdapter;
 import com.shenhui.doubanfilm.adapter.BaseAdapter;
+import com.shenhui.doubanfilm.adapter.SearchAdapter;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.Constant;
 
@@ -130,7 +127,7 @@ public class SearchActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.action_search_search);
-        mSearchView = (SearchView) MenuItemCompat.getActionView(item);
+        mSearchView = (SearchView) item.getActionView();
         mSearchView.setQueryHint(getString(R.string.query_hint));
         mSearchView.setIconified(false);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/action_sub_search"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/ic_search"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_sub_collect"
-        android:icon="@drawable/ic_uncollect"
+        android:icon="@drawable/ic_uncollected_white_24dp"
         android:title="@string/ic_sub_collect"
         app:showAsAction="ifRoom"/>
 

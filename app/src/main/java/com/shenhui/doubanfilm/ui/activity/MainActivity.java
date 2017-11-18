@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout mDrawer;
 
     private CircleImageView mNavImage;
-    private CircleImageView mNavEdit;
+    private ImageView mNavEdit;
     private TextView mUserName;
     private TextView mUserIntro;
     private MenuItem homeItem;
@@ -100,10 +101,10 @@ public class MainActivity extends AppCompatActivity
     protected void initView() {
         homeItem = mNavView.getMenu().findItem(R.id.nav_home);
         View mNavHeader = mNavView.inflateHeaderView(R.layout.view_nav_header);
-        mNavImage = (CircleImageView) mNavHeader.findViewById(R.id.iv_view_nav_header);
-        mNavEdit = (CircleImageView) mNavHeader.findViewById(R.id.iv_view_nav_edit);
-        mUserName = (TextView) mNavHeader.findViewById(R.id.tv_view_nav_name);
-        mUserIntro = (TextView) mNavHeader.findViewById(R.id.tv_view_nav_intro);
+        mNavImage = mNavHeader.findViewById(R.id.iv_view_nav_header);
+        mNavEdit = mNavHeader.findViewById(R.id.iv_view_nav_edit);
+        mUserName = mNavHeader.findViewById(R.id.tv_view_nav_name);
+        mUserIntro = mNavHeader.findViewById(R.id.tv_view_nav_intro);
     }
 
     protected void initData() {
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.openDrawer, R.string.closeDrawer);
         mToggle.syncState();
-        mDrawer.setDrawerListener(mToggle);
+        mDrawer.addDrawerListener(mToggle);
         //初始化Viewpager
         mFragmentManager = getSupportFragmentManager();
         mCurFragment = mFragmentManager.findFragmentByTag(mTitle);

@@ -37,12 +37,6 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
     private void initData() {
         PagerAdapter mPagerAdapter = new HomePagerAdapter(getChildFragmentManager());
         mViewPager.setOffscreenPageLimit(3);

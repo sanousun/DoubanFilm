@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="192dp"
@@ -15,7 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/def_header"
         app:border_color="@color/white"
-        app:border_width="2dp" />
+        app:border_width="2dp"/>
 
     <TextView
         android:id="@+id/tv_view_nav_name"
@@ -26,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tv_view_nav_intro"
@@ -36,18 +37,16 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/iv_view_nav_edit"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_create"
-        app:border_color="@color/white"
-        app:border_width="2dp" />
+        android:padding="16dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_create_white_16dp"/>
 
 </RelativeLayout>

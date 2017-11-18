@@ -464,9 +464,9 @@ public class SubjectActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_sub, menu);
         MenuItem collect = menu.findItem(R.id.action_sub_collect);
         if (isCollect) {
-            collect.setIcon(R.drawable.ic_collect);
+            collect.setIcon(R.drawable.ic_collect_white_24dp);
         } else {
-            collect.setIcon(R.drawable.ic_uncollect);
+            collect.setIcon(R.drawable.ic_uncollected_white_24dp);
         }
         return true;
     }
