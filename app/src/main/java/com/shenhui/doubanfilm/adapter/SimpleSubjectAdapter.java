@@ -1,7 +1,6 @@
 package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -54,11 +49,6 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
      */
     private boolean isComingFilm;
 
-    /**
-     * imageLoader的异步加载监听接口实例
-     */
-    private ImageLoadingListener imageLoadingListener =
-            new AnimateFirstDisplayListener();
 
     public SimpleSubjectAdapter(Context context, List<SimpleSubjectBean> data) {
         this(context, data, false);
@@ -110,7 +100,8 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
 
     /**
      * 用于更新数据
-     * @param data  更新的数据
+     *
+     * @param data           更新的数据
      * @param totalDataCount 数据的总量，采取多次加载
      */
     public void updateList(List<SimpleSubjectBean> data, int totalDataCount) {
@@ -216,8 +207,9 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             text_cast.setText(StringUtil.getSpannableString(
                     mContext.getString(R.string.casts), Color.GRAY));
             text_cast.append(CelebrityUtil.list2String(sub.getCasts(), '/'));
-            imageLoader.displayImage(sub.getImages().getLarge(),
-                    image_film, options, imageLoadingListener);
+            GlideApp.with(itemView.getContext())
+                    .load(sub.getImages().getLarge())
+                    .into(image_film);
         }
 
         @Override
@@ -280,22 +272,6 @@ public class SimpleSubjectAdapter extends BaseAdapter<RecyclerView.ViewHolder> {
             if (mCallback != null) {
                 setFootView(FOOT_LOADING);
                 mCallback.onItemClick(FOOT_VIEW_ID, null);
-            }
-        }
-    }
-
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
             }
         }
     }

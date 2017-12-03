@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.shenhui.doubanfilm.data.bean.SimpleMovieInfo"/>
+
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/iv_subject"
+            android:layout_width="100dp"
+            android:layout_height="142dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@{item.images.large}"
+            tools:ignore="ContentDescription"
+            tools:src="@mipmap/ic_launcher"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <RatingBar
+                    android:id="@+id/rb_rate"
+                    style="@style/MyRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:rating="@{item.rating.average}"
+                    tools:rating="4"/>
+
+                <TextView
+                    android:id="@+id/tv_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@{@string/item_rate(item.rating.average)}"
+                    android:textColor="@color/red"
+                    tools:text="8分"/>
+
+                <TextView
+                    android:id="@+id/tv_rate_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_rate_count(item.collectCount)}"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    tools:text="（1000人评价）"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:singleLine="true"
+                android:text="@{item.title}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="电影标题"/>
+
+            <TextView
+                android:id="@+id/tv_original_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@{item.originalTitle}"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                tools:text="电影原名"/>
+
+            <TextView
+                android:id="@+id/tv_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{item.getGenreStr}"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                tools:text="电影分类"/>
+
+            <TextView
+                android:id="@+id/tv_director"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="2"
+                android:text="@{item.getDirectorStr}"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                tools:text="电影导演"/>
+
+            <TextView
+                android:id="@+id/tv_cast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:lineSpacingMultiplier="1.2"
+                android:maxLines="3"
+                android:text="@{item.getCastStr}"
+                android:textColor="@color/blue"
+                android:textSize="12sp"
+                tools:text="电影演员"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

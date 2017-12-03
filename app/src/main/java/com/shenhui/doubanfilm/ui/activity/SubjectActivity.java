@@ -42,14 +42,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
+import com.shenhui.doubanfilm.app.GlideApp;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.bean.CelebrityEntity;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
@@ -158,9 +158,6 @@ public class SubjectActivity extends AppCompatActivity
     private int mImageWidth;
     private FrameLayout.LayoutParams mIntroduceContainerParams;
 
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = MyApplication.getLoaderOptions();
-
     //----------------------------------------------------------------------------------------
 
     public static void toActivity(Activity activity, String id, String imageUrl) {
@@ -250,21 +247,26 @@ public class SubjectActivity extends AppCompatActivity
         String imageUri = (mFile.exists() ?
                 String.format("%s%s", URI_FOR_FILE, mFile.getPath()) :
                 getIntent().getStringExtra(KEY_IMAGE_URL));
-        imageLoader.displayImage(imageUri, mImage, options);
-        imageLoader.displayImage(imageUri, mToolbarImage, options,
-                new SimpleImageLoadingListener() {
+        GlideApp.with(this)
+                .load(imageUri)
+                .into(mImage);
+        GlideApp.with(this)
+                .asBitmap()
+                .load(imageUri)
+                .into(new BitmapImageViewTarget(mToolbarImage) {
                     @Override
-                    public void onLoadingComplete(String imageUri, View view,
-                                                  final Bitmap loadedImage) {
-                        super.onLoadingComplete(imageUri, view, loadedImage);
-                        Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(Palette palette) {
-                                int defaultBgColor = Color.parseColor("#009688");
-                                int bgColor = palette.getDarkVibrantColor(defaultBgColor);
-                                mToolbarContainer.setBackgroundColor(bgColor);
-                            }
-                        });
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        if (resource != null) {
+                            Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(Palette palette) {
+                                    int defaultBgColor = Color.parseColor("#009688");
+                                    int bgColor = palette.getDarkVibrantColor(defaultBgColor);
+                                    mToolbarContainer.setBackgroundColor(bgColor);
+                                }
+                            });
+                        }
                     }
                 });
     }
@@ -303,7 +305,7 @@ public class SubjectActivity extends AppCompatActivity
                         mRefresh.setRefreshing(false);
                     }
                 });
-        MyApplication.addRequest(stringRequest,mId);
+        MyApplication.addRequest(stringRequest, mId);
     }
 
 
@@ -441,7 +443,7 @@ public class SubjectActivity extends AppCompatActivity
                         mRecommendTip.setClickable(true);
                     }
                 });
-        MyApplication.addRequest(request,mId);
+        MyApplication.addRequest(request, mId);
     }
 
     @Override
@@ -510,29 +512,36 @@ public class SubjectActivity extends AppCompatActivity
      * 用于保存filmContent和filmImage
      */
     private void filmSave() {
-        if (mFile.exists()) mFile.delete();
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(mFile);
-            Bitmap bitmap = imageLoader.loadImageSync(mSubject.getImages().getLarge());
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.flush();
-                    out.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //将电影信息存入到数据库中
-        mSubject.setLocalImageFile(mFile.getPath());
-        String content = new Gson().toJson(mSubject, Constant.subType);
-        MyApplication.getDataSource().insertOrUpDataFilm(mId, content);
-        Toast.makeText(this, getString(R.string.collect_completed), Toast.LENGTH_SHORT).show();
+        GlideApp.with(this)
+                .asBitmap()
+                .load(mSubject.getImages().getLarge())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                        if (mFile.exists()) mFile.delete();
+                        FileOutputStream out = null;
+                        try {
+                            out = new FileOutputStream(mFile);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                if (out != null) {
+                                    out.flush();
+                                    out.close();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        //将电影信息存入到数据库中
+                        mSubject.setLocalImageFile(mFile.getPath());
+                        String content = new Gson().toJson(mSubject, Constant.subType);
+                        MyApplication.getDataSource().insertOrUpDataFilm(mId, content);
+                        Toast.makeText(SubjectActivity.this, getString(R.string.collect_completed), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void cancelSave() {
@@ -630,7 +639,7 @@ public class SubjectActivity extends AppCompatActivity
             mCastView.setOnClickListener(this);
 
             if (data.getAvatars() == null) return;
-            imageLoader.displayImage(data.getAvatars().getLarge(), mImage, options);
+            GlideApp.with(mCastView.getContext()).load(data.getAvatars().getLarge()).into(mImage);
         }
 
         void bindDataForDir(CelebrityEntity data, boolean isCast) {
@@ -645,7 +654,7 @@ public class SubjectActivity extends AppCompatActivity
             mCastView.setOnClickListener(this);
 
             if (data.getAvatars() == null) return;
-            imageLoader.displayImage(data.getAvatars().getLarge(), mImage, options);
+            GlideApp.with(mCastView.getContext()).load(data.getAvatars().getLarge()).into(mImage);
         }
 
         @Override

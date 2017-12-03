@@ -27,7 +27,13 @@ public class RateInfo {
     /**
      * 评分
      */
-    @SerializedName("value")
+    @SerializedName("average")
     @Expose
-    public Integer value;
+    public Float average;
+    /**
+     * 关注
+     */
+    @SerializedName("stars")
+    @Expose
+    public String stars;
 }

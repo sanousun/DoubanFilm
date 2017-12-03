@@ -74,16 +74,51 @@ public class SimpleMovieInfo {
     @SerializedName("genres")
     @Expose
     public List<String> genres;
+
+    public String getGenreStr() {
+        if (genres == null || genres.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String genre : genres) {
+            sb.append(genre).append(" ");
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
     /**
      * 导演
      */
     @SerializedName("directors")
     @Expose
     public List<SimpleCelebrityInfo> directors;
+
+    public String getDirectorStr() {
+        if (directors == null || directors.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (SimpleCelebrityInfo celebrityInfo : directors) {
+            sb.append(celebrityInfo.name).append(" ");
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
     /**
      * 主演，最多可获得4个
      */
     @SerializedName("casts")
     @Expose
     public List<SimpleCelebrityInfo> casts;
+
+    public String getCastStr() {
+        if (casts == null || casts.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (SimpleCelebrityInfo celebrityInfo : casts) {
+            sb.append(celebrityInfo.name).append(" ");
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
 }

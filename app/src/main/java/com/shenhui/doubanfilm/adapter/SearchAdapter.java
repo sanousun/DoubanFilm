@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
@@ -94,7 +95,9 @@ public class SearchAdapter extends BaseAdapter<SearchAdapter.ViewHolder> {
             text_director.append(CelebrityUtil.list2String(subj.getDirectors(), '/'));
             text_cast.setText(mContext.getString(R.string.casts));
             text_cast.append(CelebrityUtil.list2String(subj.getCasts(), '/'));
-            imageLoader.displayImage(subj.getImages().getLarge(), image_film, options);
+            GlideApp.with(itemView.getContext())
+                    .load(subj.getImages().getLarge())
+                    .into(image_film);
         }
 
         @Override

@@ -1,7 +1,6 @@
 package com.shenhui.doubanfilm.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.bean.BoxSubjectBean;
+import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -38,9 +33,6 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
     private List<BoxSubjectBean> mData;
-
-    private ImageLoadingListener imageLoadingListener =
-            new AnimateFirstDisplayListener();
 
     public static final String[] RANK = {"th", "1st", "2nd", "3rd"};
 
@@ -118,9 +110,9 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
                 text_rating.setText(String.format("%s", rating));
             }
             text_title.setText(simSubject.getTitle());
-
-            imageLoader.displayImage(simSubject.getImages().getLarge(),
-                    image_film, options, imageLoadingListener);
+            GlideApp.with(itemView.getContext())
+                    .load(simSubject.getImages().getLarge())
+                    .into(image_film);
         }
 
         private int getRankTextColor(int rank) {
@@ -144,24 +136,6 @@ public class BoxAdapter extends BaseAdapter<BoxAdapter.ViewHolder> {
                         mData.get(position).getSubject().getId(),
                         mData.get(position).getSubject().getImages().getLarge());
 
-            }
-        }
-    }
-
-    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-        static final List<String> displayedImages =
-                Collections.synchronizedList(new LinkedList<String>());
-
-        @Override
-        public void onLoadingComplete(
-                String imageUri, View view, Bitmap loadedImage) {
-            if (loadedImage != null) {
-                ImageView imageView = (ImageView) view;
-                boolean firstDisplay = !displayedImages.contains(imageUri);
-                if (firstDisplay) {
-                    FadeInBitmapDisplayer.animate(imageView, 500);
-                    displayedImages.add(imageUri);
-                }
             }
         }
     }

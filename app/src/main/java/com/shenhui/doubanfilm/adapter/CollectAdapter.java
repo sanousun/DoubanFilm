@@ -10,14 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.util.CelebrityUtil;
 import com.shenhui.doubanfilm.support.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.Subject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -138,9 +137,9 @@ public class CollectAdapter extends BaseAdapter<CollectAdapter.ViewHolder> {
             text_cast.append(mContext.getString(R.string.casts));
             text_cast.append(CelebrityUtil.list2String(subj.getCasts(), ','));
             if (subj.getLocalImageFile() != null) {
-                imageLoader.displayImage(
-                        String.format("%s%s", URI_FOR_FILE, subj.getLocalImageFile()),
-                        image_film, options);
+                GlideApp.with(itemView.getContext())
+                        .load(String.format("%s%s", URI_FOR_FILE, subj.getLocalImageFile()))
+                        .into(image_film);
             }
         }
 

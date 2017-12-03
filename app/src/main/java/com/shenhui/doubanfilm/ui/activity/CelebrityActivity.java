@@ -18,13 +18,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.GsonBuilder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.adapter.SimpleFilmAdapter;
-import com.shenhui.doubanfilm.bean.SimpleCardBean;
+import com.shenhui.doubanfilm.app.GlideApp;
+import com.shenhui.doubanfilm.app.MyApplication;
 import com.shenhui.doubanfilm.bean.CelebrityBean;
+import com.shenhui.doubanfilm.bean.SimpleCardBean;
 import com.shenhui.doubanfilm.bean.WorksEntity;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.support.util.StringUtil;
@@ -65,9 +64,6 @@ public class CelebrityActivity extends BaseActivity
 
     private CelebrityBean mCelebrity;
     private List<SimpleCardBean> mWorksData = new ArrayList<>();
-
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = MyApplication.getLoaderOptions();
 
     public static void toActivity(Context context, String id) {
         Intent intent = new Intent(context, CelebrityActivity.class);
@@ -157,7 +153,7 @@ public class CelebrityActivity extends BaseActivity
     private void setViewAfterGetData() {
         if (mCelebrity == null) return;
         setActionBarTitle(mCelebrity.getName());
-        imageLoader.displayImage(mCelebrity.getAvatars().getMedium(), mImage, options);
+        GlideApp.with(this).load(mCelebrity.getAvatars().getMedium()).into(mImage);
         mName.setText(mCelebrity.getName());
         mNameEn.setText(mCelebrity.getName_en());
         String gender = getResources().getString(R.string.gender);

@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.app.MyApplication;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.bean.SimpleCardBean;
 
 import java.util.ArrayList;
@@ -25,9 +23,6 @@ public class SimpleFilmAdapter extends RecyclerView.Adapter<SimpleFilmAdapter.Vi
     private Context mContext;
     private List<SimpleCardBean> mData = new ArrayList<>();
     private OnItemClickListener callback;
-
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = MyApplication.getLoaderOptions();
 
     public SimpleFilmAdapter(Context context) {
         this.mContext = context;
@@ -80,7 +75,7 @@ public class SimpleFilmAdapter extends RecyclerView.Adapter<SimpleFilmAdapter.Vi
 
         public void update() {
             subj = mData.get(getLayoutPosition());
-            imageLoader.displayImage(subj.getImage(), image_film, options);
+            GlideApp.with(mContext).load(subj.getImage()).into(image_film);
             text_title.setText(subj.getName());
         }
 

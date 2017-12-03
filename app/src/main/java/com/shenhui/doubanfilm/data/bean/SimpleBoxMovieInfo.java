@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  * desc: 票房榜电影信息
  */
 
-public class BoxCelebrityInfo {
+public class SimpleBoxMovieInfo {
     /**
      * 排名
      */
