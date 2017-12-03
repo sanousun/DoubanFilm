@@ -7,16 +7,15 @@
     android:background="@drawable/bg_nav_header">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/iv_view_nav_header"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/def_header"
-        app:border_color="@color/white"
-        app:border_width="2dp"/>
+        android:background="@drawable/bg_avatar"
+        android:padding="2dp"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/tv_view_nav_name"

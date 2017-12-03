@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shenhui.doubanfilm.R;
+import com.shenhui.doubanfilm.app.GlideApp;
 import com.shenhui.doubanfilm.ui.fragment.BaseFragment;
 import com.shenhui.doubanfilm.ui.fragment.CollectFragment;
 import com.shenhui.doubanfilm.ui.fragment.HomeFragment;
@@ -43,7 +43,6 @@ import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.main_drawer)
     DrawerLayout mDrawer;
 
-    private CircleImageView mNavImage;
+    private ImageView mNavImage;
     private ImageView mNavEdit;
     private TextView mUserName;
     private TextView mUserIntro;
@@ -131,10 +130,15 @@ public class MainActivity extends AppCompatActivity
         mFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                 PICTURE_HEADER_FILE);
         if (mFile.exists()) {
-            Bitmap header = BitmapFactory.decodeFile(mFile.getPath());
-            mNavImage.setImageBitmap(header);
+            GlideApp.with(this)
+                    .load(mFile)
+                    .circleCrop()
+                    .into(mNavImage);
         } else {
-            mNavImage.setImageResource(R.drawable.def_header);
+            GlideApp.with(this)
+                    .load(R.drawable.def_header)
+                    .circleCrop()
+                    .into(mNavImage);
         }
         mNavView.setItemIconTintList(null);
         userSP = getSharedPreferences(USER_INFO, Context.MODE_PRIVATE);
@@ -340,8 +344,10 @@ public class MainActivity extends AppCompatActivity
         Bundle extras = data.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            mNavImage.setImageBitmap(photo);
-            saveBitmap(photo);
+            GlideApp.with(this)
+                    .load(photo)
+                    .circleCrop()
+                    .into(mNavImage);
         }
     }
 

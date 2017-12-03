@@ -1,8 +1,26 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
+# Gradle directory
+.gradle/
+build/
+
+# files for the dex VM
+*.dex
+
+#built application files
+*.apk
+*.ap_
+
+# Java class files
+*.class
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+.idea/workspace.xml
+.idea/libraries
+.idea/gradle.xml
+.idea/misc.xml
+
+# OSX files
 .DS_Store
-/build
-/captures
+
+captures/
