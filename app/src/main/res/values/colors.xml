@@ -16,4 +16,8 @@
     <color name="brassiness">#b5a642</color>
     <color name="search_view_hint_color">#e3f2fd</color>
     <color name="background_gray">#44000000</color>
+
+    <color name="window_background">#F3F4F5</color>
+    <color name="text_hint">#AFAFAF</color>
+    <color name="text_error_hint">#ff3131</color>
 </resources>

@@ -19,7 +19,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // TODO: 2016/2/27 正式版需要去除LeakCanary
         LeakCanary.install(this);
         mQueue = Volley.newRequestQueue(getApplicationContext(), new OkHttpStack());
         mSource = new DataSource(getApplicationContext());

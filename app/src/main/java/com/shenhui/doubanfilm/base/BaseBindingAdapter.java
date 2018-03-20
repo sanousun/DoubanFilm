@@ -1,7 +1,11 @@
 package com.shenhui.doubanfilm.base;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.shenhui.doubanfilm.BR;
@@ -28,15 +32,18 @@ public abstract class BaseBindingAdapter<T>
         super(context, data);
     }
 
-    public abstract @LayoutRes int getItemLayoutRes(int viewType);
+    @LayoutRes
+    public abstract int getItemLayoutRes(int viewType);
 
+    @NonNull
     @Override
-    public BaseBindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BaseBindingViewHolder(parent, getItemLayoutRes(viewType));
+    public BaseBindingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ViewDataBinding dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), getItemLayoutRes(viewType), parent, false);
+        return new BaseBindingViewHolder(dataBinding);
     }
 
     @Override
-    public void onBindViewHolder(BaseBindingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseBindingViewHolder holder, int position) {
         holder.getViewDataBinding().setVariable(BR.item, getData(position));
     }
 }

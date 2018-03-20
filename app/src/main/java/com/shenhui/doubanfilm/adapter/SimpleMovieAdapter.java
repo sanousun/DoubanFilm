@@ -3,7 +3,7 @@ package com.shenhui.doubanfilm.adapter;
 import android.content.Context;
 
 import com.shenhui.doubanfilm.R;
-import com.shenhui.doubanfilm.base.BaseBindingAdapter;
+import com.shenhui.doubanfilm.base.BasePullAdapter;
 import com.shenhui.doubanfilm.data.bean.SimpleMovieInfo;
 
 /**
@@ -15,13 +15,18 @@ import com.shenhui.doubanfilm.data.bean.SimpleMovieInfo;
  * desc: 电影列表
  */
 
-public class SimpleMovieAdapter extends BaseBindingAdapter<SimpleMovieInfo> {
+public class SimpleMovieAdapter extends BasePullAdapter<SimpleMovieInfo> {
     public SimpleMovieAdapter(Context context) {
         super(context);
     }
 
     @Override
-    public int getItemLayoutRes(int viewType) {
+    public int getNormalItemViewType(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getNormalItemLayoutRes(int viewType) {
         return R.layout.item_simple_movie;
     }
 }

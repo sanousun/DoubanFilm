@@ -16,7 +16,8 @@ import java.util.List;
  * desc: Adapter的抽象基类，集成了一些数据操作方法
  */
 
-public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH> {
 
     private Context mContext;
     private List<T> mData;
@@ -146,8 +147,20 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyItemRangeChanged(positionStart, itemCount, payload);
     }
 
+    /**
+     * 清空数据
+     */
+    public void clear() {
+        mData.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 }

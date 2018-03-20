@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.shenhui.doubanfilm.R;
 import com.shenhui.doubanfilm.app.GlideApp;
-import com.shenhui.doubanfilm.ui.fragment.BaseFragment;
+import com.shenhui.doubanfilm.ui.BaseFragment;
 import com.shenhui.doubanfilm.ui.fragment.CollectFragment;
 import com.shenhui.doubanfilm.ui.fragment.HomeFragment;
 import com.shenhui.doubanfilm.ui.fragment.TopFragment;

@@ -30,7 +30,7 @@
 
     <path
         android:fillType="evenOdd"
-        android:pathData="M 4 4 H 104 V 104 H 4 V 4 Z"
+        android:pathData="M4 4 H 104 V 104 H 4 V 4 Z"
         android:strokeWidth="1"/>
     <path
         android:fillColor="#FCFCFC"

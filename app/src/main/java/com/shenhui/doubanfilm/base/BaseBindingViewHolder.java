@@ -1,11 +1,7 @@
 package com.shenhui.doubanfilm.base;
 
-import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 /**
  * Created with Android Studio.
@@ -20,9 +16,9 @@ public class BaseBindingViewHolder extends RecyclerView.ViewHolder {
 
     private ViewDataBinding mViewDataBinding;
 
-    public BaseBindingViewHolder(ViewGroup parent, @LayoutRes int resId) {
-        super(LayoutInflater.from(parent.getContext()).inflate(resId, parent, false));
-        mViewDataBinding = DataBindingUtil.getBinding(itemView);
+    public BaseBindingViewHolder(ViewDataBinding viewDataBinding) {
+        super(viewDataBinding.getRoot());
+        mViewDataBinding = viewDataBinding;
     }
 
     public ViewDataBinding getViewDataBinding() {

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         applicationId "com.shenhui.doubanfilm"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 10200
         versionName "2.0"
         javaCompileOptions {
@@ -22,6 +22,10 @@ android {
     }
     dataBinding {
         enabled true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 
@@ -39,14 +43,18 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroidVer"
     implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVer"
 
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.0'
+    implementation "android.arch.persistence.room:runtime:$rootProject.ext.roomVer"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.roomVer"
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.ext.roomVer"
+
     implementation "com.github.bumptech.glide:glide:$rootProject.ext.glideVer"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.ext.glideVer"
     implementation "com.github.bumptech.glide:okhttp3-integration:$rootProject.ext.glideVer"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVer"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakcanaryVer"
 
-    compile 'com.google.code.gson:gson:2.4'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.0'
+    compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.mcxiaoke.volley:library:1.0.18'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'

@@ -15,6 +15,7 @@ import com.shenhui.doubanfilm.adapter.CollectAdapter;
 import com.shenhui.doubanfilm.adapter.CollectAdapter.OnItemClickListener;
 import com.shenhui.doubanfilm.bean.SubjectBean;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
+import com.shenhui.doubanfilm.ui.BaseFragment;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import java.util.ArrayList;

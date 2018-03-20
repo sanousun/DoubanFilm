@@ -69,8 +69,12 @@
     <string name="foot_fail">加载失败，请点击重试。</string>
     <string name="system">系统</string>
 
-    <string name="item_rate">%d分</string>
-    <string name="item_rate_count">（%d人评价）</string>
+    <string name="item_rate">%s分</string>
+    <string name="item_rate_count">（%s人评价）</string>
     <string name="item_director">导演：%s</string>
     <string name="item_cast">演员：%s</string>
+
+    <string name="item_pull_no_more">没有更多的内容</string>
+    <string name="item_pull_error">加载错误，点击重试</string>
+    <string name="item_pull_loading">加载中...</string>
 </resources>

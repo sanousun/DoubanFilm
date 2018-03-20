@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import
+            type="android.view.View"/>
+
+        <variable
+            name="pullInfo"
+            type="com.shenhui.doubanfilm.base.BasePullInfo"/>
+
+        <variable
+            name="pullListener"
+            type="com.shenhui.doubanfilm.base.BasePullClickListener"/>
+
+    </data>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pull_item_height"
+        android:gravity="center"
+        android:onClick="@{() -> pullListener.onClick()}"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="@{pullInfo.isLoading ? View.VISIBLE : View.GONE}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@{pullInfo.desc}"
+            android:textColor="@{pullInfo.isError ? @color/text_error_hint : @color/text_hint}"
+            android:textSize="@dimen/text_hint_size"
+            tools:text="加载中..."/>
+
+    </LinearLayout>
+
+</layout>

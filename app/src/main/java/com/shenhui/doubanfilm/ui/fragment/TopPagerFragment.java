@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -26,6 +25,7 @@ import com.shenhui.doubanfilm.bean.SimpleSubjectBean;
 import com.shenhui.doubanfilm.support.AnimatorListenerAdapter;
 import com.shenhui.doubanfilm.support.Constant;
 import com.shenhui.doubanfilm.support.util.DensityUtil;
+import com.shenhui.doubanfilm.ui.BaseFragment;
 import com.shenhui.doubanfilm.ui.activity.SubjectActivity;
 
 import org.json.JSONException;

@@ -55,6 +55,9 @@ public class HomeFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
+            if (position == 0) {
+                return HomePageFragment.getInstance();
+            }
             return HomePagerFragment.newInstance(position);
         }
 

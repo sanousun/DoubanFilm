@@ -1,7 +1,12 @@
 package com.shenhui.doubanfilm.bean;
 
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.List;
 
+@Entity(tableName = "subject")
 public class SubjectBean {
 
     private RatingEntity rating;//评分
@@ -12,6 +17,7 @@ public class SubjectBean {
     private String year;//年代
     private ImagesEntity images;//电影海报图，分别提供288px x 465px(大)，96px x 155px(中) 64px x 103px(小)尺寸
     private String alt;//条目页URL
+    @PrimaryKey
     private String id;//条目id
     private String mobile_url;//移动版条目页URL
     private String title;//中文名

@@ -1,4 +1,4 @@
-package com.shenhui.doubanfilm.ui.fragment;
+package com.shenhui.doubanfilm.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

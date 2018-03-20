@@ -1,5 +1,6 @@
 package com.shenhui.doubanfilm.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -12,13 +13,14 @@ public class BaseAdapter<T extends RecyclerView.ViewHolder>
         mCallback = listener;
     }
 
+    @NonNull
     @Override
-    public T onCreateViewHolder(ViewGroup parent, int viewType) {
+    public T onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return null;
     }
 
     @Override
-    public void onBindViewHolder(T holder, int position) {
+    public void onBindViewHolder(@NonNull T holder, int position) {
 
     }
 

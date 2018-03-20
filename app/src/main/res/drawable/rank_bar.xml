@@ -2,11 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@android:id/background"
-        android:drawable="@drawable/ic_star_border_blue_16dp"/>
+        android:drawable="@drawable/ic_star_border_blue_500_18dp"/>
     <item
         android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/ic_star_half_blue_16dp"/>
+        android:drawable="@drawable/ic_star_half_blue_500_18dp"/>
     <item
         android:id="@android:id/progress"
-        android:drawable="@drawable/ic_star_blue_16dp"/>
+        android:drawable="@drawable/ic_star_blue_500_18dp"/>
 </layer-list>

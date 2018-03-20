@@ -17,7 +17,8 @@
         android:background="@color/white"
         android:foreground="?android:attr/selectableItemBackground"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
 
         <ImageView
             android:id="@+id/iv_subject"
@@ -49,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="false"
                     android:numStars="5"
-                    android:rating="@{item.rating.average}"
+                    android:rating="@{item.rating.average / 2f}"
                     tools:rating="4"/>
 
                 <TextView
@@ -57,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@{@string/item_rate(item.rating.average)}"
+                    android:text="@{@string/item_rate(String.valueOf(item.rating.average))}"
                     android:textColor="@color/red"
                     tools:text="8分"/>
 
@@ -65,7 +66,7 @@
                     android:id="@+id/tv_rate_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{@string/item_rate_count(item.collectCount)}"
+                    android:text="@{@string/item_rate_count(String.valueOf(item.collectCount))}"
                     android:textColor="@color/gray"
                     android:textSize="12sp"
                     tools:text="（1000人评价）"/>
